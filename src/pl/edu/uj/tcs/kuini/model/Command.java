@@ -5,28 +5,28 @@ import java.util.List;
 
 public class Command {
 
-	final float radius;
-	final List<Position> path;
-	final Player player;
-	
-	public Command(float radius, List<Position> path, Player player) {
-		super();
-		this.radius = radius;
-		this.path = path;
-		this.player = player;
-	}
+    final float radius;
+    final List<Position> path;
+    final Player player;
 
-	public float getRadius() {
-		return radius;
-	}
+    public Command(float radius, List<Position> path, Player player) {
+        super();
+        this.radius = radius;
+        this.path = path;
+        this.player = player;
+    }
 
-	public List<Position> getPath() {
-		return new ArrayList<Position>(path);
-	}
+    public float getRadius() {
+        return radius;
+    }
 
-	public Player getPlayer() {
-		return player;
-	}
-	
-	
+    public List<Position> getPath() {
+        return new ArrayList<Position>(path);
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+
 }
