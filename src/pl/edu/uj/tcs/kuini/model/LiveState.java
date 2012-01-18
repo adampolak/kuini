@@ -16,18 +16,18 @@ import pl.edu.uj.tcs.kuini.model.live.ILiveState;
 public class LiveState implements ILiveState {
 	private List<ILiveActor> actors;
 	private Map<Integer, ILivePlayer> playersById;
-	private List<ILiveActor> actorsToAdd = new LinkedList<ILiveActor>();
+	private List<ILiveActor> actorsToAdd;
 	private final float width;
 	private final float height;
 	private long lastActorId = -1;
 	private int lastPlayerId = 0;
 	private IActorOrderer orderer;
 	
-	public LiveState(List<ILiveActor> actors,
-			Map<Integer, ILivePlayer> playersById, float width, float height,
+	public LiveState(float width, float height,
 			IActorOrderer orderer) {
-		this.actors = actors;
-		this.playersById = playersById;
+		this.actors = new LinkedList<ILiveActor>();
+		this.playersById = new HashMap<Integer, ILivePlayer>();
+		this.actorsToAdd = new LinkedList<ILiveActor>();
 		this.width = width;
 		this.height = height;
 		this.orderer = orderer;
