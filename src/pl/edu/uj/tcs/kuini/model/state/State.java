@@ -2,6 +2,7 @@ package pl.edu.uj.tcs.kuini.model.state;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,12 +19,12 @@ public class State implements Serializable {
         for(IActor actor : actors){
         	this.actorStates.add(new ActorState(actor));
         }
-        this.playerStateById = playerStateById;
+        this.playerStateById = new HashMap<Integer, PlayerState>(playerStateById);
     }
     public List<ActorState> getActorStates() {
-        return new ArrayList<ActorState>(actorStates);
+        return Collections.unmodifiableList(actorStates);
     }
     public Map<Integer, PlayerState> getPlayerStatesById() {
-        return new HashMap<Integer, PlayerState>(playerStateById);
+        return Collections.unmodifiableMap(playerStateById);
     }
 }
