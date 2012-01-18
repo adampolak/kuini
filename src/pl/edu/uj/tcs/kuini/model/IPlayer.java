@@ -5,4 +5,5 @@ public interface IPlayer {
     String getName();
     PlayerColor getColor();
     long getScore();
+    long getFood();
 }

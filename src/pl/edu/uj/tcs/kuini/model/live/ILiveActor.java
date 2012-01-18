@@ -13,4 +13,5 @@ public interface ILiveActor extends IActor {
 	float getSpeed();
 	void setPosition(Position position);
 	void changeHP(float change);
+	boolean isDead();
 }

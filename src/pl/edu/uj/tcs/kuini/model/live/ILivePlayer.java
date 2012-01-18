@@ -4,4 +4,5 @@ import pl.edu.uj.tcs.kuini.model.IPlayer;
 
 public interface ILivePlayer extends IPlayer {
 	void changeScore(long change);
+	boolean shouldAttack(ILivePlayer player);
 }

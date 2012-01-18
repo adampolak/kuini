@@ -14,12 +14,12 @@ public class Model implements IModel{
 
 	@Override
 	public void doCommand(Command command) {
-		// TODO: implement
+		state.doCommand(command);
 	}
 
 	@Override
 	public void nextTurn(float elapsedTime) {
-		// TODO: implement
+		state.nextTurn(elapsedTime);
 	}
 
 }

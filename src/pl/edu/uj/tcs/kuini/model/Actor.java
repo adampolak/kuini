@@ -55,7 +55,8 @@ public class Actor implements ILiveActor {
 	}
 	@Override
 	public void performAction(float elapsedTime, ILiveState state) {
-		action.performAction(this, elapsedTime, state);
+		if(!isDead())
+			action.performAction(this, elapsedTime, state);
 	}
 	@Override
 	public float getSpeed() {
@@ -72,5 +73,9 @@ public class Actor implements ILiveActor {
 	@Override
 	public void changeHP(float change) {
 		hp += change;
+	}
+	@Override
+	public boolean isDead() {
+		return hp > 0;
 	}
 }
