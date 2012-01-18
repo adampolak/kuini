@@ -1,12 +1,14 @@
-package pl.edu.uj.tcs.kuini.model;
+package pl.edu.uj.tcs.kuini.model.state;
 
-public class Player {
+import pl.edu.uj.tcs.kuini.model.PlayerColor;
+
+public class PlayerState {
     final int id;
     final String name;
     final PlayerColor color;
     final long score;
 
-    public Player(int id, String name, PlayerColor color, long score) {
+    public PlayerState(int id, String name, PlayerColor color, long score) {
         super();
         this.id = id;
         this.name = name;

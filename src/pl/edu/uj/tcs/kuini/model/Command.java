@@ -3,13 +3,15 @@ package pl.edu.uj.tcs.kuini.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.edu.uj.tcs.kuini.model.state.PlayerState;
+
 public class Command {
 
     final float radius;
     final List<Position> path;
-    final Player player;
+    final PlayerState player;
 
-    public Command(float radius, List<Position> path, Player player) {
+    public Command(float radius, List<Position> path, PlayerState player) {
         super();
         this.radius = radius;
         this.path = path;
@@ -24,7 +26,7 @@ public class Command {
         return new ArrayList<Position>(path);
     }
 
-    public Player getPlayer() {
+    public PlayerState getPlayer() {
         return player;
     }
 

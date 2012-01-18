@@ -7,6 +7,6 @@ public interface IActor {
     ActorType getActorType();
     long getId();
     float getAngle(); // radians
-    Player getPlayer();
+    int getPlayerId();
 
 }
