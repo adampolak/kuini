@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import pl.edu.uj.tcs.kuini.model.actions.IGlobalAction;
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
 import pl.edu.uj.tcs.kuini.model.live.ILiveActor;
 import pl.edu.uj.tcs.kuini.model.live.ILivePlayer;
@@ -22,15 +23,18 @@ public class LiveState implements ILiveState {
 	private long lastActorId = -1;
 	private int lastPlayerId = 0;
 	private IActorOrderer orderer;
+	private IGlobalAction globalAction;
 	
 	public LiveState(float width, float height,
-			IActorOrderer orderer) {
+			IActorOrderer orderer, IGlobalAction globalAction) {
 		this.actors = new LinkedList<ILiveActor>();
 		this.playersById = new HashMap<Integer, ILivePlayer>();
 		this.actorsToAdd = new LinkedList<ILiveActor>();
 		this.width = width;
 		this.height = height;
 		this.orderer = orderer;
+		this.globalAction = globalAction;
+		playersById.put(-1, new Player(-1, "FOOD", PlayerColor.RED, 0, 0));
 	}
 
 	@Override
@@ -79,6 +83,7 @@ public class LiveState implements ILiveState {
 		for(ILiveActor actor : orderer.orderActors(actors)){
 			actor.performAction(elapsedTime, this);
 		}
+		globalAction.performAction(elapsedTime, this);
 		actors.addAll(actorsToAdd);
 		actorsToAdd.clear();
 		Set<ILiveActor> actorsToRemove = new HashSet<ILiveActor>();
@@ -122,4 +127,8 @@ public class LiveState implements ILiveState {
 		return height;
 	}
 
+	@Override
+	public int getFoodPlayerId() {
+		return -1;
+	}
 }

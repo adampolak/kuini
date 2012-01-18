@@ -7,25 +7,28 @@ import pl.edu.uj.tcs.kuini.model.PlayerColor;
 
 public class PlayerState implements Serializable, IPlayer{
 	private static final long serialVersionUID = 6628465411701306103L;
-	final int id;
-    final String name;
-    final PlayerColor color;
-    final long score;
-    final long food;
+	private final int id;
+    private final String name;
+    private final PlayerColor color;
+    private final long score;
+    private final long food;
+	private final boolean human;
 
-    public PlayerState(int id, String name, PlayerColor color, long score, long food) {
+    public PlayerState(int id, String name, PlayerColor color, long score, long food, boolean human) {
         this.id = id;
         this.name = name;
         this.color = color;
         this.score = score;
         this.food = food;
+        this.human = human;
     }
     public PlayerState(IPlayer player){
     	this(player.getId(), 
     			player.getName(),
     			player.getColor(),
     			player.getScore(),
-    			player.getFood());
+    			player.getFood(),
+    			player.isHuman());
     }
 
     public int getId() {
@@ -46,6 +49,10 @@ public class PlayerState implements Serializable, IPlayer{
 	@Override
 	public long getFood() {
 		return food;
+	}
+	@Override
+	public boolean isHuman() {
+		return human;
 	}
 
 }

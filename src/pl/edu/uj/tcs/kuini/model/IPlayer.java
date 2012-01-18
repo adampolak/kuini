@@ -6,4 +6,5 @@ public interface IPlayer {
     PlayerColor getColor();
     long getScore();
     long getFood();
+    boolean isHuman();
 }

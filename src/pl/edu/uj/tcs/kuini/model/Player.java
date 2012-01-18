@@ -50,6 +50,11 @@ public class Player implements ILivePlayer {
 	@Override
 	public boolean shouldAttack(ILivePlayer player) {
 		int otherId = player.getId();
-		return otherId > 0 && otherId != getId();
+		return player.isHuman() && otherId != getId();
+	}
+
+	@Override
+	public boolean isHuman() {
+		return getId()>0;
 	}
 }

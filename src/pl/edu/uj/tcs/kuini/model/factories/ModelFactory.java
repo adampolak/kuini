@@ -16,6 +16,7 @@ import pl.edu.uj.tcs.kuini.model.actions.CompoundAction;
 import pl.edu.uj.tcs.kuini.model.actions.HealYourselfAction;
 import pl.edu.uj.tcs.kuini.model.actions.IAction;
 import pl.edu.uj.tcs.kuini.model.actions.SpawnAntAction;
+import pl.edu.uj.tcs.kuini.model.actions.SpawnFoodAction;
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
 import pl.edu.uj.tcs.kuini.model.live.ILivePlayer;
 import pl.edu.uj.tcs.kuini.model.live.ILiveState;
@@ -23,7 +24,10 @@ import pl.edu.uj.tcs.kuini.model.live.ILiveState;
 public class ModelFactory implements IModelFactory {
 	@Override
 	public IModel getModel() {
-		ILiveState state = new LiveState(10, 20, new RandomOrderer(new Random(0)));
+		Random random = new Random(0);
+		ILiveState state = new LiveState(10, 20, 
+				new RandomOrderer(random), 
+				new SpawnFoodAction(new FoodFactory(random)));
 		
 		ILivePlayer player1 = new Player(state.nextPlayerId(), "RED", PlayerColor.RED, 0, 1000);
 		ILivePlayer player2 = new Player(state.nextPlayerId(), "BLUE", PlayerColor.BLUE, 0, 1000);
