@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.Random;
 
 import pl.edu.uj.tcs.kuini.IController;
+import pl.edu.uj.tcs.kuini.model.Command;
 import pl.edu.uj.tcs.kuini.model.IActor;
 import pl.edu.uj.tcs.kuini.model.IPlayer;
 import pl.edu.uj.tcs.kuini.model.IState;
+import pl.edu.uj.tcs.kuini.model.Path;
+import pl.edu.uj.tcs.kuini.model.Player;
 import pl.edu.uj.tcs.kuini.model.PlayerColor;
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
 import android.content.Context;
@@ -26,15 +29,20 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
     private IState state;
     private final int myWidth;
     private final int myHeight;
+    private List<Position> path;
+    private float radius;
+    private float max_radius_for_command = 20;
+    private final int myID;
     
-    public GamePlayView(Context context, IController controller, int myWidth, int myHeight) {
+    public GamePlayView(Context context, IController controller, int myWidth, int myHeight, int id) {
         super(context);
         
         this.controller = controller;
         changes = true;
         this.myWidth = myWidth;
         this.myHeight = myHeight;
-        
+        this.myID = id;
+
         setFocusable(true);
         setFocusableInTouchMode(true);
 
@@ -49,6 +57,15 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
     }
     
     private List<Position> tmpPointList = new ArrayList<Position>(); 
+    
+    private float[] ptsFromPositions(List<Position> path) {
+        float[] pts = new float[path.size()*2];
+        for(int i = 0; i < path.size(); i++) {
+            pts[2*i] = path.get(i).getX();
+            pts[2*i+1] = path.get(i).getY();
+        }
+        return pts;
+    }
     
     @Override
     public void onDraw(Canvas canvas) {
@@ -80,17 +97,42 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
             paint.setColor(color);
             canvas.drawCircle(newx, newy, radius, paint);
         }
-        for(Position p : tmpPointList) {
+        if(path != null) {
+            Paint paint = new Paint();
+            paint.setColor(Color.argb((int) 255*3/10, 0xFF, 0x00, 0x00));
+            canvas.drawCircle(path.get(0).getX(), path.get(0).getY(), radius, paint);
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setStrokeWidth(4);
+            canvas.drawLines(ptsFromPositions(path), paint);
+        } 
+/*        for(Position p : tmpPointList) {
             Paint paint = new Paint();
             paint.setColor(new Random().nextInt());
             canvas.drawCircle(p.getX(), p.getY(), 5, paint);    
         }
-        
+  */      
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        tmpPointList.add(new Position(event.getX(), event.getY()));
+        Position act = new Position(event.getX(), event.getY());
+        if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            path = new ArrayList<Position>();
+            path.add(act);
+            radius = max_radius_for_command;
+        }
+        else if(event.getAction() == MotionEvent.ACTION_UP) {
+            // TODO rescale positions, radius, etc
+            controller.proxyCommand(new Command(radius, new Path(path), myID));
+            path = null;
+        }
+        else {
+            if(path.get(0).distanceTo(act) < max_radius_for_command)
+                radius += 0.5f;
+            else
+                path.add(act);
+        }
+    //    tmpPointList.add(new Position(event.getX(), event.getY()));
         invalidate();
         return true;
     }
