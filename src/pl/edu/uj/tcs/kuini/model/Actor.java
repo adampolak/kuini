@@ -1,28 +1,33 @@
 package pl.edu.uj.tcs.kuini.model;
 
-public class Actor implements IActor {
+import pl.edu.uj.tcs.kuini.model.actions.IAction;
+import pl.edu.uj.tcs.kuini.model.actions.NullAction;
+import pl.edu.uj.tcs.kuini.model.geometry.Position;
+import pl.edu.uj.tcs.kuini.model.live.ILiveActor;
+import pl.edu.uj.tcs.kuini.model.live.ILiveState;
+
+public class Actor implements ILiveActor {
 	private Position position;
+	private IAction action;
 	private float radius;
 	private final ActorType actorType;
 	private final long id;
 	private float angle;
 	private final int playerId;
-	public Actor(Position position, float radius, ActorType actorType, long id,
-			float angle, int playerId) {
+	private float hp;
+	public Actor(ActorType actorType, long id, int playerId, IAction action, 
+			Position position, float radius, float angle, float hp) {
+		this.action = action;
 		this.position = position;
 		this.radius = radius;
 		this.actorType = actorType;
 		this.id = id;
 		this.angle = angle;
 		this.playerId = playerId;
+		this.hp = hp;
 	}
 	public Actor(ActorType actorType, long id, int playerId) {
-		this.position = new Position(0,0);
-		this.radius = 0.01f;
-		this.angle = 0;
-		this.actorType = actorType;
-		this.id = id;
-		this.playerId = playerId;
+		this(actorType, id, playerId, new NullAction(), new Position(0,0), 0.01f, 0, 100);
 	}
 	@Override
 	public Position getPosition() {
@@ -47,5 +52,25 @@ public class Actor implements IActor {
 	@Override
 	public int getPlayerId() {
 		return playerId;
+	}
+	@Override
+	public void performAction(float elapsedTime, ILiveState state) {
+		action.performAction(this, elapsedTime, state);
+	}
+	@Override
+	public float getSpeed() {
+		return 0.01f;
+	}
+	@Override
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+	@Override
+	public float getHP() {
+		return hp;
+	}
+	@Override
+	public void changeHP(float change) {
+		hp += change;
 	}
 }

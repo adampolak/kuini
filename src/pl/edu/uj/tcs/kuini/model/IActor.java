@@ -1,5 +1,7 @@
 package pl.edu.uj.tcs.kuini.model;
 
+import pl.edu.uj.tcs.kuini.model.geometry.Position;
+
 public interface IActor {
 
     Position getPosition();
@@ -8,5 +10,5 @@ public interface IActor {
     long getId();
     float getAngle(); // radians
     int getPlayerId();
-
+    float getHP();
 }

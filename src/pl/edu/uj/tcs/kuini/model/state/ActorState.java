@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import pl.edu.uj.tcs.kuini.model.ActorType;
 import pl.edu.uj.tcs.kuini.model.IActor;
-import pl.edu.uj.tcs.kuini.model.Position;
+import pl.edu.uj.tcs.kuini.model.geometry.Position;
 
 public class ActorState implements IActor, Serializable {
 	private static final long serialVersionUID = -1927504484577547043L;
@@ -14,6 +14,7 @@ public class ActorState implements IActor, Serializable {
 	private final long id;
 	private final float angle;
 	private final int playerId;
+	private final float hp;
 	
 	public ActorState(IActor actor){
 		position = actor.getPosition();
@@ -22,6 +23,7 @@ public class ActorState implements IActor, Serializable {
 		id = actor.getId();
 		angle = actor.getAngle();
 		playerId = actor.getPlayerId();
+		hp = actor.getHP();
 	}
 
 	@Override
@@ -52,6 +54,11 @@ public class ActorState implements IActor, Serializable {
 	@Override
 	public int getPlayerId() {
 		return playerId;
+	}
+
+	@Override
+	public float getHP() {
+		return hp;
 	}
 
 }

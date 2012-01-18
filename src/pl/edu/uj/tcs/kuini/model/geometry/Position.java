@@ -1,4 +1,4 @@
-package pl.edu.uj.tcs.kuini.model;
+package pl.edu.uj.tcs.kuini.model.geometry;
 
 import java.io.Serializable;
 

@@ -1,6 +1,7 @@
 package pl.edu.uj.tcs.kuini.model.live;
 
 import pl.edu.uj.tcs.kuini.model.IActor;
+import pl.edu.uj.tcs.kuini.model.geometry.Position;
 
 /**
  * Interface describing actor whose state can be changed.
@@ -9,4 +10,7 @@ import pl.edu.uj.tcs.kuini.model.IActor;
  */
 public interface ILiveActor extends IActor {
 	void performAction(float elapsedTime, ILiveState state);
+	float getSpeed();
+	void setPosition(Position position);
+	void changeHP(float change);
 }
