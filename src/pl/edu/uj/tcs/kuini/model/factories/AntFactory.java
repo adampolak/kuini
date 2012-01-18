@@ -10,7 +10,7 @@ import pl.edu.uj.tcs.kuini.model.actions.CompoundAction;
 import pl.edu.uj.tcs.kuini.model.actions.EatFoodAction;
 import pl.edu.uj.tcs.kuini.model.actions.HealYourselfAction;
 import pl.edu.uj.tcs.kuini.model.actions.IAction;
-import pl.edu.uj.tcs.kuini.model.actions.MoveAction;
+import pl.edu.uj.tcs.kuini.model.actions.SimpleMoveAction;
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
 import pl.edu.uj.tcs.kuini.model.live.ILiveActor;
 import pl.edu.uj.tcs.kuini.model.live.ILiveState;
@@ -19,7 +19,7 @@ public class AntFactory implements IAntFactory {
 	private final IAction antAction = new CompoundAction(
 			Arrays.asList(new IAction[]{
 				new EatFoodAction(),
-				new MoveAction(),
+				new SimpleMoveAction(),
 				new HealYourselfAction(),
 				new AttackAction()
 		}));

@@ -8,6 +8,10 @@ public class Vector implements Serializable{
 	private final Position source;
 	private final Position target;
 	
+	public Vector(Vector v, float magnitude){
+		this(v.getSource(), v.getAngle(), magnitude);
+	}
+	
 	public Vector(Position source, Position target) {
 		this.source = source;
 		this.target = target;
