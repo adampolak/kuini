@@ -37,9 +37,7 @@ public class Vector implements Serializable{
 	}
 	
 	public float magnitude(){
-		float x = getX();
-		float y = getY();
-		return (float) Math.sqrt(x*x + y*y);
+		return source.distanceTo(target);
 	}
 	
 	public float getX(){

@@ -8,7 +8,6 @@ public class Position implements Serializable {
 
     /**
      * Class representing position on board.
-     * (x,y) is normalized to 0<=x<=1, 0<=y<=1. 
      * @param x
      * @param y
      */
@@ -23,6 +22,12 @@ public class Position implements Serializable {
 
     public float getY() {
         return y;
+    }
+    
+    public float distanceTo(Position target){
+    	float x = target.getX() - getX();
+    	float y = target.getY() - getY();
+    	return (float) Math.sqrt(x*x+y*y);
     }
 
 }

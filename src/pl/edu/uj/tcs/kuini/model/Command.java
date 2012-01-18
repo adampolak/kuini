@@ -4,9 +4,9 @@ import java.io.Serializable;
 
 public class Command implements Serializable{
 	private static final long serialVersionUID = -4073525047169440066L;
-	final float radius;
-    final Path path;
-    final int playerId;
+	private final float radius;
+    private final Path path;
+    private final int playerId;
 
     public Command(float radius, Path path, int playerId) {
         super();
@@ -23,7 +23,7 @@ public class Command implements Serializable{
         return path;
     }
 
-    public int getPlayer() {
+    public int getPlayerId() {
         return playerId;
     }
 

@@ -7,4 +7,6 @@ public interface IState {
 
     public List<IActor> getActorStates();
     public Map<Integer, IPlayer> getPlayerStatesById();
+    public float getWidth();
+    public float getHeight();
 }

@@ -6,6 +6,10 @@ import pl.edu.uj.tcs.kuini.model.state.State;
 
 public class Model implements IModel{
 	private ILiveState state;
+	
+	public Model(ILiveState startingState){
+		this.state = startingState;
+	}
 
 	@Override
 	public IFrozenState getState() {
