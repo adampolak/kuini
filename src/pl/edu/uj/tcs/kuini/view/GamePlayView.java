@@ -52,10 +52,11 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
     
     @Override
     public void onDraw(Canvas canvas) {
+        Log.d("ON DRAW", "called");
         updateState();
         /* will be changed to drawBitmap */ 
         Paint white = new Paint();
-        white.setColor(new Random().nextInt());
+        white.setColor(Color.LTGRAY);
         canvas.drawPaint(white);
         
         float xModifier = (float) myWidth / state.getWidth();
@@ -90,6 +91,7 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         tmpPointList.add(new Position(event.getX(), event.getY()));
+        invalidate();
         return true;
     }
 
@@ -98,6 +100,7 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
     @Override
     public void somethingChanged() {
         changes = true;
+        invalidate();
     }
 
 }
