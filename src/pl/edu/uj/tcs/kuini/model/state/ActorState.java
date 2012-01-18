@@ -1,11 +1,13 @@
 package pl.edu.uj.tcs.kuini.model.state;
 
+import java.io.Serializable;
+
 import pl.edu.uj.tcs.kuini.model.ActorType;
 import pl.edu.uj.tcs.kuini.model.IActor;
 import pl.edu.uj.tcs.kuini.model.Position;
 
-public class ActorState implements IActor {
-
+public class ActorState implements IActor, Serializable {
+	private static final long serialVersionUID = -1927504484577547043L;
 	private final Position position;
 	private float radius;
 	private final ActorType actorType;

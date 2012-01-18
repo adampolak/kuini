@@ -1,5 +1,6 @@
 package pl.edu.uj.tcs.kuini.model.state;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,8 +8,9 @@ import java.util.Map;
 
 import pl.edu.uj.tcs.kuini.model.IActor;
 
-public class State {
-    private final List<ActorState> actorStates;
+public class State implements Serializable {
+	private static final long serialVersionUID = 4420923801793215908L;
+	private final List<ActorState> actorStates;
     private final Map<Integer, PlayerState> playerStateById;
     public State(List<IActor> actors, Map<Integer, PlayerState> playerStateById) {
         super();

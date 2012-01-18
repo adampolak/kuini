@@ -1,7 +1,10 @@
 package pl.edu.uj.tcs.kuini.model;
 
-public class Position {
-    private final float x, y;
+import java.io.Serializable;
+
+public class Position implements Serializable {
+	private static final long serialVersionUID = 4791245481333071454L;
+	private final float x, y;
 
     /**
      * Class representing position on board.
