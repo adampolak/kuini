@@ -57,4 +57,9 @@ public class Player implements ILivePlayer {
 	public boolean isHuman() {
 		return getId()>0;
 	}
+
+	@Override
+	public void changeFood(float change) {
+		food += change;
+	}
 }
