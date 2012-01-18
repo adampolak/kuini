@@ -11,7 +11,7 @@ public class EatFoodAction implements IAction {
 			ILiveState state) {
 		for(ILiveActor food : state.getNeigbours(actor.getPosition(), actor.getRadius()*3)){
 			if(food.getActorType() != ActorType.FOOD)continue;
-			float foodEaten = elapsedTime*10;
+			float foodEaten = Math.max(0, Math.min(food.getHP(), elapsedTime*10));
 			food.changeHP(-foodEaten);
 			state.getLivePlayersById().get(actor.getPlayerId()).changeFood(foodEaten);
 			return;

@@ -23,7 +23,7 @@ public class FoodFactory implements IFoodFactory {
 	public ILiveActor getFood(ILiveState state) {
 		Position p = new Position(random.nextFloat()*state.getWidth(), random.nextFloat()*state.getHeight());
 		return new Actor(ActorType.FOOD, state.nextActorId(), state.getFoodPlayerId(), 
-				foodAction, p, 0.5f, 0, 100, Path.EMPTY_PATH);
+				foodAction, p, 0.5f, 0, 100, 100, Path.EMPTY_PATH);
 	}
 
 }

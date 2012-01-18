@@ -2,6 +2,8 @@ package pl.edu.uj.tcs.kuini.model;
 
 import java.io.Serializable;
 
+import pl.edu.uj.tcs.kuini.model.geometry.Position;
+
 public class Command implements Serializable{
 	private static final long serialVersionUID = -4073525047169440066L;
 	private final float radius;
@@ -26,6 +28,9 @@ public class Command implements Serializable{
     public int getPlayerId() {
         return playerId;
     }
-
+    
+    public Position getStart(){
+    	return path.getStart();
+    }
 
 }

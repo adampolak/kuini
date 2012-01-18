@@ -40,9 +40,9 @@ public class ModelFactory implements IModelFactory {
 				new SpawnAntAction(antFactory)
 				}));
 		state.addActor(new Actor(ActorType.ANTHILL, state.nextActorId(), player1.getId(), anthillAction,
-				new Position(2,2), 0.5f, 0, 1000, Path.EMPTY_PATH));
+				new Position(2,2), 0.5f, 0, 1000, 1000, Path.EMPTY_PATH));
 		state.addActor(new Actor(ActorType.ANTHILL, state.nextActorId(), player2.getId(), anthillAction,
-				new Position(8,18), 0.5f, (float)Math.PI, 1000, Path.EMPTY_PATH));
+				new Position(8,18), 0.5f, (float)Math.PI, 1000, 1000, Path.EMPTY_PATH));
 		state.nextTurn(0);
 		return new Model(state);
 	}

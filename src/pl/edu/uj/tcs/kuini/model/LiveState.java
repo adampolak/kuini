@@ -95,12 +95,10 @@ public class LiveState implements ILiveState {
 
 	@Override
 	public void doCommand(Command command) {
-		if(!command.getPath().isEmpty()){
-			Position start = command.getPath().getPositions().get(0);
-			for(ILiveActor actor : getNeigbours(start, command.getRadius())){
-				if(actor.getPlayerId() == command.getPlayerId()){
-					actor.setPath(command.getPath());
-				}
+		Position start = command.getStart();
+		for(ILiveActor actor : getNeigbours(start, command.getRadius())){
+			if(actor.getPlayerId() == command.getPlayerId()){
+				actor.setPath(command.getPath());
 			}
 		}
 	}

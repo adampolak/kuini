@@ -21,4 +21,10 @@ public class Path implements Serializable{
 	public boolean isEmpty(){
 		return positions.isEmpty();
 	}
+	public Position getStart(){
+		return positions.get(0);
+	}
+	public Position getEnd(){
+		return positions.get(positions.size()-1);
+	}
 }

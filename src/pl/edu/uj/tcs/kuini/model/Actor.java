@@ -15,9 +15,10 @@ public class Actor implements ILiveActor {
 	private float angle;
 	private final int playerId;
 	private float hp;
+	private float maxHp;
 	private Path path;
 	public Actor(ActorType actorType, long id, int playerId, IAction action, 
-			Position position, float radius, float angle, float hp, Path path) {
+			Position position, float radius, float angle, float hp, float maxHp, Path path) {
 		this.action = action;
 		this.position = position;
 		this.radius = radius;
@@ -26,13 +27,14 @@ public class Actor implements ILiveActor {
 		this.angle = angle;
 		this.playerId = playerId;
 		this.hp = hp;
+		this.maxHp = maxHp;
 	}
 	public Actor(ActorType actorType, long id, int playerId) {
 		this(actorType, id, playerId, new NullAction());
 	}
 	public Actor(ActorType actorType, long id, int playerId,
 			IAction action) {
-		this(actorType, id, playerId, action, new Position(0,0), 0.01f, 0, 100, Path.EMPTY_PATH);
+		this(actorType, id, playerId, action, new Position(0,0), 0.01f, 0, 100, 100, Path.EMPTY_PATH);
 	}
 	@Override
 	public Position getPosition() {
@@ -78,6 +80,7 @@ public class Actor implements ILiveActor {
 	@Override
 	public void changeHP(float change) {
 		hp += change;
+		hp = Math.min(hp, maxHp);
 	}
 	@Override
 	public boolean isDead() {
