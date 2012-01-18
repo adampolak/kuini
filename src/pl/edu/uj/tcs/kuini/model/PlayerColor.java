@@ -21,5 +21,5 @@ public enum PlayerColor {
     public int getB() {
         return B;
     }
-
+    
 }
