@@ -94,4 +94,8 @@ public class Actor implements ILiveActor {
 	public Path getPath() {
 		return path;
 	}
+	@Override
+	public float getMaxHP(){
+		return maxHp;
+	}
 }

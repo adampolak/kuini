@@ -11,4 +11,5 @@ public interface IActor {
     float getAngle(); // radians
     int getPlayerId();
     float getHP();
+    float getMaxHP();
 }

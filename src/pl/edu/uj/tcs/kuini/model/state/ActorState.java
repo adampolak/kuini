@@ -15,6 +15,7 @@ public class ActorState implements IActor, Serializable {
 	private final float angle;
 	private final int playerId;
 	private final float hp;
+	private final float maxHp;
 	
 	public ActorState(IActor actor){
 		position = actor.getPosition();
@@ -24,6 +25,7 @@ public class ActorState implements IActor, Serializable {
 		angle = actor.getAngle();
 		playerId = actor.getPlayerId();
 		hp = actor.getHP();
+		maxHp = actor.getMaxHP();
 	}
 
 	@Override
@@ -59,6 +61,11 @@ public class ActorState implements IActor, Serializable {
 	@Override
 	public float getHP() {
 		return hp;
+	}
+	
+	@Override
+	public float getMaxHP(){
+		return maxHp;
 	}
 
 }
