@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import pl.edu.uj.tcs.kuini.IController;
+import pl.edu.uj.tcs.kuini.controller.IController;
 import pl.edu.uj.tcs.kuini.model.Command;
 import pl.edu.uj.tcs.kuini.model.IActor;
 import pl.edu.uj.tcs.kuini.model.IPlayer;
@@ -140,7 +140,7 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
 
     
     @Override
-    public void somethingChanged() {
+    public void stateChanged(IState state) {
         changes = true;
         invalidate();
     }

@@ -1,5 +1,6 @@
 package pl.edu.uj.tcs.kuini;
 
+import pl.edu.uj.tcs.kuini.controller.EmptyController;
 import pl.edu.uj.tcs.kuini.view.GamePlayView;
 import android.app.Activity;
 import android.os.Bundle;

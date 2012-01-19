@@ -1,4 +1,4 @@
-package pl.edu.uj.tcs.kuini;
+package pl.edu.uj.tcs.kuini.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,8 +17,8 @@ import pl.edu.uj.tcs.kuini.model.geometry.Position;
 import pl.edu.uj.tcs.kuini.model.state.State;
 
 public class EmptyController implements IController{
-
-    @Override
+	
+	//@Override
     public IState getCurrentState() {
         Player player0 = new Player(0, "zero", PlayerColor.BLUE, 0, 0);
         Map<Integer, IPlayer> map = new HashMap<Integer, IPlayer>();
