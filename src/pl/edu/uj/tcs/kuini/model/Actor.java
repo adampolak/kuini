@@ -84,7 +84,7 @@ public class Actor implements ILiveActor {
 	}
 	@Override
 	public boolean isDead() {
-		return hp > 0;
+		return hp < 0;
 	}
 	@Override
 	public void setPath(Path path) {
