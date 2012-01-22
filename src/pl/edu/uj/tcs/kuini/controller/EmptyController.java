@@ -50,5 +50,8 @@ public class EmptyController implements IController{
         model.nextTurn(1);
     }
     
+    @Override
+    public void run() {} /* Added for compatibility reason */
+    
 
 }
