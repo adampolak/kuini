@@ -18,14 +18,21 @@ import pl.edu.uj.tcs.kuini.model.state.State;
 
 public class EmptyController implements IController{
 	
+    Player player0;
+    Map<Integer, IPlayer> map;
+    List<IActor> list;
+    
+    public EmptyController() {
+        player0 = new Player(0, "zero", PlayerColor.BLUE, 0, 0);
+        map = new HashMap<Integer, IPlayer>();
+        map.put(0, player0);
+        list = new ArrayList<IActor>();
+        list.add(new Actor(ActorType.ANT, 1, 0, null, new Position(10, 10), 200, 0, 5, 10, null));
+        
+    }
 	//@Override
     public IState getCurrentState() {
-        Player player0 = new Player(0, "zero", PlayerColor.BLUE, 0, 0);
-        Map<Integer, IPlayer> map = new HashMap<Integer, IPlayer>();
-        map.put(0, player0);
-        List<IActor> list = new ArrayList<IActor>();
-        list.add(new Actor(ActorType.ANT, 1, 0, null, new Position(10, 10), 200, 0, 5, 10, null));
-        return new State(list, map, 440, 800);
+        return new State(list, map, 440, 800);    
     }
 
     @Override

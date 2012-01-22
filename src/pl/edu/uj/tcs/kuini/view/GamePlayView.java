@@ -2,7 +2,6 @@ package pl.edu.uj.tcs.kuini.view;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import pl.edu.uj.tcs.kuini.controller.IController;
 import pl.edu.uj.tcs.kuini.model.Command;
@@ -10,14 +9,13 @@ import pl.edu.uj.tcs.kuini.model.IActor;
 import pl.edu.uj.tcs.kuini.model.IPlayer;
 import pl.edu.uj.tcs.kuini.model.IState;
 import pl.edu.uj.tcs.kuini.model.Path;
-import pl.edu.uj.tcs.kuini.model.Player;
 import pl.edu.uj.tcs.kuini.model.PlayerColor;
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
+import pl.edu.uj.tcs.kuini.model.state.State;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -27,11 +25,12 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
     private IController controller;
     private boolean changes;
     private IState state;
+    private IState newWaitingState;
     private final int myWidth;
     private final int myHeight;
     private List<Position> path;
     private float radius;
-    private float max_radius_for_command = 20;
+    private float max_radius_for_command = 30;
     private final int myID;
     
     public GamePlayView(Context context, IController controller, int myWidth, int myHeight, int id) {
@@ -52,11 +51,12 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
     private void updateState() {
         if(!changes)
             return;
-        changes = false;
-        state = controller.getCurrentState();
+        synchronized (this) {
+            changes = false;
+            state = newWaitingState;
+            newWaitingState = null;
+        }
     }
-    
-    private List<Position> tmpPointList = new ArrayList<Position>(); 
     
     private float[] ptsFromPositions(List<Position> path) {
         float[] pts = new float[path.size()*2];
@@ -69,21 +69,20 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
     
     @Override
     public void onDraw(Canvas canvas) {
-        Log.d("ON DRAW", "called");
         updateState();
         /* will be changed to drawBitmap */ 
         Paint white = new Paint();
         white.setColor(Color.LTGRAY);
         canvas.drawPaint(white);
         
+        if(state == null)
+            return;
+        
         float xModifier = (float) myWidth / state.getWidth();
         float yModifier = (float) myHeight / state.getHeight();
         float modifier = Math.min(xModifier, yModifier);
                 
         for(IActor actor : state.getActorStates()) {
-        
-            Log.d("MODIFIER", "" + modifier + " " + myWidth + " " + state.getWidth());
-            
             actor.getPosition(); 
             float newx = actor.getPosition().getX() * modifier;
             float newy = actor.getPosition().getY() * modifier;
@@ -128,20 +127,20 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
         }
         else {
             if(path.get(0).distanceTo(act) < max_radius_for_command)
-                radius += 0.5f;
+                radius += 1f;
             else
                 path.add(act);
         }
-    //    tmpPointList.add(new Position(event.getX(), event.getY()));
         invalidate();
         return true;
     }
-
-
     
     @Override
     public void stateChanged(IState state) {
-        changes = true;
+        synchronized (this) {
+            newWaitingState = new State(state);
+            changes = true;
+        }
         invalidate();
     }
 

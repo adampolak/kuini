@@ -1,6 +1,7 @@
 package pl.edu.uj.tcs.kuini;
 
 import pl.edu.uj.tcs.kuini.controller.EmptyController;
+import pl.edu.uj.tcs.kuini.controller.IController;
 import pl.edu.uj.tcs.kuini.view.GamePlayView;
 import android.app.Activity;
 import android.os.Bundle;
@@ -16,7 +17,9 @@ public class KuiniActivity extends Activity {
         Display display = getWindowManager().getDefaultDisplay(); 
         int width = display.getWidth();
         int height = display.getHeight();
-        final GamePlayView gamePlayView = new GamePlayView(this, new EmptyController(), width, height, 0);
+        IController emptyController = new EmptyController();
+        final GamePlayView gamePlayView = new GamePlayView(this, emptyController, width, height, 0);
+        gamePlayView.stateChanged(emptyController.getCurrentState());
         setContentView(gamePlayView);
     }
 }
