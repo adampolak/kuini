@@ -70,7 +70,7 @@ public class ActorState implements IActor, Serializable {
 	
 	@Override
 	public String toString(){
-		return actorType+"_State("+position+", hp:"+hp+")";
+		return actorType+"_State("+position+", hp:"+hp+"/"+maxHp+")";
 	}
 
 }

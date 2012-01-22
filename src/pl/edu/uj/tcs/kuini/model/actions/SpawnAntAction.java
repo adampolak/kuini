@@ -21,8 +21,9 @@ public class SpawnAntAction implements IAction {
 		if(player.getFood() > 100){
 			ILiveActor ant = antFactory.getAnt(state, actor.getPlayerId());
 			ant.setPosition(new Vector(actor.getPosition(), 
-					ant.getRadius()+actor.getRadius(), 
-					actor.getAngle()).getTarget());
+					actor.getAngle(),
+					ant.getRadius()+actor.getRadius()
+					).getTarget());
 			state.addActor(ant);
 			player.changeFood(-100);
 		}
