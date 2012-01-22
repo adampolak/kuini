@@ -68,7 +68,7 @@ public class Actor implements ILiveActor {
 	}
 	@Override
 	public float getSpeed() {
-		return 0.01f;
+		return 0.1f;
 	}
 	@Override
 	public void setPosition(Position position) {
@@ -98,5 +98,10 @@ public class Actor implements ILiveActor {
 	@Override
 	public float getMaxHP(){
 		return maxHp;
+	}
+	
+	@Override
+	public void changeAngle(float change){
+		angle += change;
 	}
 }

@@ -17,4 +17,5 @@ public interface ILiveActor extends IActor {
 	boolean isDead();
 	void setPath(Path path);
 	Path getPath();
+	void changeAngle(float d);
 }
