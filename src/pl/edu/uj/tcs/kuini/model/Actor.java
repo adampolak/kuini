@@ -28,6 +28,7 @@ public class Actor implements ILiveActor {
 		this.playerId = playerId;
 		this.hp = hp;
 		this.maxHp = maxHp;
+		this.path = path;
 	}
 	public Actor(ActorType actorType, long id, int playerId) {
 		this(actorType, id, playerId, new NullAction());
