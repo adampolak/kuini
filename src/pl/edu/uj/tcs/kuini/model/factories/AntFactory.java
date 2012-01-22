@@ -26,7 +26,7 @@ public class AntFactory implements IAntFactory {
 	@Override
 	public ILiveActor getAnt(ILiveState state, int playerId) {
 		return new Actor(ActorType.ANT, state.nextActorId(), playerId, antAction,
-				new Position(0,0), 0.01f, 0, 100, 100, Path.EMPTY_PATH); 
+				new Position(0,0), 0.3f, 0, 100, 100, Path.EMPTY_PATH); 
 	}
 
 }
