@@ -3,6 +3,8 @@ package pl.edu.uj.tcs.kuini.model.factories;
 import java.util.Arrays;
 import java.util.Random;
 
+import android.util.Log;
+
 import pl.edu.uj.tcs.kuini.model.Actor;
 import pl.edu.uj.tcs.kuini.model.ActorType;
 import pl.edu.uj.tcs.kuini.model.IModel;
@@ -43,7 +45,10 @@ public class ModelFactory implements IModelFactory {
 				new Position(2,2), 0.5f, 0, 1000, 1000, Path.EMPTY_PATH));
 		state.addActor(new Actor(ActorType.ANTHILL, state.nextActorId(), player2.getId(), anthillAction,
 				new Position(8,18), 0.5f, (float)Math.PI, 1000, 1000, Path.EMPTY_PATH));
+		Log.d("DEBUG 3", state.getActorStates().toString());
+        
 		state.nextTurn(0);
+		Log.d("DEBUG 2", state.getActorStates().toString());
 		return new Model(state);
 	}
 
