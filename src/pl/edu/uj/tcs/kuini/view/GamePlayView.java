@@ -75,6 +75,7 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
         white.setColor(Color.LTGRAY);
         canvas.drawPaint(white);
         
+        
         if(state == null)
             return;
         
@@ -141,7 +142,8 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
             newWaitingState = new State(state);
             changes = true;
         }
-        invalidate();
+        postInvalidate();
+//        invalidate();
     }
 
 }

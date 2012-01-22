@@ -1,13 +1,19 @@
 package pl.edu.uj.tcs.kuini;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import pl.edu.uj.tcs.kuini.controller.EmptyController;
 import pl.edu.uj.tcs.kuini.controller.IController;
 import pl.edu.uj.tcs.kuini.view.GamePlayView;
+import pl.edu.uj.tcs.kuini.view.IGamePlayView;
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
 import android.widget.SlidingDrawer;
+
 
 public class KuiniActivity extends Activity {
     /** Called when the activity is first created. */
@@ -22,23 +28,18 @@ public class KuiniActivity extends Activity {
         final GamePlayView gamePlayView = new GamePlayView(this, emptyController, width, height, 0);
         gamePlayView.stateChanged(emptyController.getCurrentState());
         setContentView(gamePlayView);
-        new Thread() {
+        
+        TimerTask timerTask = new TimerTask() {
             
             @Override
-            public void run() {
-                while(true) {
-                    try {
-                        sleep(100);
-                        emptyController.pushTime();
-                        gamePlayView.stateChanged(emptyController.getCurrentState());
-                        Log.d("TIME PUSH", "hurray");
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    
-                }
+            public void run() {                       
+                emptyController.pushTime();
+                gamePlayView.stateChanged(emptyController.getCurrentState());
+                Log.d("TIME PUSH", "hurray");                                                          
             }
-        }.run();
+        };
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(timerTask, 0, 100);
+        
     }
 }
