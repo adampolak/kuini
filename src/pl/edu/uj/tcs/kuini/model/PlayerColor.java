@@ -1,7 +1,7 @@
 package pl.edu.uj.tcs.kuini.model;
 
 public enum PlayerColor {
-    RED(255, 0, 0), BLUE(0, 0, 255);
+    RED(255, 0, 0), BLUE(0, 0, 255), GOLD(255, 215, 0);
     private final int R, G, B;
 
     PlayerColor(int R, int G, int B) {

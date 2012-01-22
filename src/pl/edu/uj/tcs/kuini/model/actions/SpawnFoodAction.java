@@ -5,8 +5,8 @@ import pl.edu.uj.tcs.kuini.model.live.ILiveState;
 
 public class SpawnFoodAction implements IGlobalAction {
 	private float accumulatedTime;
-	private float spawnTime = 3.0f;
-	private int spawnCount = 3;
+	private float spawnTime = 5.0f;
+	private int spawnCount = 1;
 	private final IFoodFactory factory;
 	public SpawnFoodAction(IFoodFactory factory){
 		this.factory = factory;

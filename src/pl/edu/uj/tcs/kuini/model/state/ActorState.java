@@ -67,5 +67,10 @@ public class ActorState implements IActor, Serializable {
 	public float getMaxHP(){
 		return maxHp;
 	}
+	
+	@Override
+	public String toString(){
+		return actorType+"_State("+position+", hp:"+hp+")";
+	}
 
 }

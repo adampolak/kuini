@@ -34,7 +34,7 @@ public class LiveState implements ILiveState {
 		this.height = height;
 		this.orderer = orderer;
 		this.globalAction = globalAction;
-		playersById.put(-1, new Player(-1, "FOOD", PlayerColor.RED, 0, 0));
+		playersById.put(-1, new Player(-1, "FOOD", PlayerColor.GOLD, 0, 0));
 	}
 
 	@Override

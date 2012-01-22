@@ -29,5 +29,9 @@ public class Position implements Serializable {
     	float y = target.getY() - getY();
     	return (float) Math.sqrt(x*x+y*y);
     }
+    @Override
+    public String toString(){
+    	return "("+x+","+y+")";
+    }
 
 }
