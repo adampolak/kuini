@@ -22,7 +22,7 @@ import pl.edu.uj.tcs.kuini.model.state.State;
 
 public class EmptyController implements IController{
 	
-    State state;
+    IModel model;
     
     public EmptyController() {
 /*        Player player0 = new Player(0, "zero", PlayerColor.BLUE, 0, 0);
@@ -31,10 +31,12 @@ public class EmptyController implements IController{
         List<IActor> list = new ArrayList<IActor>();
         list.add(new Actor(ActorType.ANT, 1, 0, null, new Position(10, 10), 200, 0, 5, 10, null));
         state = new State(list, map, 440, 800);
-  */  }
+  */
+        model = new ModelFactory().getModel();
+        
+        }
 	//@Override
     public IState getCurrentState() {
-        IModel model = new ModelFactory().getModel();
         Log.d("DEBUG", model.getState().getActorStates().toString());
         return model.getState();
         //return state;
@@ -42,6 +44,11 @@ public class EmptyController implements IController{
 
     @Override
     public void proxyCommand(Command command) {
+        model.doCommand(command);
     }
+    public void pushTime() {
+        model.nextTurn(1);
+    }
+    
 
 }
