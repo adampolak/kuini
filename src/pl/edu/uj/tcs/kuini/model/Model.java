@@ -17,8 +17,8 @@ public class Model implements IModel{
 	}
 
 	@Override
-	public void doCommand(Command command) {
-		state.doCommand(command);
+	public void doCommand(Command command) {;
+	    state.doCommand(command);
 	}
 
 	@Override

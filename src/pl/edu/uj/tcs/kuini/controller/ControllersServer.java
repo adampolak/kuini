@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import android.util.Log;
-
 import pl.edu.uj.tcs.kuini.model.Command;
 
 public class ControllersServer extends Thread {
@@ -31,7 +29,7 @@ public class ControllersServer extends Thread {
                 try {
                     Object o = in.readObject();
                     if (o instanceof Command) {
-                        Command c = (Command)in.readObject();
+                        Command c = (Command)o;
                         if (c.getPlayerId() != playerId) break;
                         synchronized(currentCommands) {
                             currentCommands.add(c);
@@ -65,7 +63,6 @@ public class ControllersServer extends Thread {
             while(!isInterrupted()) {
                 try {
                     out.writeObject(queue.take());
-                    Log.i("ClientOutputHandler", "Sending new turn to client...");
                 } catch (IOException e) { 
                 	break; 
                 } catch (InterruptedException e) {
