@@ -30,7 +30,7 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
     private final int myWidth;
     private final int myHeight;
     private List<Position> path;
-    private float radius;
+    private float pathRadius;
     private float max_radius_for_command = 30;
     private final int myID;
     
@@ -67,35 +67,29 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
         }
         return pts;
     }
-    
-    private float getXModifier(){
-        return (float) myWidth / state.getWidth();
-    }
-    private float getYModifier(){
-        return (float) myHeight / state.getHeight();
-    }
-    
+        
     @Override
     public void onDraw(Canvas canvas) {
         updateState();
         /* will be changed to drawBitmap */ 
-        Paint white = new Paint();
-        white.setColor(Color.LTGRAY);
-        canvas.drawPaint(white);
-        
+        Paint black = new Paint();
+        black.setColor(Color.DKGRAY);
+        canvas.drawPaint(black);
         
         if(state == null)
             return;
         
-        float xModifier = getXModifier();
-        float yModifier = getYModifier();
-        float modifier = Math.min(xModifier, yModifier);
-                
+        ScalerInterface scaler = new SimpleScaler(state.getHeight(), state.getWidth(), myHeight, myWidth);
+
+        Paint white = new Paint();
+        white.setColor(Color.LTGRAY);
+        Position upLeft = scaler.getCanvasPosition(new Position(0, 0));
+        Position downRight = scaler.getCanvasPosition(new Position(state.getWidth(), state.getHeight()));
+        canvas.drawRect(upLeft.getX(), upLeft.getY(), downRight.getX(), downRight.getY(), white);
+        
         for(IActor actor : state.getActorStates()) {
-            actor.getPosition(); 
-            float newx = actor.getPosition().getX() * modifier;
-            float newy = actor.getPosition().getY() * modifier;
-            float radius = actor.getRadius() * modifier;
+            Position canvasPosition = scaler.getCanvasPosition(actor.getPosition());            
+            float canvasRadius = scaler.getCanvasRadius(actor.getRadius());
             IPlayer player = state.getPlayerStatesById().get(actor.getPlayerId());
             PlayerColor playerColor = player.getColor();
             float alpha = ((float) actor.getHP() / actor.getMaxHP()) * ((1<<8)-1);
@@ -103,12 +97,12 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
 
             Paint paint = new Paint();
             paint.setColor(color);
-            canvas.drawCircle(newx, newy, radius, paint);
+            canvas.drawCircle(canvasPosition.getX(), canvasPosition.getY(), canvasRadius, paint);
         }
         if(path != null) {
             Paint paint = new Paint();
             paint.setColor(Color.argb((int) 255*3/10, 0xFF, 0x00, 0x00));
-            canvas.drawCircle(path.get(0).getX(), path.get(0).getY(), radius, paint);
+            canvas.drawCircle(path.get(0).getX(), path.get(0).getY(), pathRadius, paint);
             paint.setStyle(Paint.Style.STROKE);
             paint.setStrokeWidth(4);
             canvas.drawLines(ptsFromPositions(path), paint);
@@ -127,22 +121,23 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
         if(event.getAction() == MotionEvent.ACTION_DOWN) {
             path = new ArrayList<Position>();
             path.add(act);
-            radius = max_radius_for_command;
+            pathRadius = max_radius_for_command;
         }
         else if(event.getAction() == MotionEvent.ACTION_UP) {
             // TODO rescale positions, radius, etc
         	Log.d("COMMAND", "Command sent!");
+            ScalerInterface scaler = new SimpleScaler(state.getHeight(), state.getWidth(), myHeight, myWidth);
         	List<Position> modelPath = new ArrayList<Position>();
         	for(Position p : path){
-        		modelPath.add(new Position(p.getX()/getXModifier(), p.getY()/getYModifier()));
+        		modelPath.add(scaler.getModelPosition(p));
         	}
-        	float modelRadius = radius/Math.max(getXModifier(), getYModifier());
+        	float modelRadius = scaler.getModelRadius(pathRadius);
             controller.proxyCommand(new Command(modelRadius, new Path(modelPath), myID));
             path = null;
         }
         else {
             if(path.get(0).distanceTo(act) < max_radius_for_command)
-                radius += 1f;
+                pathRadius += 1f;
             else
                 path.add(act);
         }
