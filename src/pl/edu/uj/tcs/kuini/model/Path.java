@@ -27,4 +27,9 @@ public class Path implements Serializable{
 	public Position getEnd(){
 		return positions.get(positions.size()-1);
 	}
+	@Override
+	public String toString(){
+		if(isEmpty())return "Path(empty)";
+		else return "Path(from "+getStart()+" to "+getEnd()+")";
+	}
 }

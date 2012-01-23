@@ -32,5 +32,10 @@ public class Command implements Serializable{
     public Position getStart(){
     	return path.getStart();
     }
+    
+    @Override
+    public String toString(){
+    	return "Command(player:"+playerId+", r:"+radius+", path:"+path+")";
+    }
 
 }

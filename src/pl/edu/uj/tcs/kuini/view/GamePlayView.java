@@ -68,6 +68,13 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
         return pts;
     }
     
+    private float getXModifier(){
+        return (float) myWidth / state.getWidth();
+    }
+    private float getYModifier(){
+        return (float) myHeight / state.getHeight();
+    }
+    
     @Override
     public void onDraw(Canvas canvas) {
         updateState();
@@ -80,8 +87,8 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
         if(state == null)
             return;
         
-        float xModifier = (float) myWidth / state.getWidth();
-        float yModifier = (float) myHeight / state.getHeight();
+        float xModifier = getXModifier();
+        float yModifier = getYModifier();
         float modifier = Math.min(xModifier, yModifier);
                 
         for(IActor actor : state.getActorStates()) {
@@ -124,7 +131,13 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
         }
         else if(event.getAction() == MotionEvent.ACTION_UP) {
             // TODO rescale positions, radius, etc
-            controller.proxyCommand(new Command(radius, new Path(path), myID));
+        	Log.d("COMMAND", "Command sent!");
+        	List<Position> modelPath = new ArrayList<Position>();
+        	for(Position p : path){
+        		modelPath.add(new Position(p.getX()/getXModifier(), p.getY()/getYModifier()));
+        	}
+        	float modelRadius = radius/Math.max(getXModifier(), getYModifier());
+            controller.proxyCommand(new Command(modelRadius, new Path(modelPath), myID));
             path = null;
         }
         else {

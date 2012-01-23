@@ -35,9 +35,9 @@ public class Vector implements Serializable{
 	 * @return
 	 */
 	public float getAngle(){
-		float asin = (float) Math.asin(getX()/magnitude());
-		if(getY() >= 0) return asin;
-		else return (float)Math.PI+asin;
+		float acos = (float) Math.acos(getX()/magnitude());
+		if(getY() >= 0) return acos;
+		else return (float)Math.PI+acos;
 	}
 	
 	public float magnitude(){

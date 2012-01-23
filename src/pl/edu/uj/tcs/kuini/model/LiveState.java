@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import android.util.Log;
+
 import pl.edu.uj.tcs.kuini.model.actions.IGlobalAction;
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
 import pl.edu.uj.tcs.kuini.model.live.ILiveActor;
@@ -95,6 +97,7 @@ public class LiveState implements ILiveState {
 
 	@Override
 	public void doCommand(Command command) {
+		Log.d("COMMAND", "Command received: "+command);
 		Position start = command.getStart();
 		for(ILiveActor actor : getNeigbours(start, command.getRadius())){
 			if(actor.getPlayerId() == command.getPlayerId()){
