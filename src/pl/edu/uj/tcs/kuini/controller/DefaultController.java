@@ -13,7 +13,7 @@ import pl.edu.uj.tcs.kuini.view.IGamePlayView;
 
 public class DefaultController extends Thread implements IController {
 
-    private final IGamePlayView view;
+    private IGamePlayView view = null;
 
     private final ObjectInputStream in;
     private final ObjectOutputStream out;
@@ -36,10 +36,14 @@ public class DefaultController extends Thread implements IController {
         }
     };
 
-    public DefaultController(ObjectInputStream in, ObjectOutputStream out, IModel model, IGamePlayView view) {
+    public DefaultController(ObjectInputStream in, ObjectOutputStream out, IModel model) {
         this.in = in;
         this.out = out;
         this.model = model;
+    }
+    
+    @Override
+    public void setView(IGamePlayView view) {
         this.view = view;
     }
 

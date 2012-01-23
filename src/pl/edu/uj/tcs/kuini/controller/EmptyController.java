@@ -19,6 +19,7 @@ import pl.edu.uj.tcs.kuini.model.PlayerColor;
 import pl.edu.uj.tcs.kuini.model.factories.ModelFactory;
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
 import pl.edu.uj.tcs.kuini.model.state.State;
+import pl.edu.uj.tcs.kuini.view.IGamePlayView;
 
 public class EmptyController implements IController{
 	
@@ -52,6 +53,8 @@ public class EmptyController implements IController{
     
     @Override
     public void run() {} /* Added for compatibility reason */
+    @Override
+    public void setView(IGamePlayView view) {} /* as before */
     
 
 }

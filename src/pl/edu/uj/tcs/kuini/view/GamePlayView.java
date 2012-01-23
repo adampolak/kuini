@@ -16,13 +16,14 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
 public class GamePlayView extends View implements OnTouchListener, IGamePlayView{
     
-    private IController controller;
+    private IController controller = null;
     private boolean changes;
     private IState state;
     private IState newWaitingState;
@@ -33,10 +34,10 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
     private float max_radius_for_command = 30;
     private final int myID;
     
-    public GamePlayView(Context context, IController controller, int myWidth, int myHeight, int id) {
+    public GamePlayView(Context context, /*IController controller,*/ int myWidth, int myHeight, int id) {
         super(context);
         
-        this.controller = controller;
+        /* this.controller = controller; */
         changes = true;
         this.myWidth = myWidth;
         this.myHeight = myHeight;
@@ -144,6 +145,11 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
         }
         postInvalidate();
 //        invalidate();
+    }
+    
+    @Override
+    public void setController(IController controller) {
+        this.controller = controller;
     }
 
 }

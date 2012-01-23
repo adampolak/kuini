@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import android.util.Log;
+
 import pl.edu.uj.tcs.kuini.model.Command;
 
 public class ControllersServer extends Thread {
@@ -63,6 +65,7 @@ public class ControllersServer extends Thread {
             while(!isInterrupted()) {
                 try {
                     out.writeObject(queue.take());
+                    Log.i("ClientOutputHandler", "Sending new turn to client...");
                 } catch (IOException e) { 
                 	break; 
                 } catch (InterruptedException e) {
@@ -88,7 +91,7 @@ public class ControllersServer extends Thread {
         this.waitingTime = waitingTime;
     }
  
-    void addPlayer(ObjectInputStream in, ObjectOutputStream out, int playerId) {
+    public void addPlayer(ObjectInputStream in, ObjectOutputStream out, int playerId) {
         if (getState() != Thread.State.NEW) throw new IllegalStateException();
         clientInputHandlers.add(new ClientInputHandler(in, playerId));
         clientOutputHandlers.add(new ClientOutputHandler(out));
@@ -96,6 +99,7 @@ public class ControllersServer extends Thread {
 
     @Override
     public void run() {
+        
         for(ClientInputHandler h: clientInputHandlers)
             h.start();
         for(ClientOutputHandler h: clientOutputHandlers) 
@@ -103,7 +107,7 @@ public class ControllersServer extends Thread {
 
         while(!isInterrupted()) {
             synchronized(currentCommands) {
-                Turn turn = new Turn(currentCommands, waitingTime);
+                Turn turn = new Turn(currentCommands, 0.01f*(float)waitingTime);
                 for(ClientOutputHandler h: clientOutputHandlers)
                     h.nextTurn(turn);
                 currentCommands.clear();

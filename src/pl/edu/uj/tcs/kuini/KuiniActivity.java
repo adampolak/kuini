@@ -10,6 +10,7 @@ import pl.edu.uj.tcs.kuini.view.IGamePlayView;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Debug;
 import android.util.Log;
 import android.view.Display;
 import android.widget.SlidingDrawer;
@@ -20,12 +21,16 @@ public class KuiniActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("Activity", "onCreate");
         //setContentView(R.layout.main);
         Display display = getWindowManager().getDefaultDisplay(); 
         int width = display.getWidth();
         int height = display.getHeight();
         final EmptyController emptyController = new EmptyController();
-        final GamePlayView gamePlayView = new GamePlayView(this, emptyController, width, height, 0);
+        final GamePlayView gamePlayView = new GamePlayView(this, width, height, 0);
+        
+        /*
+        gamePlayView.setController(emptyController);
         gamePlayView.stateChanged(emptyController.getCurrentState());
         setContentView(gamePlayView);
         
@@ -40,6 +45,14 @@ public class KuiniActivity extends Activity {
         };
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(timerTask, 0, 100);
+        //*/
+        
+        try {
+            SimpleGame game = new SimpleGame(gamePlayView);
+            game.start();
+        } catch (Exception e) {}
+        setContentView(gamePlayView);
+        //*/
         
     }
 }
