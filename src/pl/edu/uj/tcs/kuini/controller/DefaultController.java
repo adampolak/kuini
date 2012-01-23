@@ -1,9 +1,8 @@
 package pl.edu.uj.tcs.kuini.controller;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.List;
+import java.io.Serializable;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -23,8 +22,8 @@ public class DefaultController extends Thread implements IController {
     private volatile IState latestState;
 
 
-    private final BlockingQueue<Command> sendingQueue = 
-            new LinkedBlockingQueue<Command>();
+    private final BlockingQueue<Serializable> sendingQueue = 
+            new LinkedBlockingQueue<Serializable>();
 
     private final Thread sender = new Thread() {
         @Override
@@ -60,14 +59,15 @@ public class DefaultController extends Thread implements IController {
         latestState = model.getState();
         if (view != null) view.stateChanged(latestState);
         while(!isInterrupted()) {
-            List<Command> commands;
+            Turn turn;
             try {
-                commands = (List<Command>)in.readObject();
+                turn = (Turn)in.readObject();
             } catch (Exception e) { break; }
-            for(Command c: commands) model.doCommand(c);
-            model.nextTurn(0.40f);
+            for(Command command: turn) model.doCommand(command);
+            model.nextTurn(turn.getElapsedTime());
             latestState = model.getState();
             if (view != null) view.stateChanged(latestState);
+            sendingQueue.add(new IAmReady()); /* Not sure where to put it */
         }
         sender.interrupt();
     }

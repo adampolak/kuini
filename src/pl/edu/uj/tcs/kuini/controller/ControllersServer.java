@@ -3,6 +3,7 @@ package pl.edu.uj.tcs.kuini.controller;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -26,10 +27,13 @@ public class ControllersServer extends Thread {
         public void run() {
             while(!isInterrupted()) {
                 try {
-                    Command c = (Command)in.readObject();
-                    if (c.getPlayerId() != playerId) break;
-                    synchronized(currentCommands) {
-                        currentCommands.add(c);
+                    Object o = in.readObject();
+                    if (o instanceof Command) {
+                        Command c = (Command)in.readObject();
+                        if (c.getPlayerId() != playerId) break;
+                        synchronized(currentCommands) {
+                            currentCommands.add(c);
+                        }
                     }
                 } catch (Exception e) { break; }
             }
@@ -40,15 +44,15 @@ public class ControllersServer extends Thread {
     private class ClientOutputHandler extends Thread {
 
         private final ObjectOutputStream out;
-        private final BlockingQueue<List<Command>> queue 
-            = new LinkedBlockingQueue<List<Command>>();
+        private final BlockingQueue<Serializable> queue 
+            = new LinkedBlockingQueue<Serializable>();
 
         public ClientOutputHandler(ObjectOutputStream out) {
             this.out = out;
         }
 
-        public void nextTurn(List<Command> commands) {
-            queue.add(commands); 
+        public void nextTurn(Turn turn) {
+            queue.add(turn); 
             /* It may throw IllegalStateException if capacity of
              * a queue is exceeded. It should not happen, thus
              * I guess it is appropriate behavior.                  */
@@ -99,9 +103,9 @@ public class ControllersServer extends Thread {
 
         while(!isInterrupted()) {
             synchronized(currentCommands) {
-                List<Command> moves = new ArrayList<Command>(currentCommands);
+                Turn turn = new Turn(currentCommands, waitingTime);
                 for(ClientOutputHandler h: clientOutputHandlers)
-                    h.nextTurn(moves);
+                    h.nextTurn(turn);
                 currentCommands.clear();
             }
             try {
