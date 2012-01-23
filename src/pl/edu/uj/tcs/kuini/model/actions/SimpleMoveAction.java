@@ -10,11 +10,13 @@ import pl.edu.uj.tcs.kuini.model.live.ILiveState;
 
 public class SimpleMoveAction implements IAction {
 	
-	Random random;
+	private final Random random;
+	public SimpleMoveAction(Random random){
+		this.random = random;
+	}
 	@Override
 	public void performAction(ILiveActor actor, float elapsedTime,
 			ILiveState state) {
-		if(random == null)random = new Random(actor.getId());
 		actor.changeAngle((float) ((random.nextFloat()-0.5)*1.0*elapsedTime));
 		Path path = actor.getPath();
 		Position target = new Vector(actor.getPosition(), actor.getAngle(), 1.0f).getTarget();

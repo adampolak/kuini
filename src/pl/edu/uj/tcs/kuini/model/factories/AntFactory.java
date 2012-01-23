@@ -1,11 +1,13 @@
 package pl.edu.uj.tcs.kuini.model.factories;
 
 import java.util.Arrays;
+import java.util.Random;
 
 import pl.edu.uj.tcs.kuini.model.Actor;
 import pl.edu.uj.tcs.kuini.model.ActorType;
 import pl.edu.uj.tcs.kuini.model.Path;
 import pl.edu.uj.tcs.kuini.model.actions.AttackAction;
+import pl.edu.uj.tcs.kuini.model.actions.BounceAction;
 import pl.edu.uj.tcs.kuini.model.actions.CompoundAction;
 import pl.edu.uj.tcs.kuini.model.actions.EatFoodAction;
 import pl.edu.uj.tcs.kuini.model.actions.HealYourselfAction;
@@ -16,13 +18,17 @@ import pl.edu.uj.tcs.kuini.model.live.ILiveActor;
 import pl.edu.uj.tcs.kuini.model.live.ILiveState;
 
 public class AntFactory implements IAntFactory {
-	private final IAction antAction = new CompoundAction(
+	private final IAction antAction; 
+	public AntFactory(Random random){
+		this.antAction = new CompoundAction(
 			Arrays.asList(new IAction[]{
 				new EatFoodAction(),
-				new SimpleMoveAction(),
+				new SimpleMoveAction(random),
+				new BounceAction(),
 				new HealYourselfAction(),
 				new AttackAction()
 		}));
+	}
 	@Override
 	public ILiveActor getAnt(ILiveState state, int playerId) {
 		return new Actor(ActorType.ANT, state.nextActorId(), playerId, antAction,

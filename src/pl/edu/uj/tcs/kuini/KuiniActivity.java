@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Debug;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.widget.SlidingDrawer;
@@ -65,9 +66,14 @@ public class KuiniActivity extends Activity {
     @Override
     public void onStart() {
         super.onStart();
-        Display display = getWindowManager().getDefaultDisplay(); 
-        int width = display.getWidth();
-        int height = display.getHeight();
+        //Display display = getWindowManager().getDefaultDisplay(); 
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        //int width = display.getWidth();
+        //int height = display.getHeight();
+        int width = displaymetrics.widthPixels;
+        int height = displaymetrics.heightPixels-80; //TODO: fix this 80: make the app fullscreen
+        
         GamePlayView gamePlayView = new GamePlayView(this, width, height, DEMO_ID);
         try {
             game = new SimpleGame(gamePlayView, DEMO_ID, WAITING_TIME);

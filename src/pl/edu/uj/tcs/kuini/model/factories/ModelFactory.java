@@ -36,7 +36,7 @@ public class ModelFactory implements IModelFactory {
 		state.addPlayer(player1);
 		state.addPlayer(player2);
 		
-		IAntFactory antFactory = new AntFactory();
+		IAntFactory antFactory = new AntFactory(random);
 		IAction anthillAction = new CompoundAction(Arrays.asList(new IAction[]{
 				new HealYourselfAction(),
 				new SpawnAntAction(antFactory)
