@@ -26,9 +26,10 @@ public class LiveState implements ILiveState {
 	private int lastPlayerId = 0;
 	private IActorOrderer orderer;
 	private IGlobalAction globalAction;
+	private final IActorWatcher actorWatcher;
 	
 	public LiveState(float width, float height,
-			IActorOrderer orderer, IGlobalAction globalAction) {
+			IActorOrderer orderer, IGlobalAction globalAction, IActorWatcher actorWatcher) {
 		this.actors = new LinkedList<ILiveActor>();
 		this.playersById = new HashMap<Integer, ILivePlayer>();
 		this.actorsToAdd = new LinkedList<ILiveActor>();
@@ -36,6 +37,7 @@ public class LiveState implements ILiveState {
 		this.height = height;
 		this.orderer = orderer;
 		this.globalAction = globalAction;
+		this.actorWatcher = actorWatcher;
 		playersById.put(-1, new Player(-1, "FOOD", PlayerColor.GOLD, 0, 0));
 	}
 
@@ -71,38 +73,39 @@ public class LiveState implements ILiveState {
 
 
 	@Override
-	public List<ILiveActor> getNeigbours(Position position, float radius) {
-		List<ILiveActor> result = new LinkedList<ILiveActor>();
-		for(ILiveActor actor : actors){
-			if(position.distanceTo(actor.getPosition()) <= radius + actor.getRadius())
-				result.add(actor);
-		}
-		return result;
+	public List<ILiveActor> getNeighbours(Position position, float radius) {
+		return actorWatcher.getNeighbours(position, radius);
 	}
 
 	@Override
 	public void nextTurn(float elapsedTime) {
-		//long time = System.nanoTime();
+		long time = System.nanoTime();
 		for(ILiveActor actor : orderer.orderActors(actors)){
 			actor.performAction(elapsedTime, this);
+			actorWatcher.updatePosition(actor);
 		}
 		globalAction.performAction(elapsedTime, this);
+		for(ILiveActor actor : actorsToAdd)
+			actorWatcher.addActor(actor);
 		actors.addAll(actorsToAdd);
 		actorsToAdd.clear();
 		Set<ILiveActor> actorsToRemove = new HashSet<ILiveActor>();
 		for(ILiveActor actor : actors){
-			if(actor.isDead())actorsToRemove.add(actor);
+			if(actor.isDead()){
+				actorsToRemove.add(actor);
+				actorWatcher.removeActor(actor);
+			}
 		}
 		actors.removeAll(actorsToRemove);
-		//Log.d("TIME", "Next turn computed in "+(((double)(System.nanoTime()-time))/1000000000)+
-		//		"s (actors:"+actors.size()+")");
+		Log.d("TIME", "Next turn computed in "+(((double)(System.nanoTime()-time))/1000000000)+
+				"s (actors:"+actors.size()+")");
 	}
 
 	@Override
 	public void doCommand(Command command) {
 		int selectedActors = 0;
 		Position start = command.getStart();
-		for(ILiveActor actor : getNeigbours(start, command.getRadius())){
+		for(ILiveActor actor : getNeighbours(start, command.getRadius())){
 			if(actor.getPlayerId() == command.getPlayerId()){
 				actor.setPath(command.getPath());
 				selectedActors++;
