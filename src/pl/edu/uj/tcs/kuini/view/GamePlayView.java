@@ -31,7 +31,8 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
     private final int myHeight;
     private List<Position> path;
     private float pathRadius;
-    private float max_radius_for_command = 30;
+    private float max_radius_for_command = 40;
+    private float radius_speed_growth = 2f;
     private final int myID;
     
     public GamePlayView(Context context, /*IController controller,*/ int myWidth, int myHeight, int id) {
@@ -137,7 +138,7 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
         }
         else {
             if(path.get(0).distanceTo(act) < max_radius_for_command)
-                pathRadius += 1f;
+                pathRadius += radius_speed_growth;
             else
                 path.add(act);
         }
