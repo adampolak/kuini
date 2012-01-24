@@ -101,7 +101,7 @@ public class Actor implements ILiveActor {
 	}
 	
 	@Override
-	public void changeAngle(float change){
-		angle += change;
+	public void setAngle(float angle) {
+		this.angle = (float)(angle%(2*Math.PI));
 	}
 }

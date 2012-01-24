@@ -17,17 +17,20 @@ public class SimpleMoveAction implements IAction {
 	@Override
 	public void performAction(ILiveActor actor, float elapsedTime,
 			ILiveState state) {
-		actor.changeAngle((float) ((random.nextFloat()-0.5)*1.0*elapsedTime));
 		Path path = actor.getPath();
-		Position target = new Vector(actor.getPosition(), actor.getAngle(), 1.0f).getTarget();
+		Position target;
 		if(!path.isEmpty())target = path.getEnd();
-		actor.setPosition(
-				new Vector(
-						new Vector(actor.getPosition(), target), 
-						actor.getSpeed()*elapsedTime)
-				.getTarget()
-				);
-
+		else target = new Vector(actor.getPosition(), 
+				actor.getAngle()+((float) ((random.nextFloat()-0.5)*0.5*elapsedTime)), 
+				100.0f).getTarget();
+		
+		Vector direction = new Vector(actor.getPosition(), target);
+		actor.setAngle(direction.getAngle());
+		float length = Math.min(direction.magnitude(), actor.getSpeed()*elapsedTime);
+		actor.setPosition(new Vector(direction, length).getTarget());
+		
+		if(actor.getPosition().distanceTo(target) < actor.getRadius())
+			actor.setPath(Path.EMPTY_PATH);
 	}
 
 }

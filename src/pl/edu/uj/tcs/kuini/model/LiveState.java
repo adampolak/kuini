@@ -100,13 +100,15 @@ public class LiveState implements ILiveState {
 
 	@Override
 	public void doCommand(Command command) {
-		Log.d("COMMAND", "Command received: "+command);
+		int selectedActors = 0;
 		Position start = command.getStart();
 		for(ILiveActor actor : getNeigbours(start, command.getRadius())){
 			if(actor.getPlayerId() == command.getPlayerId()){
 				actor.setPath(command.getPath());
+				selectedActors++;
 			}
 		}
+		Log.d("COMMAND", "Command received: "+command+" ("+selectedActors+" actors)");
 	}
 
 	@Override
