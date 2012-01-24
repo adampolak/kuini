@@ -22,10 +22,10 @@ public class AntFactory implements IAntFactory {
 	public AntFactory(Random random){
 		this.antAction = new CompoundAction(
 			Arrays.asList(new IAction[]{
-				new EatFoodAction(),
+				new EatFoodAction(2, 1.5f), // eatingSpeed, eatingRadius
 				new SimpleMoveAction(random),
 				new BounceAction(),
-				new HealYourselfAction(),
+				new HealYourselfAction(1), // healingSpeed
 				new AttackAction()
 		}));
 	}

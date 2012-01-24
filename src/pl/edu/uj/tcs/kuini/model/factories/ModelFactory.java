@@ -27,7 +27,7 @@ public class ModelFactory implements IModelFactory {
 	@Override
 	public IModel getModel() {
 		Random random = new Random(0);
-		ILiveState state = new LiveState(10, 20, 
+		ILiveState state = new LiveState(12, 18, 
 				new RandomOrderer(random), 
 				new SpawnFoodAction(new FoodFactory(random)));
 		
@@ -38,13 +38,13 @@ public class ModelFactory implements IModelFactory {
 		
 		IAntFactory antFactory = new AntFactory(random);
 		IAction anthillAction = new CompoundAction(Arrays.asList(new IAction[]{
-				new HealYourselfAction(),
+				new HealYourselfAction(5),
 				new SpawnAntAction(antFactory)
 				}));
 		state.addActor(new Actor(ActorType.ANTHILL, state.nextActorId(), player1.getId(), anthillAction,
 				new Position(2,2), 0.5f, 0, 1000, 1000, Path.EMPTY_PATH));
 		state.addActor(new Actor(ActorType.ANTHILL, state.nextActorId(), player2.getId(), anthillAction,
-				new Position(8,18), 0.5f, (float)Math.PI, 1000, 1000, Path.EMPTY_PATH));
+				new Position(10,16), 0.5f, (float)Math.PI, 1000, 1000, Path.EMPTY_PATH));
 		Log.d("DEBUG 3", state.getActorStates().toString());
         
 		state.nextTurn(0);
