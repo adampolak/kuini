@@ -26,7 +26,7 @@ public class AntFactory implements IAntFactory {
 				new SimpleMoveAction(random),
 				new BounceAction(),
 				new HealYourselfAction(1), // healingSpeed
-				new AttackAction()
+				new AttackAction(5, 1.5f) // attackForce, attackRadius
 		}));
 	}
 	@Override
