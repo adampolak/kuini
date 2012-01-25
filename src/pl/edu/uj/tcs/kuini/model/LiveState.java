@@ -79,7 +79,7 @@ public class LiveState implements ILiveState {
 
 	@Override
 	public void nextTurn(float elapsedTime) {
-		long time = System.nanoTime();
+		//long time = System.nanoTime();
 		for(ILiveActor actor : orderer.orderActors(actors)){
 			actor.performAction(elapsedTime, this);
 			actorWatcher.updatePosition(actor);
@@ -97,8 +97,8 @@ public class LiveState implements ILiveState {
 			}
 		}
 		actors.removeAll(actorsToRemove);
-		Log.d("TIME", "Next turn computed in "+(((double)(System.nanoTime()-time))/1000000000)+
-				"s (actors:"+actors.size()+")");
+		//Log.d("TIME", "Next turn computed in "+(((double)(System.nanoTime()-time))/1000000000)+
+		//		"s (actors:"+actors.size()+")");
 	}
 
 	@Override
