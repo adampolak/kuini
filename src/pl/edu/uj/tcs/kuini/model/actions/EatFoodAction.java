@@ -17,7 +17,7 @@ public class EatFoodAction implements IAction {
 	@Override
 	public void performAction(ILiveActor actor, float elapsedTime,
 			ILiveState state) {
-		for(ILiveActor food : state.getNeigbours(actor.getPosition(), eatingRadius)){
+		for(ILiveActor food : state.getNeighbours(actor.getPosition(), eatingRadius)){
 			if(food.getActorType() != ActorType.FOOD)continue;
 			float foodEaten = Math.max(0, Math.min(food.getHP(), elapsedTime*eatingSpeed));
 			food.changeHP(-foodEaten);

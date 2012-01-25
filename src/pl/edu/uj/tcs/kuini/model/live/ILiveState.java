@@ -15,7 +15,7 @@ public interface ILiveState extends IState {
 	Map<Integer, ILivePlayer> getLivePlayersById();
 	void addActor(ILiveActor actor);
 	void addPlayer(ILivePlayer player);
-	List<ILiveActor> getNeigbours(Position position, float radius);
+	List<ILiveActor> getNeighbours(Position position, float radius);
 	void nextTurn(float elapsedTime);
 	void doCommand(Command command);
 	long nextActorId();
