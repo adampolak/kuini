@@ -41,7 +41,7 @@ public class ModelFactory implements IModelFactory {
 		IAntFactory antFactory = new AntFactory(random);
 		IAction anthillAction = new CompoundAction(Arrays.asList(new IAction[]{
 				new HealYourselfAction(10),
-				new SpawnAntAction(antFactory)
+				new SpawnAntAction(antFactory, 1.5f)
 				}));
 		state.addActor(new Actor(ActorType.ANTHILL, state.nextActorId(), player1.getId(), anthillAction,
 				new Position(2,2), 0.5f, 0, 1000, 1000, Path.EMPTY_PATH));
@@ -70,8 +70,9 @@ public class ModelFactory implements IModelFactory {
 		
 		IAntFactory antFactory = new AntFactory(random);
 		IAction anthillAction = new CompoundAction(Arrays.asList(new IAction[]{
+				new RotateAction(0.5f),
 				new HealYourselfAction(10),
-				new SpawnAntAction(antFactory)
+				new SpawnAntAction(antFactory, 1.5f)
 				}));
 		
 		for(IPlayerStub playerStub : players){
