@@ -10,7 +10,10 @@ import android.util.Log;
 import pl.edu.uj.tcs.kuini.controller.ControllersServer;
 import pl.edu.uj.tcs.kuini.controller.DefaultController;
 import pl.edu.uj.tcs.kuini.model.IModel;
+import pl.edu.uj.tcs.kuini.model.PlayerColor;
+import pl.edu.uj.tcs.kuini.model.factories.IPlayerStub;
 import pl.edu.uj.tcs.kuini.model.factories.ModelFactory;
+import pl.edu.uj.tcs.kuini.model.factories.PlayerStub;
 import pl.edu.uj.tcs.kuini.view.IGamePlayView;
 
 public class SimpleGame {
@@ -51,7 +54,13 @@ public class SimpleGame {
         
         Log.i("SG", "Client added to server.");
         
-        IModel model = new ModelFactory().getModel();
+        IModel model = new ModelFactory().getModel(
+        		new IPlayerStub[]{
+        				new PlayerStub("RED", PlayerColor.RED),
+        				new PlayerStub("BLUE", PlayerColor.BLUE),
+        				new PlayerStub("GREEN", PlayerColor.GREEN)
+        		}, 1.5f, "ANTS!"
+        );
         
         Log.i("SG", "Model created.");
         
