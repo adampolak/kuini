@@ -25,7 +25,6 @@ import pl.edu.uj.tcs.kuini.model.live.ILiveState;
 import android.util.Log;
 
 public class ModelFactory implements IModelFactory {
-	@Override
 	public IModel getModel() {
 		Random random = new Random(0);
 		ILiveState state = new LiveState(12, 18, 
@@ -48,10 +47,45 @@ public class ModelFactory implements IModelFactory {
 				new Position(2,2), 0.5f, 0, 1000, 1000, Path.EMPTY_PATH));
 		state.addActor(new Actor(ActorType.ANTHILL, state.nextActorId(), player2.getId(), anthillAction,
 				new Position(10,16), 0.5f, (float)Math.PI, 1000, 1000, Path.EMPTY_PATH));
-		Log.d("DEBUG 3", state.getActorStates().toString());
         
 		state.nextTurn(0);
-		Log.d("DEBUG 2", state.getActorStates().toString());
+		return new Model(state);
+	}
+
+	@Override
+	public IModel getModel(IPlayerStub[] players, float screenRatio, String seed) {
+		Random random = new Random(seed.hashCode());
+		float width, height;
+		if(screenRatio < 1){ // horizontal
+			width = 18;
+			height = width*screenRatio;
+		}else{
+			height = 18;
+			width = height/screenRatio;
+		}
+		ILiveState state = new LiveState(width, height, 
+				new RandomOrderer(random), 
+				new SpawnFoodAction(new FoodFactory(random)),
+				new SimpleActorWatcher());
+		
+		IAntFactory antFactory = new AntFactory(random);
+		IAction anthillAction = new CompoundAction(Arrays.asList(new IAction[]{
+				new HealYourselfAction(10),
+				new SpawnAntAction(antFactory)
+				}));
+		
+		for(IPlayerStub playerStub : players){
+			ILivePlayer player = new Player(state.nextPlayerId(), playerStub.getName(), playerStub.getColor(), 0, 1000);
+			state.addPlayer(player);
+			state.addActor(new Actor(ActorType.ANTHILL, state.nextActorId(), player.getId(), anthillAction,
+				new Position(random.nextFloat()*width, random.nextFloat()*height), 
+				0.5f, //radius
+				random.nextFloat()*(float)(2*Math.PI), //angle
+				1000, //HP
+				1000, //maxHP
+				Path.EMPTY_PATH));
+		}
+		state.nextTurn(0);
 		return new Model(state);
 	}
 
