@@ -12,7 +12,9 @@
         android:debuggable="true">
         <activity
             android:label="@string/app_name"
-            android:name=".KuiniActivity" >
+            android:name=".KuiniActivity" 
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
 
