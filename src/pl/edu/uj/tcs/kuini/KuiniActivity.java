@@ -72,7 +72,7 @@ public class KuiniActivity extends Activity {
         //int width = display.getWidth();
         //int height = display.getHeight();
         int width = displaymetrics.widthPixels;
-        int height = displaymetrics.heightPixels-80; //TODO: fix this 80: make the app fullscreen
+        int height = displaymetrics.heightPixels; 
         
         GamePlayView gamePlayView = new GamePlayView(this, width, height, DEMO_ID);
         try {
