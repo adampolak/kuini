@@ -59,7 +59,7 @@ public class SimpleGame {
         				new PlayerStub("RED", PlayerColor.RED),
         				new PlayerStub("BLUE", PlayerColor.BLUE),
         				new PlayerStub("GREEN", PlayerColor.GREEN)
-        		}, 1.5f, "ANTS!"
+        		}, 800.0f/480.0f, "ANTS!"
         );
         
         Log.i("SG", "Model created.");
