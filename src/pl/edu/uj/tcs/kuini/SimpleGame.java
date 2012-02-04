@@ -21,11 +21,11 @@ public class SimpleGame {
     private final DefaultController controller;
     private final ControllersServer server;
     
-    public SimpleGame(IGamePlayView view, int playerId, long waitingTime) throws Exception {
+    public SimpleGame(IGamePlayView view, int playerId) throws Exception {
         
         Log.i("SG", "Creating SimpleGame...");
         
-        server = new ControllersServer(waitingTime);
+        server = new ControllersServer();
         
         Log.i("SG", "CServer created.");
         

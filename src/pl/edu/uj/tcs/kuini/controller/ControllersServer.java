@@ -13,6 +13,8 @@ import pl.edu.uj.tcs.kuini.model.Command;
 
 public class ControllersServer extends Thread {
     
+    private static final long MIN_TURN_DURATION = 40; // milliseconds
+    
 	private class ClientInputHandler extends Thread {
         
         private final ObjectInputStream in;
@@ -55,7 +57,7 @@ public class ControllersServer extends Thread {
             queue.add(turn); 
             /* It may throw IllegalStateException if capacity of
              * a queue is exceeded. It should not happen, thus
-             * I guess it is appropriate behavior.                  */
+             * I guess it is an appropriate behavior.                  */
         }
 
         @Override
@@ -74,7 +76,6 @@ public class ControllersServer extends Thread {
 
     }
 
-    private final long waitingTime;
     private final List<Command> currentCommands = 
             new ArrayList<Command>();
 
@@ -83,11 +84,6 @@ public class ControllersServer extends Thread {
     private final List<ClientOutputHandler> clientOutputHandlers = 
             new ArrayList<ClientOutputHandler>();
 
-
-    public ControllersServer(long waitingTime) {
-        this.waitingTime = waitingTime;
-    }
- 
     public void addPlayer(ObjectInputStream in, ObjectOutputStream out, int playerId) {
         if (getState() != Thread.State.NEW) throw new IllegalStateException();
         clientInputHandlers.add(new ClientInputHandler(in, playerId));
@@ -102,16 +98,24 @@ public class ControllersServer extends Thread {
         for(ClientOutputHandler h: clientOutputHandlers) 
             h.start();
 
+        long lastTurnTime = 0;
+        
         while(!isInterrupted()) {
+            long t = lastTurnTime + MIN_TURN_DURATION
+                    - System.currentTimeMillis();
+            if (t < 0) t = 0;
+            try {
+                sleep(t);
+            } catch (InterruptedException e) { break; }
+            lastTurnTime = System.currentTimeMillis();
+            
+            Turn turn;
             synchronized(currentCommands) {
-                Turn turn = new Turn(currentCommands, 0.01f*(float)waitingTime);
-                for(ClientOutputHandler h: clientOutputHandlers)
-                    h.nextTurn(turn);
+                turn = new Turn(currentCommands, 0.5f);
                 currentCommands.clear();
             }
-            try {
-                sleep(waitingTime);
-            } catch (InterruptedException e) { break; }
+            for(ClientOutputHandler h: clientOutputHandlers)
+                h.nextTurn(turn);
         }
 
         for(ClientInputHandler h: clientInputHandlers) 

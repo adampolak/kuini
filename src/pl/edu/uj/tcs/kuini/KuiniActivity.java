@@ -19,8 +19,7 @@ import android.widget.SlidingDrawer;
 public class KuiniActivity extends Activity {
 
     private final int DEMO_ID = 1;
-    private final long WAITING_TIME = 50; /* [ms] */
-    
+   
     private SimpleGame game = null;
     
     /** Called when the activity is first created. */
@@ -28,39 +27,6 @@ public class KuiniActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i("Activity", "onCreate");
-        //setContentView(R.layout.main);
-        /*
-        Display display = getWindowManager().getDefaultDisplay(); 
-        int width = display.getWidth();
-        int height = display.getHeight();
-        final EmptyController emptyController = new EmptyController();
-        final GamePlayView gamePlayView = new GamePlayView(this, width, height, DEMO_ID);
-        */
-        /*
-        gamePlayView.setController(emptyController);
-        gamePlayView.stateChanged(emptyController.getCurrentState());
-        setContentView(gamePlayView);
-        
-        TimerTask timerTask = new TimerTask() {
-            
-            @Override
-            public void run() {                       
-                emptyController.pushTime();
-                gamePlayView.stateChanged(emptyController.getCurrentState());
-                Log.d("TIME PUSH", "hurray");                                                          
-            }
-        };
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(timerTask, 0, 100);
-        //*/
-        /*
-        try {
-            SimpleGame game = new SimpleGame(gamePlayView, DEMO_ID, WAITING_TIME);
-            game.start();
-        } catch (Exception e) {}
-        setContentView(gamePlayView);
-        //*/
-        
     }
     
     @Override
@@ -76,7 +42,7 @@ public class KuiniActivity extends Activity {
         
         GamePlayView gamePlayView = new GamePlayView(this, width, height, DEMO_ID);
         try {
-            game = new SimpleGame(gamePlayView, DEMO_ID, WAITING_TIME);
+            game = new SimpleGame(gamePlayView, DEMO_ID);
         } catch (Exception e) {}
         game.start();
         setContentView(gamePlayView);
