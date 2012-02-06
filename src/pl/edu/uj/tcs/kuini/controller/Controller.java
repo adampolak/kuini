@@ -9,17 +9,19 @@ import java.util.concurrent.LinkedBlockingQueue;
 import pl.edu.uj.tcs.kuini.model.Command;
 import pl.edu.uj.tcs.kuini.model.IModel;
 import pl.edu.uj.tcs.kuini.model.IState;
-import pl.edu.uj.tcs.kuini.view.IGamePlayView;
 
-public class DefaultController extends Thread implements IController {
+public class Controller extends Thread implements ICommandProxy {
 
-    private IGamePlayView view = null;
+    public interface StateChangeListener {
+        void stateChanged(IState state);
+    }
+    
+    private final StateChangeListener view;
 
     private final ObjectInputStream in;
     private final ObjectOutputStream out;
 
     private final IModel model;
-    private volatile IState latestState;
 
 
     private final BlockingQueue<Serializable> sendingQueue = 
@@ -36,20 +38,11 @@ public class DefaultController extends Thread implements IController {
         }
     };
 
-    public DefaultController(ObjectInputStream in, ObjectOutputStream out, IModel model) {
+    public Controller(ObjectInputStream in, ObjectOutputStream out, IModel model, StateChangeListener view) {
         this.in = in;
         this.out = out;
         this.model = model;
-    }
-    
-    @Override
-    public void setView(IGamePlayView view) {
         this.view = view;
-    }
-
-    @Override
-    public IState getCurrentState() {
-        return latestState;
     }
 
     @Override
@@ -60,8 +53,7 @@ public class DefaultController extends Thread implements IController {
     @Override
     public void run() {
         sender.start();
-        latestState = model.getState();
-        if (view != null) view.stateChanged(latestState);
+        view.stateChanged(model.getState());
         while(!isInterrupted()) {
             Turn turn;
             try {
@@ -69,8 +61,7 @@ public class DefaultController extends Thread implements IController {
             } catch (Exception e) { break; }
             for(Command command: turn) model.doCommand(command);
             model.nextTurn(turn.getElapsedTime());
-            latestState = model.getState();
-            if (view != null) view.stateChanged(latestState);
+            view.stateChanged(model.getState());
             sendingQueue.add(new IAmReady()); /* Not sure where to put it */
         }
         sender.interrupt();
