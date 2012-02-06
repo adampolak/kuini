@@ -21,7 +21,7 @@
             
         </activity>
         <activity
-            android:name=".KuiniActivity" 
+            android:name=".gui.KuiniActivity" 
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
         </activity>

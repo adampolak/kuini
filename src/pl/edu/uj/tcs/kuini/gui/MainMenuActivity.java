@@ -1,6 +1,5 @@
 package pl.edu.uj.tcs.kuini.gui;
 
-import pl.edu.uj.tcs.kuini.KuiniActivity;
 import android.R;
 import android.app.ListActivity;
 import android.content.Intent;
@@ -32,7 +31,9 @@ public class MainMenuActivity extends ListActivity {
 
         switch (position) {
         case 0:
-            startActivity(new Intent(this, KuiniActivity.class));
+            Intent intent = new Intent(this, KuiniActivity.class);
+            intent.putExtra("game", KuiniActivity.DEMO_GAME);
+            startActivity(intent);
             break;
         default:
             Toast.makeText(this, "Not implemented yet :-(", Toast.LENGTH_SHORT).show();
