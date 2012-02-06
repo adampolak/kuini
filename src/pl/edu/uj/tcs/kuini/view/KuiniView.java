@@ -3,7 +3,7 @@ package pl.edu.uj.tcs.kuini.view;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.edu.uj.tcs.kuini.controller.IController;
+import pl.edu.uj.tcs.kuini.controller.ICommandProxy;
 import pl.edu.uj.tcs.kuini.model.Command;
 import pl.edu.uj.tcs.kuini.model.IActor;
 import pl.edu.uj.tcs.kuini.model.IPlayer;
@@ -21,9 +21,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
-public class GamePlayView extends View implements OnTouchListener, IGamePlayView{
+public class KuiniView extends View implements OnTouchListener {
     
-    private IController controller = null;
+    private ICommandProxy proxy = null;
     private boolean changes;
     private IState state;
     private IState newWaitingState;
@@ -33,16 +33,19 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
     private float pathRadius;
     private float max_radius_for_command = 40;
     private float radius_speed_growth = 2f;
-    private final int myID;
+    private int playerId;
     
-    public GamePlayView(Context context, /*IController controller,*/ int myWidth, int myHeight, int id) {
+    public void setPlayerId(int playerId) {
+        this.playerId = playerId;
+    }
+    
+    public KuiniView(Context context, int myWidth, int myHeight) {
         super(context);
         
         /* this.controller = controller; */
         changes = true;
         this.myWidth = myWidth;
         this.myHeight = myHeight;
-        this.myID = id;
 
         setFocusable(true);
         setFocusableInTouchMode(true);
@@ -133,7 +136,7 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
         		modelPath.add(scaler.getModelPosition(p));
         	}
         	float modelRadius = scaler.getModelRadius(pathRadius);
-            controller.proxyCommand(new Command(modelRadius, new Path(modelPath), myID));
+            proxy.proxyCommand(new Command(modelRadius, new Path(modelPath), playerId));
             path = null;
         }
         else {
@@ -146,7 +149,6 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
         return true;
     }
     
-    @Override
     public void stateChanged(IState state) {
         synchronized (this) {
             newWaitingState = new State(state);
@@ -156,9 +158,8 @@ public class GamePlayView extends View implements OnTouchListener, IGamePlayView
 //        invalidate();
     }
     
-    @Override
-    public void setController(IController controller) {
-        this.controller = controller;
+    public void setCommandProxy(ICommandProxy proxy) {
+        this.proxy = proxy;
     }
 
 }
