@@ -5,7 +5,6 @@ import java.util.Random;
 
 import pl.edu.uj.tcs.kuini.model.Actor;
 import pl.edu.uj.tcs.kuini.model.ActorType;
-import pl.edu.uj.tcs.kuini.model.GridActorWatcher;
 import pl.edu.uj.tcs.kuini.model.IModel;
 import pl.edu.uj.tcs.kuini.model.LiveState;
 import pl.edu.uj.tcs.kuini.model.Model;
@@ -22,7 +21,6 @@ import pl.edu.uj.tcs.kuini.model.actions.SpawnFoodAction;
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
 import pl.edu.uj.tcs.kuini.model.live.ILivePlayer;
 import pl.edu.uj.tcs.kuini.model.live.ILiveState;
-import android.util.Log;
 
 public class ModelFactory implements IModelFactory {
 	public IModel getModel() {
