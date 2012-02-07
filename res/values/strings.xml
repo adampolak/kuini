@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Kuini</string>
-</resources>
+    
+    <string name="preference_player_name">Player name</string>
+    
+    <string name="splash_before">Please wait for other players...</string>
+    <string name="splash_broken">:(</string>
+    <string name="splash_lose">You lost.</string>
+    <string name="splash_win">You won.</string>
+        
+   </resources>

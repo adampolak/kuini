@@ -35,6 +35,9 @@ public class MainMenuActivity extends ListActivity {
             intent.putExtra("game", KuiniActivity.DEMO_GAME);
             startActivity(intent);
             break;
+        case 2:
+            startActivity(new Intent(this, SettingsActivity.class));
+            break;
         default:
             Toast.makeText(this, "Not implemented yet :-(", Toast.LENGTH_SHORT).show();
         }

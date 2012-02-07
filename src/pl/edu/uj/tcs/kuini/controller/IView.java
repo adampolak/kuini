@@ -6,7 +6,7 @@ public interface IView {
     
     void gameStarted(int playerId);
     void gameBroken();
-    void gameFinished();
+    /* void gameFinished(); */
     
     void stateChanged(IState state);
     

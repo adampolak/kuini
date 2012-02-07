@@ -32,14 +32,19 @@ public class ControllersServer extends Thread {
                     Object o = in.readObject();
                     if (o instanceof Command) {
                         Command c = (Command)o;
-                        if (c.getPlayerId() != playerId) break;
+                        if (c.getPlayerId() != playerId) continue;
                         synchronized(currentCommands) {
                             currentCommands.add(c);
                         }
                     }
-                } catch (Exception e) { break; }
+                } catch (IOException e) { 
+                    break; 
+                } catch (ClassNotFoundException e) {
+                    continue;
+                }
             }
             try { in.close(); } catch (IOException e) {}
+            ControllersServer.this.interrupt();
         }
     }
 
@@ -72,6 +77,7 @@ public class ControllersServer extends Thread {
                 }
             }
             try { out.close(); } catch(IOException e) {}
+            ControllersServer.this.interrupt();
         }
 
     }
