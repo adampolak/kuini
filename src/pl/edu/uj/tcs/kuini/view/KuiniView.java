@@ -3,7 +3,7 @@ package pl.edu.uj.tcs.kuini.view;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.edu.uj.tcs.kuini.controller.ICommandProxy;
+import pl.edu.uj.tcs.kuini.gui.ICommandProxy;
 import pl.edu.uj.tcs.kuini.model.Command;
 import pl.edu.uj.tcs.kuini.model.IActor;
 import pl.edu.uj.tcs.kuini.model.IPlayer;

@@ -1,13 +1,18 @@
 package pl.edu.uj.tcs.kuini.gui;
 
+import pl.edu.uj.tcs.kuini.R;
 import pl.edu.uj.tcs.kuini.controller.AbstractGame;
 import pl.edu.uj.tcs.kuini.controller.DemoGame;
 import pl.edu.uj.tcs.kuini.controller.IView;
 import pl.edu.uj.tcs.kuini.model.IState;
 import pl.edu.uj.tcs.kuini.view.KuiniView;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 public class KuiniActivity extends Activity implements IView {
 
@@ -15,61 +20,73 @@ public class KuiniActivity extends Activity implements IView {
     public static final int JOIN_GAME = 1;
     public static final int DEMO_GAME = 2;
    
-    private AbstractGame game = null;
-    private KuiniView gamePlayView = null; 
+    private View splash;
+    private ProgressBar splashProgressBar;
+    private TextView splashText;
     
-    /** Called when the activity is first created. */
+    private AbstractGame game = null;
+    private KuiniView view;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Display display = getWindowManager().getDefaultDisplay(); 
+        
+        this.setContentView(R.layout.splash);
+        
+        splash = findViewById(R.id.splash);
+        splashProgressBar = (ProgressBar)findViewById(R.id.splashProgressBar);
+        splashText = (TextView)findViewById(R.id.splashText);
+        
+        splashProgressBar.setVisibility(View.VISIBLE);
+        splashText.setText(R.string.splash_before);
+        
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        //int width = display.getWidth();
-        //int height = display.getHeight();
         int width = displaymetrics.widthPixels;
         int height = displaymetrics.heightPixels; 
         
-        gamePlayView = new KuiniView(this, width, height);
+        view = new KuiniView(this, width, height);
                 
         game = new DemoGame(this);
         
-        gamePlayView.setCommandProxy(game);
+        view.setCommandProxy(game);
         
         game.start();
-        this.setContentView(gamePlayView);
         
     }
     
     @Override
     public void onDestroy() {
         super.onDestroy();
-        game.interrupt();
+        if (game != null) game.interrupt();
     }
 
     @Override
-    public void gameStarted(int playerId) {
-        gamePlayView.setPlayerId(playerId);
-        // TODO Auto-generated method stub
-        
+    public void gameStarted(final int playerId) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                view.setPlayerId(playerId);
+                setContentView(view);
+            }
+        });
     }
 
     @Override
     public void gameBroken() {
-        // TODO Auto-generated method stub
-        
+        runOnUiThread(new Runnable(){
+            @Override
+            public void run() {
+                splashProgressBar.setVisibility(View.GONE);
+                splashText.setText(R.string.splash_broken);
+                setContentView(splash);
+            }
+        });
     }
 
     @Override
-    public void gameFinished() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void stateChanged(IState state) {
-        gamePlayView.stateChanged(state);
-        
+    public void stateChanged(final IState state) {
+        view.stateChanged(state);
     }
     
 }

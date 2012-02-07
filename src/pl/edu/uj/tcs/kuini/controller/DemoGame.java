@@ -34,6 +34,14 @@ public class DemoGame extends AbstractGame {
             return;
         }
         
+        try {
+            sleep(3500);
+        } catch (InterruptedException e) {
+            return;
+        }
+        
+        
+        
         server.start();
         controller.start();
         
