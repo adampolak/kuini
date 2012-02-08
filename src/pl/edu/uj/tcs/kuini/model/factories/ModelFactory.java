@@ -5,6 +5,7 @@ import java.util.Random;
 
 import pl.edu.uj.tcs.kuini.model.Actor;
 import pl.edu.uj.tcs.kuini.model.ActorType;
+import pl.edu.uj.tcs.kuini.model.GridActorWatcher;
 import pl.edu.uj.tcs.kuini.model.IModel;
 import pl.edu.uj.tcs.kuini.model.LiveState;
 import pl.edu.uj.tcs.kuini.model.Model;
@@ -16,6 +17,8 @@ import pl.edu.uj.tcs.kuini.model.SimpleActorWatcher;
 import pl.edu.uj.tcs.kuini.model.actions.CompoundAction;
 import pl.edu.uj.tcs.kuini.model.actions.HealYourselfAction;
 import pl.edu.uj.tcs.kuini.model.actions.IAction;
+import pl.edu.uj.tcs.kuini.model.actions.NoCollision;
+import pl.edu.uj.tcs.kuini.model.actions.SimpleCollision;
 import pl.edu.uj.tcs.kuini.model.actions.SpawnAntAction;
 import pl.edu.uj.tcs.kuini.model.actions.SpawnFoodAction;
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
@@ -39,7 +42,7 @@ public class ModelFactory implements IModelFactory {
 		IAntFactory antFactory = new AntFactory(random);
 		IAction anthillAction = new CompoundAction(Arrays.asList(new IAction[]{
 				new HealYourselfAction(10),
-				new SpawnAntAction(antFactory, 1.5f)
+				new SpawnAntAction(antFactory, new NoCollision(), 1.5f)
 				}));
 		state.addActor(new Actor(ActorType.ANTHILL, state.nextActorId(), player1.getId(), anthillAction,
 				new Position(2,2), 0.5f, 0, 1000, 1000, Path.EMPTY_PATH));
@@ -64,13 +67,14 @@ public class ModelFactory implements IModelFactory {
 		ILiveState state = new LiveState(width, height, 
 				new RandomOrderer(random), 
 				new SpawnFoodAction(new FoodFactory(random)),
-				new SimpleActorWatcher());
+//				new SimpleActorWatcher());
+				new GridActorWatcher((int)width/2,(int)height/2, height, width));
 		
 		IAntFactory antFactory = new AntFactory(random);
 		IAction anthillAction = new CompoundAction(Arrays.asList(new IAction[]{
 				new RotateAction(0.5f),
 				new HealYourselfAction(10),
-				new SpawnAntAction(antFactory, 1.5f)
+				new SpawnAntAction(antFactory, new SimpleCollision(), 1.5f)
 				}));
 		
 		for(IPlayerStub playerStub : players){
