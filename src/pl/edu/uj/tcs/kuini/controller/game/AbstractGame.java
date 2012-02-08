@@ -1,18 +1,24 @@
-package pl.edu.uj.tcs.kuini.controller;
+package pl.edu.uj.tcs.kuini.controller.game;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.util.UUID;
 
-import pl.edu.uj.tcs.kuini.gui.ICommandProxy;
+import pl.edu.uj.tcs.kuini.controller.Controller;
+import pl.edu.uj.tcs.kuini.controller.ControllersServer;
 import pl.edu.uj.tcs.kuini.model.Command;
 import pl.edu.uj.tcs.kuini.model.IModel;
 import pl.edu.uj.tcs.kuini.model.IState;
+import pl.edu.uj.tcs.kuini.view.ICommandProxy;
 
 public abstract class AbstractGame extends Thread implements ICommandProxy {
 
+    protected static final UUID KUINI_UUID = 
+            UUID.fromString("c3246310-523d-11e1-b86c-0800200c9a66");
+    
     protected final IView view;
     
     protected IModel model = null;
@@ -62,6 +68,10 @@ public abstract class AbstractGame extends Thread implements ICommandProxy {
                 controllerToServerObjOut,
                 model,
                 stateChangeListener);    
+    }
+    
+    protected String getPlayerName() {
+        return "";
     }
 
 }

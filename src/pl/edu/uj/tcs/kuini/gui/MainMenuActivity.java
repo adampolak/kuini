@@ -12,7 +12,8 @@ import android.widget.Toast;
 public class MainMenuActivity extends ListActivity {
 
     private static final String[] MENU_ITEMS = {
-        "Start new game",
+        "Start demo game",
+        "Host new game",
         "Join existing game",
         "Settings",
         "About Kuini"
@@ -29,13 +30,24 @@ public class MainMenuActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
 
+        Intent intent;
+        
         switch (position) {
         case 0:
-            Intent intent = new Intent(this, KuiniActivity.class);
+            intent = new Intent(this, KuiniActivity.class);
             intent.putExtra("game", KuiniActivity.DEMO_GAME);
             startActivity(intent);
             break;
+        case 1:
+            intent = new Intent(this, KuiniActivity.class);
+            intent.putExtra("game", KuiniActivity.HOST_GAME);
+            startActivity(intent);
+            break;
         case 2:
+            intent = new Intent(this, SelectHostActivity.class);
+            startActivity(intent);
+            break;
+        case 3:
             startActivity(new Intent(this, SettingsActivity.class));
             break;
         default:

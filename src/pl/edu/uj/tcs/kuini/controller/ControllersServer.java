@@ -12,14 +12,17 @@ import java.util.concurrent.LinkedBlockingQueue;
 import pl.edu.uj.tcs.kuini.model.Command;
 
 public class ControllersServer extends Thread {
+
+    private int debug = 0;
+    private static final long MIN_TURN_DURATION = 30; // milliseconds
     
-    private static final long MIN_TURN_DURATION = 40; // milliseconds
-    
+    private TempoPolicyInterface tempoPolicy;
+
 	private class ClientInputHandler extends Thread {
         
         private final ObjectInputStream in;
         private final int playerId;
-
+        
         public ClientInputHandler(ObjectInputStream in, int playerId) {
             this.in = in;
             this.playerId = playerId;
@@ -36,7 +39,8 @@ public class ControllersServer extends Thread {
                         synchronized(currentCommands) {
                             currentCommands.add(c);
                         }
-                    }
+                    } else if (o instanceof ReadyForNextTurn)
+                        tempoPolicy.ready(playerId);
                 } catch (IOException e) { 
                     break; 
                 } catch (ClassNotFoundException e) {
@@ -99,6 +103,9 @@ public class ControllersServer extends Thread {
     @Override
     public void run() {
         
+        // tempoPolicy = new SimplePolicy();
+        tempoPolicy = new WaitForAllPolicy(clientInputHandlers.size());
+        
         for(ClientInputHandler h: clientInputHandlers)
             h.start();
         for(ClientOutputHandler h: clientOutputHandlers) 
@@ -117,7 +124,7 @@ public class ControllersServer extends Thread {
             
             Turn turn;
             synchronized(currentCommands) {
-                turn = new Turn(currentCommands, 0.5f);
+                turn = new Turn(currentCommands, 0.5f, debug++);
                 currentCommands.clear();
             }
             for(ClientOutputHandler h: clientOutputHandlers)
