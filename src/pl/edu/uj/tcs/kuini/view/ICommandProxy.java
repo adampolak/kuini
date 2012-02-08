@@ -1,4 +1,4 @@
-package pl.edu.uj.tcs.kuini.gui;
+package pl.edu.uj.tcs.kuini.view;
 
 import pl.edu.uj.tcs.kuini.model.Command;
 

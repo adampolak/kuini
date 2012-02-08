@@ -5,8 +5,8 @@
     <string name="preference_player_name">Player name</string>
     
     <string name="splash_before">Please wait for other players...</string>
-    <string name="splash_broken">:(</string>
-    <string name="splash_lose">You lost.</string>
-    <string name="splash_win">You won.</string>
-        
-   </resources>
+    <string name="splash_not_started">Game could not started :(</string>
+    <string name="splash_fail">Game was interrupted :(</string>
+    
+    <string name="splash_content_description">KUINI LOGO</string>    
+</resources>

@@ -3,7 +3,6 @@ package pl.edu.uj.tcs.kuini.view;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.edu.uj.tcs.kuini.gui.ICommandProxy;
 import pl.edu.uj.tcs.kuini.model.Command;
 import pl.edu.uj.tcs.kuini.model.IActor;
 import pl.edu.uj.tcs.kuini.model.IPlayer;
@@ -11,7 +10,6 @@ import pl.edu.uj.tcs.kuini.model.IState;
 import pl.edu.uj.tcs.kuini.model.Path;
 import pl.edu.uj.tcs.kuini.model.PlayerColor;
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
-import pl.edu.uj.tcs.kuini.model.state.State;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -24,9 +22,12 @@ import android.view.View.OnTouchListener;
 public class KuiniView extends View implements OnTouchListener {
     
     private ICommandProxy proxy = null;
+    /*
     private boolean changes;
     private IState state;
     private IState newWaitingState;
+    */
+    private volatile IState currState = null;
     private final int myWidth;
     private final int myHeight;
     private List<Position> path;
@@ -34,6 +35,8 @@ public class KuiniView extends View implements OnTouchListener {
     private float max_radius_for_command = 40;
     private float radius_speed_growth = 2f;
     private int playerId;
+    
+    private FpsCounter fpsCounter = new FpsCounter();
     
     public void setPlayerId(int playerId) {
         this.playerId = playerId;
@@ -43,7 +46,7 @@ public class KuiniView extends View implements OnTouchListener {
         super(context);
         
         /* this.controller = controller; */
-        changes = true;
+        //changes = true;
         this.myWidth = myWidth;
         this.myHeight = myHeight;
 
@@ -53,6 +56,7 @@ public class KuiniView extends View implements OnTouchListener {
         this.setOnTouchListener(this);
     }
 
+    /*
     private void updateState() {
         if(!changes)
             return;
@@ -62,6 +66,7 @@ public class KuiniView extends View implements OnTouchListener {
             newWaitingState = null;
         }
     }
+    */
     
     private float[] ptsFromPositions(List<Position> path) {
         float[] pts = new float[path.size()*2];
@@ -74,7 +79,10 @@ public class KuiniView extends View implements OnTouchListener {
         
     @Override
     public void onDraw(Canvas canvas) {
-        updateState();
+        /* updateState(); */
+        
+        IState state = currState;
+        
         /* will be changed to drawBitmap */ 
         Paint black = new Paint();
         black.setColor(Color.DKGRAY);
@@ -116,11 +124,17 @@ public class KuiniView extends View implements OnTouchListener {
             paint.setColor(new Random().nextInt());
             canvas.drawCircle(p.getX(), p.getY(), 5, paint);    
         }
-  */      
+  */
+        fpsCounter.drawFps(canvas);
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        
+        IState state = currState;
+        
+        if (state==null) return true;
+        
         Position act = new Position(event.getX(), event.getY());
         if(event.getAction() == MotionEvent.ACTION_DOWN) {
             path = new ArrayList<Position>();
@@ -150,10 +164,16 @@ public class KuiniView extends View implements OnTouchListener {
     }
     
     public void stateChanged(IState state) {
+        /*
         synchronized (this) {
             newWaitingState = new State(state);
             changes = true;
         }
+        */
+        
+        fpsCounter.nextFrame();
+   
+        currState = state;
         postInvalidate();
 //        invalidate();
     }

@@ -6,11 +6,13 @@ import java.io.Serializable;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import android.util.Log;
+
 import pl.edu.uj.tcs.kuini.model.Command;
 import pl.edu.uj.tcs.kuini.model.IModel;
 import pl.edu.uj.tcs.kuini.model.IState;
 
-public class Controller extends Thread {
+public class Controller {
 
     public interface StateChangeListener {
         void stateChanged(IState state);
@@ -49,18 +51,22 @@ public class Controller extends Thread {
         sendingQueue.add(command);
     }
 
-    @Override
+    private int last_debug = 0;
+    
     public void run() {
         sender.start();
         view.stateChanged(model.getState());
-        while(!isInterrupted()) {
+        while(!Thread.interrupted()) {
             Turn turn;
             try {
                 turn = (Turn)in.readObject();
             } catch (Exception e) { break; }
+            Log.i("Controller", "Received turn number "+Integer.toString(turn.debug-last_debug));
+            last_debug = turn.debug;
             for(Command command: turn) model.doCommand(command);
             model.nextTurn(turn.getElapsedTime());
             view.stateChanged(model.getState());
+            // Thread.yield();
             sendingQueue.add(new ReadyForNextTurn()); /* Not sure where to put it */
         }
         sender.interrupt();

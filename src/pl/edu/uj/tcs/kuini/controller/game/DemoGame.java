@@ -1,7 +1,8 @@
-package pl.edu.uj.tcs.kuini.controller;
+package pl.edu.uj.tcs.kuini.controller.game;
 
 import java.io.IOException;
 
+import pl.edu.uj.tcs.kuini.controller.ControllersServer;
 import pl.edu.uj.tcs.kuini.model.PlayerColor;
 import pl.edu.uj.tcs.kuini.model.factories.IPlayerStub;
 import pl.edu.uj.tcs.kuini.model.factories.ModelFactory;
@@ -30,33 +31,27 @@ public class DemoGame extends AbstractGame {
         try {
             createLocalController(server, DEMO_PLAYER_ID);
         } catch (IOException e) {
-            view.gameBroken();
+            view.gameFailed();
             return;
         }
         
-        try {
-            sleep(3500);
+        try { 
+            sleep(500);    /* Only for testing/debugging purpose */
         } catch (InterruptedException e) {
+            view.gameFailed();
             return;
         }
-        
-        
         
         server.start();
-        controller.start();
         
         view.gameStarted(DEMO_PLAYER_ID);
         
-        try {
-            controller.join();
-        } catch (InterruptedException e) {
-            controller.interrupt();
-        }
+        controller.run();
         
         server.interrupt();
         
         // TODO: ask model if the anyone won the game
-        view.gameBroken();
+        view.gameFailed();
         
     }
     

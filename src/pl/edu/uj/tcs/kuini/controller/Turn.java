@@ -13,9 +13,12 @@ public class Turn implements Iterable<Command>, Serializable {
     private final Command[] commands;
     private final float elapsedTime;
     
-    public Turn(List<Command> commands, float elapsedTime) {
+    public final int debug;
+    
+    public Turn(List<Command> commands, float elapsedTime, int debug) {
         this.commands = commands.toArray(new Command[0]);
         this.elapsedTime = elapsedTime;
+        this.debug = debug;
     }
     
     public Iterator<Command> iterator() {

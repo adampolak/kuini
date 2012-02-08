@@ -1,13 +1,17 @@
 package pl.edu.uj.tcs.kuini.gui;
 
 import pl.edu.uj.tcs.kuini.R;
-import pl.edu.uj.tcs.kuini.controller.AbstractGame;
-import pl.edu.uj.tcs.kuini.controller.DemoGame;
-import pl.edu.uj.tcs.kuini.controller.IView;
+import pl.edu.uj.tcs.kuini.controller.game.AbstractGame;
+import pl.edu.uj.tcs.kuini.controller.game.DemoGame;
+import pl.edu.uj.tcs.kuini.controller.game.HostGame;
+import pl.edu.uj.tcs.kuini.controller.game.IView;
+import pl.edu.uj.tcs.kuini.controller.game.JoinGame;
 import pl.edu.uj.tcs.kuini.model.IState;
 import pl.edu.uj.tcs.kuini.view.KuiniView;
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -26,6 +30,8 @@ public class KuiniActivity extends Activity implements IView {
     
     private AbstractGame game = null;
     private KuiniView view;
+    
+    private boolean hasStarted = false;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,9 +52,26 @@ public class KuiniActivity extends Activity implements IView {
         int height = displaymetrics.heightPixels; 
         
         view = new KuiniView(this, width, height);
-                
-        game = new DemoGame(this);
         
+        // TODO: check if BT is enabled
+        
+        Intent intent = getIntent();
+        
+        switch (intent.getIntExtra("game", HOST_GAME)) {
+        case HOST_GAME:
+            BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+            startActivity(new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE));
+            game = new HostGame(this, adapter);
+            break;
+        case JOIN_GAME:
+            BluetoothDevice device = intent.getParcelableExtra("device");
+            game = new JoinGame(this, device);
+            break;
+        case DEMO_GAME:
+            game = new DemoGame(this);
+            break;
+        }
+
         view.setCommandProxy(game);
         
         game.start();
@@ -66,6 +89,7 @@ public class KuiniActivity extends Activity implements IView {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                hasStarted = true;
                 view.setPlayerId(playerId);
                 setContentView(view);
             }
@@ -73,12 +97,15 @@ public class KuiniActivity extends Activity implements IView {
     }
 
     @Override
-    public void gameBroken() {
+    public void gameFailed() {
         runOnUiThread(new Runnable(){
             @Override
             public void run() {
                 splashProgressBar.setVisibility(View.GONE);
-                splashText.setText(R.string.splash_broken);
+                if (hasStarted)
+                    splashText.setText(R.string.splash_fail);
+                else
+                    splashText.setText(R.string.splash_not_started);
                 setContentView(splash);
             }
         });
@@ -88,5 +115,5 @@ public class KuiniActivity extends Activity implements IView {
     public void stateChanged(final IState state) {
         view.stateChanged(state);
     }
-    
+   
 }
