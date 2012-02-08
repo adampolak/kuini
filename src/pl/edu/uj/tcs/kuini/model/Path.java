@@ -32,4 +32,8 @@ public class Path implements Serializable{
 		if(isEmpty())return "Path(empty)";
 		else return "Path(from "+getStart()+" to "+getEnd()+")";
 	}
+	@Override
+	public int hashCode(){
+		return 7 + positions.hashCode();
+	}
 }

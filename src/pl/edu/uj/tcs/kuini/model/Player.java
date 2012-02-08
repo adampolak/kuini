@@ -62,4 +62,9 @@ public class Player implements ILivePlayer {
 	public void changeFood(float change) {
 		food += change;
 	}
+	
+	@Override
+	public int hashCode(){
+		return (int)(5 + 7*id + 11*name.hashCode() + 13*color.hashCode() + 17*score + 19*food);
+	}
 }

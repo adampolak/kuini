@@ -27,6 +27,12 @@ public class ActorState implements IActor, Serializable {
 		hp = actor.getHP();
 		maxHp = actor.getMaxHP();
 	}
+	
+	@Override
+	public int hashCode(){
+		return (int)(5 + 7*position.hashCode() + 11*radius + 13*actorType.hashCode())
+			+ (int)(17*id + 19*angle + 23*playerId + 29*hp + 31*maxHp);
+	}
 
 	@Override
 	public Position getPosition() {

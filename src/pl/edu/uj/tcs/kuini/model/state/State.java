@@ -49,4 +49,8 @@ public class State implements Serializable, IFrozenState{
 	public float getHeight() {
 		return height;
 	}
+	@Override
+	public int hashCode(){
+		return 5+ (int)width*7 +(int)(height)*11 + 13*actorStates.hashCode() + 17*playerStateById.hashCode();
+	}
 }
