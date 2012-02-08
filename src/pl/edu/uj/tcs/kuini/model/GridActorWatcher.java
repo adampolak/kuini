@@ -6,7 +6,11 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
+import java.util.Vector;
+
+import android.util.Log;
 
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
 import pl.edu.uj.tcs.kuini.model.live.ILiveActor;
@@ -33,7 +37,7 @@ public class GridActorWatcher implements IActorWatcher {
 		}
 	}
 	private final Map<Long, GridPosition> positionsById = new HashMap<Long, GridPosition>();
-	private final Set<ILiveActor>[][] actorsGrid;
+	private final Vector<ILiveActor>[][] actorsGrid;
 	private final float boardWidth;
 	private final float boardHeight;
 	private final int gridWidth;
@@ -43,10 +47,10 @@ public class GridActorWatcher implements IActorWatcher {
 	
 	@SuppressWarnings("unchecked")
 	public GridActorWatcher(int gridWidth, int gridHeight, float boardWidth,float boardHeight){
-		actorsGrid = (Set<ILiveActor>[][]) Array.newInstance(Set.class, gridWidth, gridHeight);
+		actorsGrid = (Vector<ILiveActor>[][]) Array.newInstance(Vector.class, gridWidth, gridHeight);
 		for(int x=0;x<gridWidth;x++)
 			for(int y=0;y<gridHeight;y++)
-				actorsGrid[x][y] = new HashSet<ILiveActor>();
+				actorsGrid[x][y] = new Vector<ILiveActor>();
 		this.boardWidth = boardWidth;
 		this.boardHeight = boardHeight;
 		this.gridWidth = gridWidth;
@@ -56,13 +60,16 @@ public class GridActorWatcher implements IActorWatcher {
 	@Override
 	public List<ILiveActor> getNeighbours(Position position, float radius) {
 		List<ILiveActor> result = new LinkedList<ILiveActor>();
+		int checked=0;
 		for(GridPosition p : getNeighbourFields(positionToGridPosition(position), 
-				radius+fieldDiagonal())){
+				radius)){
 			for(ILiveActor actor : actorsGrid[p.x][p.y]){
+				checked++;
 				if(position.distanceTo(actor.getPosition()) <= radius + actor.getRadius())
 					result.add(actor);
 			}
 		}
+		//Log.d("COLLISION", "Checked: "+checked+" ok: "+result.size());
 		return result;
 	}
 
@@ -80,7 +87,7 @@ public class GridActorWatcher implements IActorWatcher {
 		return boardHeight / gridHeight;
 	}
 	
-	/*private Set<GridPosition> getNeighbourFields(GridPosition start, float radius){
+	private Set<GridPosition> getNeighbourFields(GridPosition start, float radius){
 		Queue<GridPosition> queue = new LinkedList<GridPosition>();
 		queue.add(start);
 		Set<GridPosition> result = new HashSet<GridPosition>();
@@ -89,14 +96,16 @@ public class GridActorWatcher implements IActorWatcher {
 			GridPosition p = queue.poll();
 			for(int i=0;i<4;i++){
 				GridPosition q = new GridPosition(p.x+dx[i], p.y+dy[i]);
-				if(validPosition(q) && !result.contains(q) && distance(start, q) <= radius){
-					queue.add(q);
+				if(validPosition(q) && !result.contains(q)){
+					if(distance(start, q) <= radius)
+						queue.add(q);
 					result.add(q);
 				}
 			}
 		}
 		return result;
-	}*/
+	}
+	/*
 	private List<GridPosition> getNeighbourFields(GridPosition start, float radius){
 		List<GridPosition> result = new LinkedList<GridPosition>();
 		int width = (int)(1+radius/fieldWidth());
@@ -109,7 +118,7 @@ public class GridActorWatcher implements IActorWatcher {
 			}
 				
 		return result;
-	}
+	}*/
 			
 	
 	private boolean validPosition(GridPosition p) {

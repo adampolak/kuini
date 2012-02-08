@@ -11,8 +11,11 @@ import pl.edu.uj.tcs.kuini.model.live.ILiveState;
 public class SimpleMoveAction implements IAction {
 	
 	private final Random random;
-	public SimpleMoveAction(Random random){
+	private final ICollisionResolver collisionResolver;
+	
+	public SimpleMoveAction(Random random, ICollisionResolver collisionResolver){
 		this.random = random;
+		this.collisionResolver = collisionResolver;
 	}
 	@Override
 	public void performAction(ILiveActor actor, float elapsedTime,
@@ -27,7 +30,7 @@ public class SimpleMoveAction implements IAction {
 		Vector direction = new Vector(actor.getPosition(), target);
 		actor.setAngle(direction.getAngle());
 		float length = Math.min(direction.magnitude(), actor.getSpeed()*elapsedTime);
-		actor.setPosition(new Vector(direction, length).getTarget());
+		actor.setPosition(collisionResolver.computePosition(actor, new Vector(direction, length).getTarget(), state));
 		
 		if(actor.getPosition().distanceTo(target) < actor.getRadius())
 			actor.setPath(Path.EMPTY_PATH);
