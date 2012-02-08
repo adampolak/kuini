@@ -22,6 +22,7 @@ import pl.edu.uj.tcs.kuini.model.actions.SimpleCollision;
 import pl.edu.uj.tcs.kuini.model.actions.SpawnAntAction;
 import pl.edu.uj.tcs.kuini.model.actions.SpawnFoodAction;
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
+import pl.edu.uj.tcs.kuini.model.live.ILiveActor;
 import pl.edu.uj.tcs.kuini.model.live.ILivePlayer;
 import pl.edu.uj.tcs.kuini.model.live.ILiveState;
 
@@ -49,6 +50,36 @@ public class ModelFactory implements IModelFactory {
 		state.addActor(new Actor(ActorType.ANTHILL, state.nextActorId(), player2.getId(), anthillAction,
 				new Position(10,16), 0.5f, (float)Math.PI, 1000, 1000, Path.EMPTY_PATH));
         
+		state.nextTurn(0);
+		return new Model(state);
+	}
+	
+	public IModel getTestingModel(IPlayerStub[] players, float screenRatio, String seed, int antsPerPlayer){
+		Random random = new Random(seed.hashCode());
+		float width, height;
+		if(screenRatio < 1){ // horizontal
+			width = 18;
+			height = width*screenRatio;
+		}else{
+			height = 18;
+			width = height/screenRatio;
+		}
+		ILiveState state = new LiveState(width, height, 
+				new RandomOrderer(random), 
+				new SpawnFoodAction(new FoodFactory(random)),
+				new GridActorWatcher((int)width/2,(int)height/2, height, width));
+		
+		IAntFactory antFactory = new AntFactory(random, false, false);
+		
+		for(IPlayerStub playerStub : players){
+			ILivePlayer player = new Player(state.nextPlayerId(), playerStub.getName(), playerStub.getColor(), 0, 1000);
+			state.addPlayer(player);
+			for(int i=0;i<antsPerPlayer;i++){
+				ILiveActor ant = antFactory.getAnt(state, player.getId());
+				ant.setPosition(new Position(random.nextFloat()*width, random.nextFloat()*height));
+				state.addActor(ant);
+			}
+		}
 		state.nextTurn(0);
 		return new Model(state);
 	}

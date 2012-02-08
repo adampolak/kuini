@@ -54,5 +54,10 @@ public class PlayerState implements Serializable, IPlayer{
 	public boolean isHuman() {
 		return human;
 	}
+	
+	@Override
+	public int hashCode(){
+		return (int)(5 + 7*id + 11*name.hashCode() + 13*color.hashCode() + 17*score + 19*food);
+	}
 
 }

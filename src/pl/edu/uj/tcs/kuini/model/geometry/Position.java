@@ -33,5 +33,9 @@ public class Position implements Serializable {
     public String toString(){
     	return "("+x+","+y+")";
     }
-
+    
+    @Override
+    public int hashCode(){
+    	return (int)(17*x + 19*y + 7);
+    }
 }
