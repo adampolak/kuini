@@ -3,6 +3,8 @@ package pl.edu.uj.tcs.kuini.model;
 import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +36,7 @@ public class GridActorWatcher implements IActorWatcher {
 			return false;
 		}
 	}
-	private final Map<Long, GridPosition> positionsById = new HashMap<Long, GridPosition>();
+	private final Map<Long, GridPosition> positionsById = new LinkedHashMap<Long, GridPosition>();
 	private final Vector<ILiveActor>[][] actorsGrid;
 	private final float boardWidth;
 	private final float boardHeight;
@@ -88,7 +90,7 @@ public class GridActorWatcher implements IActorWatcher {
 	private Set<GridPosition> getNeighbourFields(GridPosition start, float radius){
 		Queue<GridPosition> queue = new LinkedList<GridPosition>();
 		queue.add(start);
-		Set<GridPosition> result = new HashSet<GridPosition>();
+		Set<GridPosition> result = new LinkedHashSet<GridPosition>();
 		result.add(start);
 		while(!queue.isEmpty()){
 			GridPosition p = queue.poll();
