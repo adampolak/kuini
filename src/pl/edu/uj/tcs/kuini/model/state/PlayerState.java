@@ -59,5 +59,11 @@ public class PlayerState implements Serializable, IPlayer{
 	public int hashCode(){
 		return (int)(5 + 7*id + 11*name.hashCode() + 13*color.hashCode() + 17*score + 19*food);
 	}
+	
+	@Override
+	public String toString(){
+		return "PlayerState[#"+hashCode()+"] id: "+id+" name: "+name+" color: "+color
+			+" score: "+score+" food: "+food;
+	}
 
 }

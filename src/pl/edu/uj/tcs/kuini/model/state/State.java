@@ -53,4 +53,10 @@ public class State implements Serializable, IFrozenState{
 	public int hashCode(){
 		return 5+ (int)width*7 +(int)(height)*11 + 13*actorStates.hashCode() + 17*playerStateById.hashCode();
 	}
+	
+	@Override
+	public String toString(){
+		return "State[#"+hashCode()+"]: actorStates: "+actorStates+" playerStateById: "+playerStateById
+		+" width: "+width+" height: "+height;	
+	}
 }

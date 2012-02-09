@@ -33,6 +33,12 @@ public class ActorState implements IActor, Serializable {
 		return (int)(5 + 7*position.hashCode() + 11*radius + 13*actorType.hashCode())
 			+ (int)(17*id + 19*angle + 23*playerId + 29*hp + 31*maxHp);
 	}
+	@Override 
+	public String toString(){
+		return "ActorState[#"+hashCode()+"] position: "+position+" radius: "+radius+" actorType: "+
+			actorType+" id: "+id+" angle "+angle+" playerId: "+playerId+" hp: "+hp
+			+" maxHp: "+maxHp;
+	}
 
 	@Override
 	public Position getPosition() {
@@ -74,9 +80,4 @@ public class ActorState implements IActor, Serializable {
 		return maxHp;
 	}
 	
-	@Override
-	public String toString(){
-		return actorType+"_State("+position+", hp:"+hp+"/"+maxHp+")";
-	}
-
 }
