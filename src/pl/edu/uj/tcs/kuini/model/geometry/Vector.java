@@ -18,8 +18,8 @@ public class Vector implements Serializable{
 	}
 	
 	public Vector(Position source, float angle, float magnitude){
-		this(source, new Position((float)(source.getX()+Math.cos(angle)*magnitude),
-				(float)(source.getY()+Math.sin(angle)*magnitude)));
+		this(source, new Position((float)(source.getX()+Math.round(1000000*Math.cos(angle))*magnitude/1000000),
+				(float)(source.getY()+Math.round(Math.sin(angle)*1000000)*magnitude/1000000)));
 	}
 
 	public Position getSource() {
@@ -35,7 +35,7 @@ public class Vector implements Serializable{
 	 * @return
 	 */
 	public float getAngle(){
-		float acos = (float) Math.acos(getX()/magnitude());
+		float acos = ((float) Math.round(1000000*Math.acos(getX()/magnitude())))/1000000;
 		if(getY() >= 0) return acos;
 		else return (float)(2*Math.PI-acos);
 	}

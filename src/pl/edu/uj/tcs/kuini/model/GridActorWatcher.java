@@ -10,8 +10,6 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.Vector;
 
-import android.util.Log;
-
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
 import pl.edu.uj.tcs.kuini.model.live.ILiveActor;
 
@@ -139,7 +137,7 @@ public class GridActorWatcher implements IActorWatcher {
 	}
 	
 	private float fieldDiagonal(){
-		return (float) Math.sqrt(square(fieldWidth())+square(fieldHeight()));
+		return ((float) Math.round(1000000*Math.sqrt(square(fieldWidth())+square(fieldHeight()))))/1000000;
 	}
 	
 	private GridPosition positionToGridPosition(Position p){
