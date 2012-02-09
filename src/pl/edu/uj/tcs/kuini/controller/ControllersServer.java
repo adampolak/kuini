@@ -14,7 +14,7 @@ import pl.edu.uj.tcs.kuini.model.Command;
 public class ControllersServer extends Thread {
 
     private int debug = 0;
-    private static final long MIN_TURN_DURATION = 30; // milliseconds
+    private static final long MIN_TURN_DURATION = 40; // milliseconds
     
     private TempoPolicyInterface tempoPolicy;
 
