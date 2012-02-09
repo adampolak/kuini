@@ -2,6 +2,7 @@ package pl.edu.uj.tcs.kuini.model;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -10,7 +11,7 @@ import pl.edu.uj.tcs.kuini.model.live.ILiveActor;
 
 public class SimpleActorWatcher implements IActorWatcher {
 
-	Set<ILiveActor> actors = new HashSet<ILiveActor>();
+	Set<ILiveActor> actors = new LinkedHashSet<ILiveActor>();
 	@Override
 	public List<ILiveActor> getNeighbours(Position position, float radius) {
 	List<ILiveActor> result = new ArrayList<ILiveActor>();

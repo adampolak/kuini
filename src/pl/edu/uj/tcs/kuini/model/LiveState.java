@@ -3,6 +3,7 @@ package pl.edu.uj.tcs.kuini.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,7 @@ public class LiveState implements ILiveState {
 	public LiveState(float width, float height,
 			IActorOrderer orderer, IGlobalAction globalAction, IActorWatcher actorWatcher) {
 		this.actors = new LinkedList<ILiveActor>();
-		this.playersById = new HashMap<Integer, ILivePlayer>();
+		this.playersById = new LinkedHashMap<Integer, ILivePlayer>();
 		this.actorsToAdd = new LinkedList<ILiveActor>();
 		this.width = width;
 		this.height = height;
@@ -48,7 +49,7 @@ public class LiveState implements ILiveState {
 
 	@Override
 	public Map<Integer, IPlayer> getPlayerStatesById() {
-		return new HashMap<Integer, IPlayer>(playersById);
+		return new LinkedHashMap<Integer, IPlayer>(playersById);
 	}
 
 	@Override

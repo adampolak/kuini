@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +27,7 @@ public class State implements Serializable, IFrozenState{
         for(IActor actor : actors){
         	this.actorStates.add(new ActorState(actor));
         }
-        this.playerStateById = new HashMap<Integer, IPlayer>(playerStateById.size());
+        this.playerStateById = new LinkedHashMap<Integer, IPlayer>(playerStateById.size());
         for(Map.Entry<Integer, IPlayer> e : playerStateById.entrySet()){
         	this.playerStateById.put(e.getKey(), new PlayerState(e.getValue()));
         }
