@@ -51,8 +51,6 @@ public class Controller {
         sendingQueue.add(command);
     }
 
-    private int last_debug = 0;
-    
     public void run() {
         sender.start();
         view.stateChanged(model.getState());
@@ -61,10 +59,10 @@ public class Controller {
             try {
                 turn = (Turn)in.readObject();
             } catch (Exception e) { break; }
-            Log.i("Controller", "Received turn number "+Integer.toString(turn.debug-last_debug));
-            last_debug = turn.debug;
+            
             for(Command command: turn) model.doCommand(command);
             model.nextTurn(turn.getElapsedTime());
+            Log.i("Controller", "Received turn number "+Integer.toString(turn.debug)+", hash = "+Integer.toString(model.getState().hashCode()));
             view.stateChanged(model.getState());
             // Thread.yield();
             sendingQueue.add(new ReadyForNextTurn()); /* Not sure where to put it */

@@ -24,7 +24,8 @@ public class SimpleMoveAction implements IAction {
 		Position target;
 		if(!path.isEmpty())target = path.getEnd();
 		else target = new Vector(actor.getPosition(), 
-				actor.getAngle()+((float) ((random.nextFloat()-0.5)*0.5*elapsedTime)), 
+				//actor.getAngle(),
+		        actor.getAngle()+((float) ((random.nextFloat()-0.5)*0.5*elapsedTime)), 
 				100.0f).getTarget();
 		
 		Vector direction = new Vector(actor.getPosition(), target);

@@ -12,6 +12,7 @@ import pl.edu.uj.tcs.kuini.model.Model;
 import pl.edu.uj.tcs.kuini.model.Path;
 import pl.edu.uj.tcs.kuini.model.Player;
 import pl.edu.uj.tcs.kuini.model.PlayerColor;
+import pl.edu.uj.tcs.kuini.model.RandomGenerator;
 import pl.edu.uj.tcs.kuini.model.RandomOrderer;
 import pl.edu.uj.tcs.kuini.model.SimpleActorWatcher;
 import pl.edu.uj.tcs.kuini.model.actions.CompoundAction;
@@ -28,7 +29,8 @@ import pl.edu.uj.tcs.kuini.model.live.ILiveState;
 
 public class ModelFactory implements IModelFactory {
 	public IModel getModel() {
-		Random random = new Random(0);
+		//Random random = new RandomGenerator();
+	    Random random = new Random(0);
 		ILiveState state = new LiveState(12, 18, 
 				new RandomOrderer(random), 
 				new SpawnFoodAction(new FoodFactory(random)),
@@ -55,7 +57,8 @@ public class ModelFactory implements IModelFactory {
 	}
 	
 	public IModel getTestingModel(IPlayerStub[] players, float screenRatio, String seed, int antsPerPlayer){
-		Random random = new Random(seed.hashCode());
+		//Random random = new RandomGenerator();
+	    Random random = new Random(seed.hashCode());
 		float width, height;
 		if(screenRatio < 1){ // horizontal
 			width = 18;
@@ -86,6 +89,7 @@ public class ModelFactory implements IModelFactory {
 
 	@Override
 	public IModel getModel(IPlayerStub[] players, float screenRatio, String seed) {
+        //Random random = new RandomGenerator();
 		Random random = new Random(seed.hashCode());
 		float width, height;
 		if(screenRatio < 1){ // horizontal
