@@ -9,7 +9,7 @@ public class WaitForAllPolicy implements TempoPolicyInterface {
     
     public WaitForAllPolicy(int N) {
         this.N = N;
-        this.semaphore = new Semaphore(N);
+        this.semaphore = new Semaphore(0);
     }
     
     @Override
