@@ -1,7 +1,9 @@
 package pl.edu.uj.tcs.kuini.model.factories;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
+import java.util.Vector;
 
 import pl.edu.uj.tcs.kuini.model.Actor;
 import pl.edu.uj.tcs.kuini.model.ActorType;
@@ -12,7 +14,6 @@ import pl.edu.uj.tcs.kuini.model.Model;
 import pl.edu.uj.tcs.kuini.model.Path;
 import pl.edu.uj.tcs.kuini.model.Player;
 import pl.edu.uj.tcs.kuini.model.PlayerColor;
-import pl.edu.uj.tcs.kuini.model.RandomGenerator;
 import pl.edu.uj.tcs.kuini.model.RandomOrderer;
 import pl.edu.uj.tcs.kuini.model.SimpleActorWatcher;
 import pl.edu.uj.tcs.kuini.model.actions.CompoundAction;
@@ -42,7 +43,7 @@ public class ModelFactory implements IModelFactory {
 		state.addPlayer(player1);
 		state.addPlayer(player2);
 		
-		IAntFactory antFactory = new AntFactory(random);
+		IAntFactory antFactory = new AntFactory(random, true);
 		IAction anthillAction = new CompoundAction(Arrays.asList(new IAction[]{
 				new HealYourselfAction(10),
 				new SpawnAntAction(antFactory, new NoCollision(), 1.5f)
@@ -53,7 +54,38 @@ public class ModelFactory implements IModelFactory {
 				new Position(10,16), 0.5f, (float)Math.PI, 1000, 1000, Path.EMPTY_PATH));
         
 		state.nextTurn(0);
-		return new Model(state);
+		return new Model(state, 1.0f);
+	}
+	
+	private Vector<PlayerColor> getColors(Random random){
+		Vector<PlayerColor> colors = new Vector<PlayerColor>(Arrays.asList(
+				new PlayerColor[]{PlayerColor.BLUE, PlayerColor.GREEN, PlayerColor.RED, PlayerColor.BLACK}));
+		Collections.shuffle(colors, random);
+		return colors;
+	}
+	
+	private Position[] getAnthillsPositions(Random random, float width, float height, float radius, int anthills){
+		radius *= 2;
+		Position[] result = new Position[anthills];
+		Position[] tmp;
+		if(anthills != 3){
+			 tmp = new Position[]{
+					new Position(radius, radius),
+					new Position(width-radius, height-radius),
+					new Position(radius, height-radius),
+					new Position(width-radius, radius)
+			};
+		}else{
+			 tmp = new Position[]{
+				new Position(radius*0.7f+(width-radius)*0.3f, radius),
+				new Position(width-radius, (height-radius)*0.7f+radius*0.3f),
+				new Position(radius, height-radius)
+			};
+		}
+		for(int i=0;i<anthills;i++)
+			result[i] = tmp[i];
+		Collections.shuffle(Arrays.asList(tmp), random);
+		return result;
 	}
 	
 	public IModel getTestingModel(IPlayerStub[] players, float screenRatio, String seed, int antsPerPlayer){
@@ -72,10 +104,12 @@ public class ModelFactory implements IModelFactory {
 				new SpawnFoodAction(new FoodFactory(random)),
 				new GridActorWatcher((int)width/2,(int)height/2, height, width));
 		
-		IAntFactory antFactory = new AntFactory(random, false, false);
+		IAntFactory antFactory = new AntFactory(random, false, false, true);
 		
+		Vector<PlayerColor> colors = getColors(random);
+		int colorIdx = 0;
 		for(IPlayerStub playerStub : players){
-			ILivePlayer player = new Player(state.nextPlayerId(), playerStub.getName(), playerStub.getColor(), 0, 1000);
+			ILivePlayer player = new Player(playerStub.getId(), playerStub.getName(), colors.get(colorIdx++), 0, 1000);
 			state.addPlayer(player);
 			for(int i=0;i<antsPerPlayer;i++){
 				ILiveActor ant = antFactory.getAnt(state, player.getId());
@@ -84,12 +118,11 @@ public class ModelFactory implements IModelFactory {
 			}
 		}
 		state.nextTurn(0);
-		return new Model(state);
+		return new Model(state, 1.0f);
 	}
 
 	@Override
-	public IModel getModel(IPlayerStub[] players, float screenRatio, String seed) {
-        //Random random = new RandomGenerator();
+	public IModel getModel(IPlayerStub[] players, float screenRatio, String seed, float gameSpeed, boolean healAnts, int maxActors) {
 		Random random = new Random(seed.hashCode());
 		float width, height;
 		if(screenRatio < 1){ // horizontal
@@ -101,30 +134,34 @@ public class ModelFactory implements IModelFactory {
 		}
 		ILiveState state = new LiveState(width, height, 
 				new RandomOrderer(random), 
-				new SpawnFoodAction(new FoodFactory(random)),
-//				new SimpleActorWatcher());
+				new SpawnFoodAction(new FoodFactory(random), maxActors),
 				new GridActorWatcher((int)width/2,(int)height/2, height, width));
 		
-		IAntFactory antFactory = new AntFactory(random);
+		IAntFactory antFactory = new AntFactory(random, healAnts);
 		IAction anthillAction = new CompoundAction(Arrays.asList(new IAction[]{
 				new RotateAction(0.5f),
 				new HealYourselfAction(10),
-				new SpawnAntAction(antFactory, new SimpleCollision(), 1.5f)
+				new SpawnAntAction(antFactory, new SimpleCollision(), 10.0f)
 				}));
 		
+		Vector<PlayerColor> colors = getColors(random);
+		float anthillRadius = 0.5f;
+		Position[] anthills = getAnthillsPositions(random, width, height, anthillRadius, players.length);
+		int idx = 0;
 		for(IPlayerStub playerStub : players){
-			ILivePlayer player = new Player(state.nextPlayerId(), playerStub.getName(), playerStub.getColor(), 0, 1000);
+			ILivePlayer player = new Player(playerStub.getId(), playerStub.getName(), colors.get(idx), 0, 500);
 			state.addPlayer(player);
 			state.addActor(new Actor(ActorType.ANTHILL, state.nextActorId(), player.getId(), anthillAction,
-				new Position(random.nextFloat()*width, random.nextFloat()*height), 
-				0.5f, //radius
+				anthills[idx],
+				anthillRadius, //radius
 				random.nextFloat()*(float)(2*Math.PI), //angle
 				1000, //HP
 				1000, //maxHP
 				Path.EMPTY_PATH));
+			idx++;
 		}
 		state.nextTurn(0);
-		return new Model(state);
+		return new Model(state, gameSpeed);
 	}
 
 }
