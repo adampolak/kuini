@@ -1,14 +1,12 @@
 package pl.edu.uj.tcs.kuini.model.factories;
 
-import pl.edu.uj.tcs.kuini.model.PlayerColor;
-
 public class PlayerStub implements IPlayerStub {
 	private final String name;
-	private final PlayerColor color;
+	private final int id;
 	
-	public PlayerStub(String name, PlayerColor color){
+	public PlayerStub(String name, int id){
 		this.name = name;
-		this.color = color;
+		this.id = id;
 	}
 
 	@Override
@@ -17,8 +15,8 @@ public class PlayerStub implements IPlayerStub {
 	}
 
 	@Override
-	public PlayerColor getColor() {
-		return color;
+	public int getId() {
+		return id;
 	}
 
 }
