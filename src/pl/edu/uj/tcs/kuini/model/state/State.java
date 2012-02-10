@@ -72,6 +72,12 @@ public class State implements Serializable, IFrozenState{
 	}
 
 	@Override
+	public String getWinnerName() {
+	    if (winnerId < 0) return null;
+	    return playerStateById.get(winnerId).getName();
+	}
+	
+	@Override
 	public boolean isGameEnded() {
 		return gameEnded;
 	}

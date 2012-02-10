@@ -1,9 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    <EditTextPreference android:key="playerName"
-        android:title="@string/preference_player_name"
-        android:defaultValue="Anonymous"/>
-    <CheckBoxPreference android:key="showFps"
-        android:title="@string/preference_show_fps"
-        android:defaultValue="true"/>
+    <PreferenceCategory android:key="general"
+        android:title="General Kuini settings"
+        >
+        <EditTextPreference android:key="playerName"
+            android:title="@string/preference_player_name"
+            android:defaultValue="Anonymous"/>
+        <CheckBoxPreference android:key="showFps"
+            android:title="@string/preference_show_fps"
+            android:defaultValue="true"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:key="game"
+        android:title="New game settings"
+        >
+        <ListPreference android:key="oppNumber"
+            android:title="@string/preference_opp_number"
+            android:entryValues="@array/opp_number_values"
+            android:entries="@array/opp_number_human"
+            android:defaultValue="1"
+            />
+        <CheckBoxPreference android:key="healAnts"
+            android:title="@string/preference_heal_ants"
+            android:defaultValue="true"
+            />
+        <CheckBoxPreference android:key="fasterGame"
+            android:title="@string/preference_faster_game"
+            android:defaultValue="false"
+            />
+        <Preference android:key="start"
+            android:title="@string/preference_start"
+            />
+    </PreferenceCategory>
+    
 </PreferenceScreen>

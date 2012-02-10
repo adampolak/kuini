@@ -5,7 +5,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import pl.edu.uj.tcs.kuini.controller.Controller;
+import pl.edu.uj.tcs.kuini.model.factories.IPlayerStub;
 import pl.edu.uj.tcs.kuini.model.factories.ModelFactory;
+import pl.edu.uj.tcs.kuini.model.factories.PlayerStub;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
@@ -31,32 +33,22 @@ public class JoinGame extends AbstractGame {
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
             
-            /*
-            out.writeObject((String)getPlayerName());
-            int playerId = in.readInt();
-            model = (IModel) in.readObject();
-            */
-            
             int playerId = HostGame.GUEST_PLAYER_ID;
-            model = new ModelFactory().getModel();
-            /*
             model = new ModelFactory().getModel(
                     new IPlayerStub[]{
-                            new PlayerStub("Host", PlayerColor.RED),
-                            new PlayerStub(getPlayerName(), PlayerColor.BLUE),
-                    }, 800.0f/480.0f, "ANTS!"
-            );
-            */
+                            new PlayerStub("Host", HostGame.HOST_PLAYER_ID),
+                            new PlayerStub("Guest", HostGame.GUEST_PLAYER_ID),
+                    }, 800.0f/480.0f, "ANTS!", 1.0f, true);            
 
             controller = new Controller(in, out, model, stateChangeListener);
             view.gameStarted(playerId);
             controller.run();
 
-            view.gameFailed();
+            view.gameFinished();
             
         } catch (Exception e) { /* IOException, ClassNotFoundException, ClassCastException */
             Log.i("JoinGame", Log.getStackTraceString(e));
-            view.gameFailed();
+            view.gameFinished();
         }
         
         try {
