@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kuini</string>
+    
+    <string name="error_no_bt">This device does not support Bluetooth. Kuini is exiting.</string>
+    <string name="error_bt_disabled">Bluetooth was not enabled. Kuini is exiting.</string>
+    
+    <string name="preference_player_name">Player name</string>
+    <string name="preference_show_fps">Display FPS</string>
+    
+    <string name="splash_before">Please wait for other players...</string>
+    <string name="splash_not_started">Game could not started :(</string>
+    <string name="splash_fail">Game was interrupted :(</string>
+    
+    <string name="splash_content_description">KUINI LOGO</string>    
+</resources>
