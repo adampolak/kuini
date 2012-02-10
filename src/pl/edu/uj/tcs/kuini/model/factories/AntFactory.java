@@ -22,10 +22,10 @@ import pl.edu.uj.tcs.kuini.model.live.ILiveState;
 
 public class AntFactory implements IAntFactory {
 	private final IAction antAction; 
-	public AntFactory(Random random){
-		this(random, true, true);
+	public AntFactory(Random random, boolean healAnts){
+		this(random, true, true, healAnts);
 	}
-	public AntFactory(Random random, boolean attack, boolean collision){
+	public AntFactory(Random random, boolean attack, boolean collision, boolean healAnts){
 		List<IAction> actions = new LinkedList<IAction>();
 		actions.add(new EatFoodAction(2, 1.5f)); // eatingSpeed, eatingRadius
 		if(collision)
@@ -33,7 +33,8 @@ public class AntFactory implements IAntFactory {
 		else
 			actions.add(new SimpleMoveAction(random, new NoCollision()));
 		actions.add(new BounceAction());
-		actions.add(new HealYourselfAction(1)); // healingSpeed
+		if(healAnts)
+			actions.add(new HealYourselfAction(1)); // healingSpeed
 		if(attack)
 			actions.add(new AttackAction(5, 1.5f)); // attackForce, attackRadius
 		antAction = new CompoundAction(actions);
