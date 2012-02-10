@@ -122,7 +122,8 @@ public class ModelFactory implements IModelFactory {
 	}
 
 	@Override
-	public IModel getModel(IPlayerStub[] players, float screenRatio, String seed, float gameSpeed, boolean healAnts, int maxActors) {
+	public IModel getModel(IPlayerStub[] players, float screenRatio, String seed, float gameSpeed, boolean healAnts) {
+		int maxActors = 50;
 		Random random = new Random(seed.hashCode());
 		float width, height;
 		if(screenRatio < 1){ // horizontal

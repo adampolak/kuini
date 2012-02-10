@@ -23,7 +23,7 @@ public class DemoGame extends AbstractGame {
                         new PlayerStub("Player 1", 1),
                         new PlayerStub("Player 2", 2),
                         new PlayerStub("Player 3", 3)
-                }, 800.0f/480.0f, "ANTS!", 1.5f, false, 50
+                }, 800.0f/480.0f, "ANTS!", 1.5f, false
         );
 
         ControllersServer server = new ControllersServer();

@@ -1,7 +1,6 @@
 package pl.edu.uj.tcs.kuini.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -9,13 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import android.util.Log;
-
 import pl.edu.uj.tcs.kuini.model.actions.IGlobalAction;
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
 import pl.edu.uj.tcs.kuini.model.live.ILiveActor;
 import pl.edu.uj.tcs.kuini.model.live.ILivePlayer;
 import pl.edu.uj.tcs.kuini.model.live.ILiveState;
+import android.util.Log;
 
 public class LiveState implements ILiveState {
 	private List<ILiveActor> actors;
@@ -140,5 +138,24 @@ public class LiveState implements ILiveState {
 	@Override
 	public int getFoodPlayerId() {
 		return -1;
+	}
+
+	@Override
+	public int getWinnerId() {
+		Set<Integer> livePlayers = new HashSet<Integer>();
+		for(ILiveActor actor : getLiveActors()){
+			if(playersById.get(actor.getPlayerId()).isHuman())
+				livePlayers.add(actor.getPlayerId());
+		}
+		if(livePlayers.size() == 1)
+			for(int id : livePlayers){
+				return id;
+			}
+		return -1;
+	}
+
+	@Override
+	public boolean isGameEnded() {
+		return getWinnerId() != -1;
 	}
 }

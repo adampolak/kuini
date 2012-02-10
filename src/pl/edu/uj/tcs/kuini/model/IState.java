@@ -9,4 +9,11 @@ public interface IState {
     public Map<Integer, IPlayer> getPlayerStatesById();
     public float getWidth();
     public float getHeight();
+    /**
+     * If game is in progress returns -1,
+     * else return winner id.
+     * @return winner id
+     */
+    public int getWinnerId();
+    public boolean isGameEnded();
 }
