@@ -155,6 +155,13 @@ public class LiveState implements ILiveState {
 	}
 
 	@Override
+	public String getWinnerName() {
+	    int i = getWinnerId();
+	    if (i < 0) return null;
+	    return playersById.get(i).getName();
+	}
+	
+	@Override
 	public boolean isGameEnded() {
 		return getWinnerId() != -1;
 	}

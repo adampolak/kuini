@@ -11,9 +11,10 @@ public interface IState {
     public float getHeight();
     /**
      * If game is in progress returns -1,
-     * else return winner id.
+     * else returns winner id.
      * @return winner id
      */
     public int getWinnerId();
+    public String getWinnerName();
     public boolean isGameEnded();
 }
