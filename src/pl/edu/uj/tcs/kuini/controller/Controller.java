@@ -56,6 +56,8 @@ public class Controller {
         sender.start();
         view.stateChanged(model.getState());
         while(!Thread.interrupted()) {
+            sendingQueue.add(new ReadyForNextTurn());
+
             Turn turn;
             try {
                 turn = (Turn)in.readObject();
@@ -63,12 +65,13 @@ public class Controller {
             
             for(Command command: turn) model.doCommand(command);
             model.nextTurn(turn.getElapsedTime());
-            turnN ++;
-            Log.i("Controller", "Received turn number "+Integer.toString(turnN)+", hash = "+Integer.toString(model.getState().hashCode()));
-            //Log.i("Controller", "Received turn number "+Integer.toString(turnN)+", turn = "+model.getState());
             view.stateChanged(model.getState());
             // Thread.yield();
-            sendingQueue.add(new ReadyForNextTurn()); /* Not sure where to put it */
+            
+            //turnN ++;
+            //Log.i("Controller", "Received turn number "+Integer.toString(turnN)+", hash = "+Integer.toString(model.getState().hashCode()));
+            //Log.i("Controller", "Received turn number "+Integer.toString(turnN)+", turn = "+model.getState());
+            
         }
         sender.interrupt();
     }

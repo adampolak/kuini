@@ -13,7 +13,7 @@ import pl.edu.uj.tcs.kuini.model.Command;
 
 public class ControllersServer extends Thread {
 
-    private static final long MIN_TURN_DURATION = 100; // milliseconds
+    private static final long IDLE_TIME = 10; // milliseconds
     
     private TempoPolicyInterface tempoPolicy;
 
@@ -113,17 +113,18 @@ public class ControllersServer extends Thread {
         long lastTurnTime = 0;
         
         while(!isInterrupted()) {
-            long t = lastTurnTime + MIN_TURN_DURATION
-                    - System.currentTimeMillis();
-            if (t < 0) t = 0;
+ 
             try {
-                sleep(t);
+                tempoPolicy.nextTurn();
+                sleep(IDLE_TIME);
             } catch (InterruptedException e) { break; }
+            
+            float turnDuration = 0.01f * Math.min(System.currentTimeMillis()-lastTurnTime, 1000);
             lastTurnTime = System.currentTimeMillis();
             
             Turn turn;
             synchronized(currentCommands) {
-                turn = new Turn(currentCommands, 0.5f);
+                turn = new Turn(currentCommands, turnDuration);
                 currentCommands.clear();
             }
             for(ClientOutputHandler h: clientOutputHandlers)
