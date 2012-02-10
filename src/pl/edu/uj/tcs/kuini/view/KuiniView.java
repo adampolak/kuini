@@ -14,6 +14,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,6 +37,7 @@ public class KuiniView extends View implements OnTouchListener {
     private float radius_speed_growth = 2f;
     private int playerId;
     
+    private boolean showFps = true;
     private FpsCounter fpsCounter = new FpsCounter();
     
     public void setPlayerId(int playerId) {
@@ -53,6 +55,8 @@ public class KuiniView extends View implements OnTouchListener {
         setFocusable(true);
         setFocusableInTouchMode(true);
 
+        showFps = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("showFps", true);
+        
         this.setOnTouchListener(this);
     }
 
@@ -125,7 +129,7 @@ public class KuiniView extends View implements OnTouchListener {
             canvas.drawCircle(p.getX(), p.getY(), 5, paint);    
         }
   */
-        fpsCounter.drawFps(canvas);
+        if (showFps) fpsCounter.drawFps(canvas);
     }
 
     @Override

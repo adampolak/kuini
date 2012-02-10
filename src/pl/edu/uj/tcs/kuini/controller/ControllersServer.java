@@ -13,8 +13,7 @@ import pl.edu.uj.tcs.kuini.model.Command;
 
 public class ControllersServer extends Thread {
 
-    private int debug = 0;
-    private static final long MIN_TURN_DURATION = 40; // milliseconds
+    private static final long MIN_TURN_DURATION = 100; // milliseconds
     
     private TempoPolicyInterface tempoPolicy;
 
@@ -124,7 +123,7 @@ public class ControllersServer extends Thread {
             
             Turn turn;
             synchronized(currentCommands) {
-                turn = new Turn(currentCommands, 0.5f, debug++);
+                turn = new Turn(currentCommands, 0.5f);
                 currentCommands.clear();
             }
             for(ClientOutputHandler h: clientOutputHandlers)

@@ -6,15 +6,15 @@ import android.graphics.Paint;
 
 public class FpsCounter {
 
-    private volatile long lastFrameTimestamp = 0;
-    private volatile long averageFrameDuration = 0;
+    private long lastFrameTimestamp = 0;
+    private long averageFrameDuration = 0;
     
     private final Paint paint;
     
     public FpsCounter() {
         paint = new Paint();
         paint.setColor(Color.GRAY);
-        paint.setTextSize(40.0f);
+        paint.setTextSize(30.0f);
     }
     
     public void nextFrame() {
@@ -26,8 +26,9 @@ public class FpsCounter {
     }
     
     public void drawFps(Canvas canvas) {
-        canvas.drawText(Long.toString(averageFrameDuration)+"ms", 
-                20.0f, 60.0f, paint);
+        long fps = averageFrameDuration > 0 ? 1000 / averageFrameDuration : 0;
+        canvas.drawText(Long.toString(fps)+" FPS", 
+                20.0f, 50.0f, paint);
     }
     
 }
