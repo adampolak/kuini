@@ -18,11 +18,14 @@ public class State implements Serializable, IFrozenState{
     private final Map<Integer, IPlayer> playerStateById;
     private final float width;
     private final float height;
+	private final boolean gameEnded;
+	private final int winnerId;
     public State(IState state){
-    	this(state.getActorStates(), state.getPlayerStatesById(), state.getWidth(), state.getHeight());
+    	this(state.getActorStates(), state.getPlayerStatesById(), state.getWidth(), state.getHeight(), state.getWinnerId(), state.isGameEnded());
     }
     	
-    public State(List<IActor> actors, Map<Integer, IPlayer> playerStateById, float width, float height) {
+    public State(List<IActor> actors, Map<Integer, IPlayer> playerStateById, float width, float height, 
+    		int winnerId, boolean gameEnded) {
         this.actorStates = new ArrayList<IActor>(actors.size());
         for(IActor actor : actors){
         	this.actorStates.add(new ActorState(actor));
@@ -33,6 +36,8 @@ public class State implements Serializable, IFrozenState{
         }
         this.width = width;
         this.height = height;
+        this.gameEnded = gameEnded;
+        this.winnerId = winnerId;
     }
     public List<IActor> getActorStates() {
         return Collections.unmodifiableList(actorStates);
@@ -59,5 +64,15 @@ public class State implements Serializable, IFrozenState{
 	public String toString(){
 		return "State[#"+hashCode()+"]: actorStates: "+actorStates+" playerStateById: "+playerStateById
 		+" width: "+width+" height: "+height;	
+	}
+
+	@Override
+	public int getWinnerId() {
+		return winnerId;
+	}
+
+	@Override
+	public boolean isGameEnded() {
+		return gameEnded;
 	}
 }
