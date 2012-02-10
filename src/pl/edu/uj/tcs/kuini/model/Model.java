@@ -6,9 +6,11 @@ import pl.edu.uj.tcs.kuini.model.state.State;
 
 public class Model implements IModel{
 	private ILiveState state;
+	private final float gameSpeed;
 	
-	public Model(ILiveState startingState){
+	public Model(ILiveState startingState, float gameSpeed){
 		this.state = startingState;
+		this.gameSpeed = gameSpeed;
 	}
 
 	@Override
@@ -23,7 +25,7 @@ public class Model implements IModel{
 
 	@Override
 	public void nextTurn(float elapsedTime) {
-		state.nextTurn(elapsedTime);
+		state.nextTurn(elapsedTime*gameSpeed);
 	}
 
 }
