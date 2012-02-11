@@ -32,10 +32,13 @@ public class KuiniView extends View implements OnTouchListener {
     private final int myWidth;
     private final int myHeight;
     private List<Position> path;
+    private Position startPosition;
+    private boolean incremeanting_radius;
     private float pathRadius;
     private float max_radius_for_command = 40;
     private float radius_speed_growth = 3f;
     private int playerId;
+
     
     private boolean showFps = true;
     private FpsCounter fpsCounter = new FpsCounter();
@@ -115,20 +118,21 @@ public class KuiniView extends View implements OnTouchListener {
             paint.setColor(color);
             canvas.drawCircle(canvasPosition.getX(), canvasPosition.getY(), canvasRadius, paint);
         }
-        if(path != null) {
+        if(startPosition != null) {
             
             PlayerColor ourPlayerColor = state.getPlayerStatesById().get(playerId).getColor();
             int color = Color.argb((int) 255*3/10, ourPlayerColor.getR(), ourPlayerColor.getG(), ourPlayerColor.getB());            
             Paint paint = new Paint();
             paint.setColor(color);
             
-            canvas.drawCircle(path.get(0).getX(), path.get(0).getY(), pathRadius, paint);
+            canvas.drawCircle(startPosition.getX(), startPosition.getY(), pathRadius, paint);
             paint.setStyle(Paint.Style.STROKE);
             paint.setStrokeWidth(16);
             canvas.drawLines(ptsFromPositions(path), paint);
             List<Position> path2 = new ArrayList<Position>(path);
             path2.remove(0);
             canvas.drawLines(ptsFromPositions(path2), paint);
+        
         } 
 /*        for(Position p : tmpPointList) {
             Paint paint = new Paint();
@@ -150,6 +154,8 @@ public class KuiniView extends View implements OnTouchListener {
         if(event.getAction() == MotionEvent.ACTION_DOWN) {
             path = new ArrayList<Position>();
             path.add(act);
+            incremeanting_radius = true;
+            startPosition = act;
             pathRadius = max_radius_for_command;
         }
         else if(event.getAction() == MotionEvent.ACTION_UP) {
@@ -163,11 +169,14 @@ public class KuiniView extends View implements OnTouchListener {
         	float modelRadius = scaler.getModelRadius(pathRadius);
             proxy.proxyCommand(new Command(modelRadius, new Path(modelPath), playerId));
             path = null;
+            startPosition = null;
         }
         else {
-            if(path.size()==1 && path.get(0).distanceTo(act) < max_radius_for_command)
+            if(incremeanting_radius && startPosition.distanceTo(act) < max_radius_for_command)
                 pathRadius += radius_speed_growth;
             else
+                incremeanting_radius = false;
+            if(startPosition.distanceTo(act) > pathRadius)
                 path.add(act);
         }
         invalidate();
