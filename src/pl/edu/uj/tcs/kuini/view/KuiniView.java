@@ -34,7 +34,7 @@ public class KuiniView extends View implements OnTouchListener {
     private List<Position> path;
     private float pathRadius;
     private float max_radius_for_command = 40;
-    private float radius_speed_growth = 2f;
+    private float radius_speed_growth = 3f;
     private int playerId;
     
     private boolean showFps = true;
@@ -122,6 +122,9 @@ public class KuiniView extends View implements OnTouchListener {
             paint.setStyle(Paint.Style.STROKE);
             paint.setStrokeWidth(4);
             canvas.drawLines(ptsFromPositions(path), paint);
+            List<Position> path2 = new ArrayList<Position>(path);
+            path2.remove(0);
+            canvas.drawLines(ptsFromPositions(path2), paint);
         } 
 /*        for(Position p : tmpPointList) {
             Paint paint = new Paint();
@@ -158,7 +161,7 @@ public class KuiniView extends View implements OnTouchListener {
             path = null;
         }
         else {
-            if(path.get(0).distanceTo(act) < max_radius_for_command)
+            if(path.size()==1 && path.get(0).distanceTo(act) < max_radius_for_command)
                 pathRadius += radius_speed_growth;
             else
                 path.add(act);
