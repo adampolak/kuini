@@ -17,6 +17,7 @@ public class Actor implements ILiveActor {
 	private float hp;
 	private float maxHp;
 	private Path path;
+	private LivePath livePath;
 	public Actor(ActorType actorType, long id, int playerId, IAction action, 
 			Position position, float radius, float angle, float hp, float maxHp, Path path) {
 		this.action = action;
@@ -28,7 +29,7 @@ public class Actor implements ILiveActor {
 		this.playerId = playerId;
 		this.hp = hp;
 		this.maxHp = maxHp;
-		this.path = path;
+		setPath(path);
 	}
 	public Actor(ActorType actorType, long id, int playerId) {
 		this(actorType, id, playerId, new NullAction());
@@ -90,6 +91,7 @@ public class Actor implements ILiveActor {
 	@Override
 	public void setPath(Path path) {
 		this.path = path;
+		this.livePath = new LivePath(path);
 	}
 	@Override
 	public Path getPath() {
@@ -103,5 +105,9 @@ public class Actor implements ILiveActor {
 	@Override
 	public void setAngle(float angle) {
 		this.angle = (float)(angle%(2*Math.PI));
+	}
+	@Override
+	public LivePath getLivePath() {
+		return livePath;
 	}
 }

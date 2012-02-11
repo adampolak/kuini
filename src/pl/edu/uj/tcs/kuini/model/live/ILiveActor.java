@@ -1,6 +1,7 @@
 package pl.edu.uj.tcs.kuini.model.live;
 
 import pl.edu.uj.tcs.kuini.model.IActor;
+import pl.edu.uj.tcs.kuini.model.LivePath;
 import pl.edu.uj.tcs.kuini.model.Path;
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
 
@@ -17,5 +18,6 @@ public interface ILiveActor extends IActor {
 	boolean isDead();
 	void setPath(Path path);
 	Path getPath();
+	LivePath getLivePath();
 	void setAngle(float angle);
 }

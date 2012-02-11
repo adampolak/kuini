@@ -8,6 +8,7 @@ import pl.edu.uj.tcs.kuini.model.Actor;
 import pl.edu.uj.tcs.kuini.model.ActorType;
 import pl.edu.uj.tcs.kuini.model.Path;
 import pl.edu.uj.tcs.kuini.model.actions.AttackAction;
+import pl.edu.uj.tcs.kuini.model.actions.BoidMoveAction;
 import pl.edu.uj.tcs.kuini.model.actions.BounceAction;
 import pl.edu.uj.tcs.kuini.model.actions.CompoundAction;
 import pl.edu.uj.tcs.kuini.model.actions.EatFoodAction;
@@ -28,10 +29,12 @@ public class AntFactory implements IAntFactory {
 	public AntFactory(Random random, boolean attack, boolean collision, boolean healAnts){
 		List<IAction> actions = new LinkedList<IAction>();
 		actions.add(new EatFoodAction(2, 1.5f)); // eatingSpeed, eatingRadius
-		if(collision)
+		
+		actions.add(new BoidMoveAction(random, new NoCollision()));
+		/*if(collision)
 			actions.add(new SimpleMoveAction(random, new SimpleCollision()));
 		else
-			actions.add(new SimpleMoveAction(random, new NoCollision()));
+			actions.add(new SimpleMoveAction(random, new NoCollision()));*/
 		actions.add(new BounceAction());
 		if(healAnts)
 			actions.add(new HealYourselfAction(1)); // healingSpeed
