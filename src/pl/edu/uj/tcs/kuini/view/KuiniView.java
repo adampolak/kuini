@@ -116,8 +116,12 @@ public class KuiniView extends View implements OnTouchListener {
             canvas.drawCircle(canvasPosition.getX(), canvasPosition.getY(), canvasRadius, paint);
         }
         if(path != null) {
+            
+            PlayerColor ourPlayerColor = state.getPlayerStatesById().get(playerId).getColor();
+            int color = Color.argb((int) 255*3/10, ourPlayerColor.getR(), ourPlayerColor.getG(), ourPlayerColor.getB());            
             Paint paint = new Paint();
-            paint.setColor(Color.argb((int) 255*3/10, 0xFF, 0x00, 0x00));
+            paint.setColor(color);
+            
             canvas.drawCircle(path.get(0).getX(), path.get(0).getY(), pathRadius, paint);
             paint.setStyle(Paint.Style.STROKE);
             paint.setStrokeWidth(4);
