@@ -124,7 +124,7 @@ public class KuiniView extends View implements OnTouchListener {
             
             canvas.drawCircle(path.get(0).getX(), path.get(0).getY(), pathRadius, paint);
             paint.setStyle(Paint.Style.STROKE);
-            paint.setStrokeWidth(4);
+            paint.setStrokeWidth(16);
             canvas.drawLines(ptsFromPositions(path), paint);
             List<Position> path2 = new ArrayList<Position>(path);
             path2.remove(0);
