@@ -42,4 +42,13 @@ public class Position implements Serializable {
 	public Position symmetry(Position other) {
 		return new Position(2*x - other.x, 2*y - other.y);
 	}
+	
+	@Override
+	public boolean equals(Object o){
+		if(o instanceof Position){
+			Position p = (Position)o;
+			return p.x == x && p.y == y;
+		}
+		return false;
+	}
 }

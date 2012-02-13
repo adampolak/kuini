@@ -19,7 +19,7 @@ public class AttackAction implements IAction {
 			ILiveState state) {
 		Map<Integer, ILivePlayer> players = state.getLivePlayersById();
 		ILivePlayer player = players.get(actor.getPlayerId());
-		for(ILiveActor neighbour:state.getNeighbours(actor.getPosition(), attackRadius)){
+		for(ILiveActor neighbour:state.getNeighbours(actor, attackRadius)){
 			if(player.shouldAttack(players.get(neighbour.getPlayerId()))){
 				neighbour.changeHP(-attackForce*elapsedTime);
 			}

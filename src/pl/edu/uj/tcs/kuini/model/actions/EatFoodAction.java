@@ -1,7 +1,9 @@
 package pl.edu.uj.tcs.kuini.model.actions;
 
+import android.util.Log;
 import pl.edu.uj.tcs.kuini.model.ActorType;
 import pl.edu.uj.tcs.kuini.model.live.ILiveActor;
+import pl.edu.uj.tcs.kuini.model.live.ILivePlayer;
 import pl.edu.uj.tcs.kuini.model.live.ILiveState;
 
 public class EatFoodAction implements IAction {
@@ -17,11 +19,13 @@ public class EatFoodAction implements IAction {
 	@Override
 	public void performAction(ILiveActor actor, float elapsedTime,
 			ILiveState state) {
-		for(ILiveActor food : state.getNeighbours(actor.getPosition(), eatingRadius)){
+		for(ILiveActor food : state.getNeighbours(actor, eatingRadius)){
 			if(food.getActorType() != ActorType.FOOD)continue;
 			float foodEaten = Math.max(0, Math.min(food.getHP(), elapsedTime*eatingSpeed));
+			ILivePlayer player = state.getLivePlayersById().get(actor.getPlayerId());
+			Log.d("EAT FOOD", "Player: "+actor.getPlayerId()+" Food eaten: "+foodEaten +" ("+player.getFood()+")");
 			food.changeHP(-foodEaten);
-			state.getLivePlayersById().get(actor.getPlayerId()).changeFood(foodEaten);
+			player.changeFood(foodEaten);
 			return;
 		}
 

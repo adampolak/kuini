@@ -136,7 +136,8 @@ public class ModelFactory implements IModelFactory {
 		ILiveState state = new LiveState(width, height, 
 				new RandomOrderer(random), 
 				new SpawnFoodAction(new FoodFactory(random), maxActors),
-				new GridActorWatcher((int)width/2,(int)height/2, height, width));
+				//new GridActorWatcher((int)width/2,(int)height/2, height, width));
+				new SimpleActorWatcher());
 		
 		IAntFactory antFactory = new AntFactory(random, healAnts);
 		IAction anthillAction = new CompoundAction(Arrays.asList(new IAction[]{

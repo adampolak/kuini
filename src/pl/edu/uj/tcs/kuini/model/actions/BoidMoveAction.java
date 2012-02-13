@@ -13,28 +13,31 @@ import pl.edu.uj.tcs.kuini.model.live.ILiveActor;
 import pl.edu.uj.tcs.kuini.model.live.ILiveState;
 
 public class BoidMoveAction implements IAction {
-	private final float followPathFactor = 1.0f;
+	private final float followPathFactor = 0.7f;
 	private final float velocityFactor = 0.5f;
-	private final float repellFactor = 0.5f;
+	private final float repellFactor;
 	private final Random random;
-	private final ICollisionResolver collisionResolver;
+	private final boolean collision;
 	
-	public BoidMoveAction(Random random, ICollisionResolver collisionResolver){
+	public BoidMoveAction(Random random, boolean collision){
 		this.random = random;
-		this.collisionResolver = collisionResolver;
+		this.collision = collision;
+		if(collision)repellFactor = 0.5f;
+		else repellFactor = 0.0f;
 	}
 
 	@Override
 	public void performAction(ILiveActor actor, float elapsedTime,
 			ILiveState state) {
 		List<ILiveActor> repellers = new LinkedList<ILiveActor>();
-		for(ILiveActor neighbour : state.getNeighbours(actor.getPosition(), actor.getRadius()*5)){
-			if(neighbour.getPosition().distanceTo(actor.getPosition()) < 3*actor.getRadius() && (
-					neighbour.getActorType() == ActorType.ANT || (neighbour.getActorType() == ActorType.ANTHILL && 
-					neighbour.getPlayerId() != actor.getPlayerId())))
-				repellers.add(neighbour);
-		}
-		float maxDistance = actor.getSpeed()*elapsedTime;
+		if(collision)
+			for(ILiveActor neighbour : state.getNeighbours(actor)){
+				if(neighbour.getPosition().distanceTo(actor.getPosition()) < 3*actor.getRadius() && (
+						neighbour.getActorType() == ActorType.ANT || (neighbour.getActorType() == ActorType.ANTHILL && 
+						neighbour.getPlayerId() != actor.getPlayerId())))
+					repellers.add(neighbour);
+			}
+		float maxDistance = (actor.getSpeed()*elapsedTime)*(velocityFactor+followPathFactor+repellFactor)/(velocityFactor+followPathFactor);
 		Position velocityTarget = getVelocityTarget(actor, elapsedTime, maxDistance);
 		Position pathTarget = getPathTarget(actor, maxDistance);
 		Position repellAntsTarget = getRepellTarget(actor, repellers, maxDistance);
@@ -44,7 +47,7 @@ public class BoidMoveAction implements IAction {
 		
 		Vector direction = new Vector(actor.getPosition(), target);
 		actor.setAngle(direction.getAngle());
-		actor.setPosition(collisionResolver.computePosition(actor, target, state));
+		actor.setPosition(target);
 	}
 
 	private Position getRepellTarget(ILiveActor actor, List<ILiveActor> friends, float maxDistance) {

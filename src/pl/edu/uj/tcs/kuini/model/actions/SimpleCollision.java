@@ -10,13 +10,15 @@ public class SimpleCollision implements ICollisionResolver {
 	@Override
 	public Position computePosition(ILiveActor actor, Position target,
 			ILiveState state) {
-		for(ILiveActor other : state.getNeighbours(actor.getPosition(), actor.getRadius())){
+		/*for(ILiveActor other : state.getNeighbours(actor, actor.getRadius())){
 			if(other.getId() != actor.getId()
 					&& other.getActorType() != ActorType.FOOD) return target;
-		}
-		for(ILiveActor other : state.getNeighbours(target, actor.getRadius())){
+		}*/
+		for(ILiveActor other : state.getNeighbours(actor)){
 			if(other.getId() != actor.getId()
-					&& other.getActorType() != ActorType.FOOD) return actor.getPosition();
+					&& other.getActorType() != ActorType.FOOD
+					&& other.getPosition().distanceTo(target) <= actor.getRadius())
+				return actor.getPosition();
 		}
 		return target;
 	}
