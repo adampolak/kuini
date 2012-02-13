@@ -110,4 +110,8 @@ public class Actor implements ILiveActor {
 	public LivePath getLivePath() {
 		return livePath;
 	}
+	@Override
+	public float getNeigbourhoodRadius() {
+		return 5*getRadius();
+	}
 }

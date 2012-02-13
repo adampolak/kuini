@@ -20,4 +20,5 @@ public interface ILiveActor extends IActor {
 	Path getPath();
 	LivePath getLivePath();
 	void setAngle(float angle);
+	float getNeigbourhoodRadius();
 }

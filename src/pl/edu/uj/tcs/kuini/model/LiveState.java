@@ -1,6 +1,7 @@
 package pl.edu.uj.tcs.kuini.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -26,6 +27,8 @@ public class LiveState implements ILiveState {
 	private IActorOrderer orderer;
 	private IGlobalAction globalAction;
 	private final IActorWatcher actorWatcher;
+	private List<ILiveActor> neighbourhoodCache;
+	private long cachedNeighbourhoodActorId = -1;
 	
 	public LiveState(float width, float height,
 			IActorOrderer orderer, IGlobalAction globalAction, IActorWatcher actorWatcher) {
@@ -72,12 +75,18 @@ public class LiveState implements ILiveState {
 
 
 	@Override
-	public List<ILiveActor> getNeighbours(Position position, float radius) {
-		return actorWatcher.getNeighbours(position, radius);
+	public List<ILiveActor> getNeighbours(ILiveActor actor) {
+		if(cachedNeighbourhoodActorId != actor.getId()){
+			neighbourhoodCache = Collections.unmodifiableList(
+					actorWatcher.getNeighbours(actor.getPosition(), actor.getNeigbourhoodRadius()));
+			cachedNeighbourhoodActorId = actor.getId();
+		}
+		return neighbourhoodCache;
 	}
 
 	@Override
 	public void nextTurn(float elapsedTime) {
+		clearCache();
 		//long time = System.nanoTime();
 		for(ILiveActor actor : orderer.orderActors(actors)){
 			actor.performAction(elapsedTime, this);
@@ -100,17 +109,26 @@ public class LiveState implements ILiveState {
 		//		"s (actors:"+actors.size()+")");
 	}
 
+	private void clearCache() {
+		cachedNeighbourhoodActorId = -1;
+		neighbourhoodCache = null;
+	}
+
 	@Override
 	public void doCommand(Command command) {
 		int selectedActors = 0;
 		Position start = command.getStart();
-		for(ILiveActor actor : getNeighbours(start, command.getRadius())){
+		for(ILiveActor actor : getActorsInRange(start, command.getRadius())){
 			if(actor.getPlayerId() == command.getPlayerId()){
 				actor.setPath(command.getPath());
 				selectedActors++;
 			}
 		}
 		Log.d("COMMAND", "Command received: "+command+" ("+selectedActors+" actors)");
+	}
+
+	private List<ILiveActor> getActorsInRange(Position origin, float radius) {
+		return actorWatcher.getNeighbours(origin, radius);
 	}
 
 	@Override
@@ -157,5 +175,15 @@ public class LiveState implements ILiveState {
 	@Override
 	public boolean isGameEnded() {
 		return getWinnerId() != -1;
+	}
+
+	@Override
+	public List<ILiveActor> getNeighbours(ILiveActor actor, float radius) {
+		List<ILiveActor> result = new LinkedList<ILiveActor>();
+		for(ILiveActor neighbour : getNeighbours(actor)){
+			if(neighbour.getPosition().distanceTo(actor.getPosition()) <= radius)
+				result.add(neighbour);
+		}
+		return result;
 	}
 }

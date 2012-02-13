@@ -3,6 +3,8 @@ package pl.edu.uj.tcs.kuini.model.actions;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.util.Log;
+
 import pl.edu.uj.tcs.kuini.model.factories.IAntFactory;
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
 import pl.edu.uj.tcs.kuini.model.geometry.Vector;
@@ -28,21 +30,26 @@ public class SpawnAntAction implements IAction {
 		if(cooldownLeftByActorId.get(actor.getId()) == null)
 			cooldownLeftByActorId.put(actor.getId(), cooldown);
 		float cooldownLeft = cooldownLeftByActorId.get(actor.getId());
-		cooldownLeft = Math.max(0.0f, cooldownLeft-elapsedTime);
+		cooldownLeft = Math.max(-0.01f, cooldownLeft-elapsedTime);
 		
 		ILivePlayer player = state.getLivePlayersById().get(actor.getPlayerId());
-		if(player.getFood() >= 100 && cooldownLeft == 0.0f){
+		//Log.d("SPAWN", "Player: "+player+" food: "+player.getFood()+" cooldown: "+cooldownLeft);
+		if(player.getFood() >= 100 && cooldownLeft <= 0.0f){
 			ILiveActor ant = antFactory.getAnt(state, actor.getPlayerId());
+			ant.setPosition(actor.getPosition());
 			Position target = collisionResolver.computePosition(ant, new Vector(actor.getPosition(), 
 					actor.getAngle(),
-					ant.getRadius()+actor.getRadius()+0.02f
+					(ant.getRadius()+actor.getRadius())*1.1f
 					).getTarget() , state);
-			if(target != ant.getPosition()){
+			if(!target.equals(ant.getPosition())){
 				ant.setPosition(target);
 				ant.setAngle(actor.getAngle());
 				state.addActor(ant);
 				player.changeFood(-100);
 				cooldownLeft = cooldown;
+				Log.d("SPAWNED", "Ant spawned: "+ant);
+			}else{
+				Log.d("SPAWNED", "Ant NOT spawned");
 			}
 		}
 		cooldownLeftByActorId.put(actor.getId(), cooldownLeft);

@@ -10,11 +10,11 @@ public class PlayerState implements Serializable, IPlayer{
 	private final int id;
     private final String name;
     private final PlayerColor color;
-    private final long score;
-    private final long food;
+    private final float score;
+    private final float food;
 	private final boolean human;
 
-    public PlayerState(int id, String name, PlayerColor color, long score, long food, boolean human) {
+    public PlayerState(int id, String name, PlayerColor color, float score, float food, boolean human) {
         this.id = id;
         this.name = name;
         this.color = color;
@@ -43,11 +43,11 @@ public class PlayerState implements Serializable, IPlayer{
         return color;
     }
 
-    public long getScore() {
+    public float getScore() {
         return score;
     }
 	@Override
-	public long getFood() {
+	public float getFood() {
 		return food;
 	}
 	@Override
@@ -65,5 +65,4 @@ public class PlayerState implements Serializable, IPlayer{
 		return "PlayerState[#"+hashCode()+"] id: "+id+" name: "+name+" color: "+color
 			+" score: "+score+" food: "+food;
 	}
-
 }

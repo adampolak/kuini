@@ -6,10 +6,10 @@ public class Player implements ILivePlayer {
 	private final int id;
 	private final String name;
 	private final PlayerColor color;
-	private long score;
-	private long food;
+	private float score;
+	private float food;
 
-	public Player(int id, String name, PlayerColor color, long score, long food) {
+	public Player(int id, String name, PlayerColor color, float score, float food) {
 		this.id = id;
 		this.name = name;
 		this.color = color;
@@ -33,17 +33,17 @@ public class Player implements ILivePlayer {
 	}
 
 	@Override
-	public long getScore() {
+	public float getScore() {
 		return score;
 	}
 
 	@Override
-	public long getFood() {
+	public float getFood() {
 		return food;
 	}
 
 	@Override
-	public void changeScore(long change) {
+	public void changeScore(float change) {
 		score += change;
 	}
 

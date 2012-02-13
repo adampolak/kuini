@@ -4,7 +4,7 @@ public interface IPlayer {
     int getId();
     String getName();
     PlayerColor getColor();
-    long getScore();
-    long getFood();
+    float getScore();
+    float getFood();
     boolean isHuman();
 }
