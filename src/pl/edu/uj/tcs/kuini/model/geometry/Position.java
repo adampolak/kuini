@@ -38,4 +38,8 @@ public class Position implements Serializable {
     public int hashCode(){
     	return (int)(17*x + 19*y + 7);
     }
+
+	public Position symmetry(Position other) {
+		return new Position(2*x - other.x, 2*y - other.y);
+	}
 }

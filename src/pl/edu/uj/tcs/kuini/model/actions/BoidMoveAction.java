@@ -10,12 +10,12 @@ import pl.edu.uj.tcs.kuini.model.Path;
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
 import pl.edu.uj.tcs.kuini.model.geometry.Vector;
 import pl.edu.uj.tcs.kuini.model.live.ILiveActor;
-import pl.edu.uj.tcs.kuini.model.live.ILivePlayer;
 import pl.edu.uj.tcs.kuini.model.live.ILiveState;
 
 public class BoidMoveAction implements IAction {
-	private final float followPathFactor = 0.1f;
-	private final float velocityFactor = 0.005f;
+	private final float followPathFactor = 1.0f;
+	private final float velocityFactor = 0.5f;
+	private final float repellFactor = 0.5f;
 	private final Random random;
 	private final ICollisionResolver collisionResolver;
 	
@@ -24,40 +24,48 @@ public class BoidMoveAction implements IAction {
 		this.collisionResolver = collisionResolver;
 	}
 
-	private ILivePlayer getPlayer(ILiveActor actor, ILiveState state){
-		return state.getLivePlayersById().get(actor.getPlayerId());
-	}
 	@Override
 	public void performAction(ILiveActor actor, float elapsedTime,
 			ILiveState state) {
-		/*List<ILiveActor> friends = new LinkedList<ILiveActor>();
-		List<ILiveActor> enemies = new LinkedList<ILiveActor>();
-		List<ILiveActor> food = new LinkedList<ILiveActor>();
-		ILivePlayer player = getPlayer(actor, state);
-		
+		List<ILiveActor> repellers = new LinkedList<ILiveActor>();
 		for(ILiveActor neighbour : state.getNeighbours(actor.getPosition(), actor.getRadius()*5)){
-			if(neighbour.getActorType() == ActorType.FOOD){
-				food.add(neighbour);
-			}else{
-				if(player.shouldAttack(getPlayer(neighbour, state))){
-					enemies.add(neighbour);
-				}else{
-					friends.add(neighbour);
-				}
-			}
-		}*/
-		Position velocityTarget = getVelocityTarget(actor, elapsedTime);
-		Position pathTarget = getPathTarget(actor);
+			if(neighbour.getPosition().distanceTo(actor.getPosition()) < 3*actor.getRadius() && (
+					neighbour.getActorType() == ActorType.ANT || (neighbour.getActorType() == ActorType.ANTHILL && 
+					neighbour.getPlayerId() != actor.getPlayerId())))
+				repellers.add(neighbour);
+		}
+		float maxDistance = actor.getSpeed()*elapsedTime;
+		Position velocityTarget = getVelocityTarget(actor, elapsedTime, maxDistance);
+		Position pathTarget = getPathTarget(actor, maxDistance);
+		Position repellAntsTarget = getRepellTarget(actor, repellers, maxDistance);
 		
-		Position target = average(new Position[]{velocityTarget, pathTarget}, 
-				new float[]{velocityFactor, followPathFactor});
+		Position target = average(new Position[]{velocityTarget, pathTarget, repellAntsTarget}, 
+				new float[]{velocityFactor, followPathFactor, repellFactor});
 		
 		Vector direction = new Vector(actor.getPosition(), target);
 		actor.setAngle(direction.getAngle());
-		float length = Math.min(direction.magnitude(), actor.getSpeed()*elapsedTime);
-		actor.setPosition(collisionResolver.computePosition(actor, new Vector(direction, length).getTarget(), state));
+		actor.setPosition(collisionResolver.computePosition(actor, target, state));
+	}
+
+	private Position getRepellTarget(ILiveActor actor, List<ILiveActor> friends, float maxDistance) {
+		return normalize(actor.getPosition(), 
+				actor.getPosition().symmetry(averagePositions(friends, actor.getPosition())),
+				maxDistance);
 	}
 	
+	private Position averagePositions(List<ILiveActor> actors, Position resultIfEmpty){
+		if(actors.isEmpty())return resultIfEmpty;
+		float x=0, y=0;
+		for(ILiveActor actor : actors){
+			Position p = actor.getPosition();
+			x += p.getX();
+			y += p.getY();
+		}
+		x /= actors.size();
+		y /= actors.size();
+		return new Position(x, y);
+	}
+
 	private Position average(Position[] positions, float[] factors){
 		float x=0, y=0;
 		float sum = 0;
@@ -71,13 +79,21 @@ public class BoidMoveAction implements IAction {
 		return new Position(x, y);
 	}
 	
-	private Position getVelocityTarget(ILiveActor actor, float elapsedTime){
-		return new Vector(actor.getPosition(), 
+	private Position getVelocityTarget(ILiveActor actor, float elapsedTime, float maxDistance){
+		return normalize(actor.getPosition(),
+				new Vector(actor.getPosition(), 
 		        actor.getAngle()+((float) ((random.nextFloat()-0.5)*0.5*elapsedTime)), 
-				100.0f).getTarget();
+				100.0f).getTarget(),
+				maxDistance);
 	}
 	
-	private Position getPathTarget(ILiveActor actor) {
+	private Position normalize(Position actorPosition, Position target, float distance){
+		if(actorPosition.distanceTo(target) < distance)return target;
+		float angle = new Vector(actorPosition, target).getAngle();
+		return new Vector(actorPosition, angle, distance).getTarget();
+	}
+	
+	private Position getPathTarget(ILiveActor actor, float maxDistance) {
 		LivePath path = actor.getLivePath();
 		while(true){
 			if(!path.hasNextPosition()){
@@ -89,7 +105,7 @@ public class BoidMoveAction implements IAction {
 			else 
 				break;
 		}
-		return path.currentPosition();
+		return normalize(actor.getPosition(), path.currentPosition(), maxDistance);
 	}
 
 }

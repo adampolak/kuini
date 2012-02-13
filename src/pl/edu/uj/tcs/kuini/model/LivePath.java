@@ -4,7 +4,7 @@ import pl.edu.uj.tcs.kuini.model.geometry.Position;
 
 public class LivePath {
 	private final Path path;
-	private int idx = 0;
+	private int idx = 1; // ignore first point (center of selection)
 	
 	public LivePath(Path path){
 		this.path = path;
