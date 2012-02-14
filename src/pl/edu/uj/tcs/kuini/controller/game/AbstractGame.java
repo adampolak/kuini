@@ -13,6 +13,8 @@ import pl.edu.uj.tcs.kuini.model.Command;
 import pl.edu.uj.tcs.kuini.model.IModel;
 import pl.edu.uj.tcs.kuini.model.IState;
 import pl.edu.uj.tcs.kuini.view.ICommandProxy;
+import android.content.Context;
+import android.preference.PreferenceManager;
 
 public abstract class AbstractGame extends Thread implements ICommandProxy {
 
@@ -24,8 +26,14 @@ public abstract class AbstractGame extends Thread implements ICommandProxy {
     protected IModel model = null;
     protected Controller controller = null;
     
+    protected String playerName = "";
+    
     public AbstractGame(IView view) {
         this.view = view;
+    }
+    
+    public void getPlayerNameFromContext(Context context) {
+        playerName = PreferenceManager.getDefaultSharedPreferences(context).getString("playerName", "");
     }
     
     @Override

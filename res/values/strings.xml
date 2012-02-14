@@ -8,9 +8,35 @@
     <string name="preference_player_name">Player name</string>
     <string name="preference_show_fps">Display FPS</string>
     
-    <string name="splash_before">Please wait for other players...</string>
-    <string name="splash_not_started">Game could not started :(</string>
-    <string name="splash_fail">Game was interrupted :(</string>
+    <string name="preference_opp_number">Number of opponents</string>
+    <string name="preference_heal_ants">Autohealing ants</string>
+    <string name="preference_faster_game">Increased game speed</string>
+    <string name="preference_start">Start!</string>
     
-    <string name="splash_content_description">KUINI LOGO</string>    
+    <string-array name="opp_number_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="opp_number_human">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+    </string-array>
+    
+    <string name="splash_before">Please wait for other players...</string>
+    <string name="splash_not_started">Game could not started.</string>
+    <string name="splash_fail">Game was interrupted.</string>
+    <string name="splash_winner">is the new Queen Ant!</string>
+    
+    <string name="about_title">About Kuini</string>
+    <string name="about">
+        Kuini is a real-time multiplayer
+        mobile game.\n\nIt has been developed 
+        by Jagiellonian University students 
+        during Team Project course.
+    </string>
+    <string name="about_ok">OK</string>
+    
 </resources>

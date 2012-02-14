@@ -32,6 +32,7 @@ public class KuiniActivity extends Activity implements IView {
     private KuiniView view;
     
     private boolean hasStarted = false;
+    private String winner = null;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,15 +54,13 @@ public class KuiniActivity extends Activity implements IView {
         
         view = new KuiniView(this, width, height);
         
-        // TODO: check if BT is enabled
-        
         Intent intent = getIntent();
         
         switch (intent.getIntExtra("game", HOST_GAME)) {
         case HOST_GAME:
             BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
             startActivity(new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE));
-            game = new HostGame(this, adapter);
+            game = new HostGame(this, adapter, 1);
             break;
         case JOIN_GAME:
             BluetoothDevice device = intent.getParcelableExtra("device");
@@ -73,7 +72,7 @@ public class KuiniActivity extends Activity implements IView {
         }
 
         view.setCommandProxy(game);
-        
+        game.getPlayerNameFromContext(this);
         game.start();
         
     }
@@ -97,15 +96,17 @@ public class KuiniActivity extends Activity implements IView {
     }
 
     @Override
-    public void gameFailed() {
+    public void gameFinished() {
         runOnUiThread(new Runnable(){
             @Override
             public void run() {
                 splashProgressBar.setVisibility(View.GONE);
-                if (hasStarted)
+                if (!hasStarted)
+                    splashText.setText(R.string.splash_not_started);
+                else if (winner == null)
                     splashText.setText(R.string.splash_fail);
                 else
-                    splashText.setText(R.string.splash_not_started);
+                    splashText.setText(winner + " " + getString(R.string.splash_winner));
                 setContentView(splash);
             }
         });
@@ -113,6 +114,8 @@ public class KuiniActivity extends Activity implements IView {
 
     @Override
     public void stateChanged(final IState state) {
+        if (state.isGameEnded())
+            winner = state.getWinnerName();
         view.stateChanged(state);
     }
    
