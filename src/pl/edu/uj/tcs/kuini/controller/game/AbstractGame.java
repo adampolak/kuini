@@ -32,7 +32,7 @@ public abstract class AbstractGame extends Thread implements ICommandProxy {
         this.view = view;
     }
     
-    public void getPlayerNameFromContext(Context context) {
+    public void importPlayerNameFromContext(Context context) {
         playerName = PreferenceManager.getDefaultSharedPreferences(context).getString("playerName", "");
     }
     

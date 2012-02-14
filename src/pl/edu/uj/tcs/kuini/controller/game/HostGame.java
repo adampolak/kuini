@@ -19,12 +19,18 @@ public class HostGame extends AbstractGame {
     public static final int GUEST_PLAYER_ID = 2;
     
     private final BluetoothAdapter btAdapter;
-    private final int N;
     
-    public HostGame(IView view, BluetoothAdapter btAdapter, int N) {
+    /* Configuration: */
+    private final int playersN;
+    private final float gameSpeed;
+    private final boolean healAnts;
+    
+    public HostGame(IView view, BluetoothAdapter btAdapter, int playersN, float gameSpeed, boolean healAnts) {
         super(view);
         this.btAdapter = btAdapter;
-        this.N = N;
+        this.playersN = 2; //playersN;
+        this.gameSpeed = 1.0f; //gameSpeed;
+        this.healAnts = true; //healAnts;
     }
     
     @Override
@@ -35,24 +41,30 @@ public class HostGame extends AbstractGame {
         
         try {
         
+            PlayerStub players[] = new PlayerStub[playersN];
+            
             ControllersServer server = new ControllersServer();
             createLocalController(server, HOST_PLAYER_ID);
             
-            serverSocket = 
-                    btAdapter.listenUsingInsecureRfcommWithServiceRecord("Kuini", KUINI_UUID);
-            socket = serverSocket.accept();
-            serverSocket.close();
+            players[0] = new PlayerStub("Host", 1);
             
-            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+            for(int i=0; i<playersN-1; i++) {
             
-            server.addPlayer(in, out, GUEST_PLAYER_ID);
+                serverSocket = 
+                        btAdapter.listenUsingInsecureRfcommWithServiceRecord("Kuini", KUINI_UUID);
+                socket = serverSocket.accept();
+                serverSocket.close();
             
-            model = new ModelFactory().getModel(
-                    new IPlayerStub[]{
-                            new PlayerStub("Host", HOST_PLAYER_ID),
-                            new PlayerStub("Guest", GUEST_PLAYER_ID),
-                    }, 800.0f/480.0f, "ANTS!", 1.0f, true);
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+            
+                server.addPlayer(in, out, 2 + i);
+                
+                players[1+i] = new PlayerStub("Guest", 2 + i);
+            
+            }
+            
+            model = new ModelFactory().getModel(players, 800.0f/480.0f, "ANTS!", gameSpeed, healAnts);
             
             server.start();
             
