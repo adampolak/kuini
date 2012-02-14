@@ -1,11 +1,12 @@
 package pl.edu.uj.tcs.kuini.gui;
 
 import pl.edu.uj.tcs.kuini.R;
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -62,8 +63,7 @@ public class MainMenuActivity extends ListActivity {
             startActivity(intent);
             break;
         case 1:
-            intent = new Intent(this, KuiniActivity.class);
-            intent.putExtra("game", KuiniActivity.HOST_GAME);
+            intent = new Intent(this, NewGameActivity.class);
             startActivity(intent);
             break;
         case 2:
@@ -73,8 +73,20 @@ public class MainMenuActivity extends ListActivity {
         case 3:
             startActivity(new Intent(this, SettingsActivity.class));
             break;
+        case 4:
+            (new AlertDialog.Builder(this))
+                .setTitle(R.string.about_title)
+                .setMessage(R.string.about)
+                .setPositiveButton(R.string.about_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int arg1) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
+            break;
         default:
-            Toast.makeText(this, "Not implemented yet :-(", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Not implemented yet.", Toast.LENGTH_SHORT).show();
         }
     
     }

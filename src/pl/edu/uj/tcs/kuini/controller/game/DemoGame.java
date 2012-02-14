@@ -31,14 +31,14 @@ public class DemoGame extends AbstractGame {
         try {
             createLocalController(server, DEMO_PLAYER_ID);
         } catch (IOException e) {
-            view.gameFailed();
+            view.gameFinished();
             return;
         }
         
         try { 
             sleep(500);    /* Only for testing/debugging purpose */
         } catch (InterruptedException e) {
-            view.gameFailed();
+            view.gameFinished();
             return;
         }
         
@@ -51,7 +51,7 @@ public class DemoGame extends AbstractGame {
         server.interrupt();
         
         // TODO: ask model if the anyone won the game
-        view.gameFailed();
+        view.gameFinished();
         
     }
     

@@ -66,6 +66,7 @@ public class Controller {
             for(Command command: turn) model.doCommand(command);
             model.nextTurn(turn.getElapsedTime());
             view.stateChanged(model.getState());
+            if (model.getState().isGameEnded()) break;
             // Thread.yield();
             
             //turnN ++;
