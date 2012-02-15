@@ -27,7 +27,7 @@ public class Position implements Serializable {
     public float distanceTo(Position target){
     	float x = target.getX() - getX();
     	float y = target.getY() - getY();
-    	return (float) Math.round(Math.sqrt(x*x+y*y)*1000000)/1000000;
+    	return (float) Math.sqrt(x*x+y*y);
     }
     @Override
     public String toString(){

@@ -1,4 +1,4 @@
-package pl.edu.uj.tcs.kuini.model;
+package pl.edu.uj.tcs.kuini.model.live;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,11 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import pl.edu.uj.tcs.kuini.model.Command;
+import pl.edu.uj.tcs.kuini.model.IActor;
+import pl.edu.uj.tcs.kuini.model.IActorOrderer;
+import pl.edu.uj.tcs.kuini.model.IActorWatcher;
+import pl.edu.uj.tcs.kuini.model.IPlayer;
+import pl.edu.uj.tcs.kuini.model.PlayerColor;
 import pl.edu.uj.tcs.kuini.model.actions.IGlobalAction;
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
-import pl.edu.uj.tcs.kuini.model.live.ILiveActor;
-import pl.edu.uj.tcs.kuini.model.live.ILivePlayer;
-import pl.edu.uj.tcs.kuini.model.live.ILiveState;
 import android.util.Log;
 
 public class LiveState implements ILiveState {

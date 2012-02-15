@@ -1,6 +1,6 @@
-package pl.edu.uj.tcs.kuini.model.factories;
+package pl.edu.uj.tcs.kuini.model;
 
-public class PlayerStub implements IPlayerStub {
+public class PlayerStub{
 	private final String name;
 	private final int id;
 	
@@ -9,12 +9,10 @@ public class PlayerStub implements IPlayerStub {
 		this.id = id;
 	}
 
-	@Override
 	public String getName() {
 		return name;
 	}
 
-	@Override
 	public int getId() {
 		return id;
 	}

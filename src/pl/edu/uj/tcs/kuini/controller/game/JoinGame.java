@@ -5,9 +5,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import pl.edu.uj.tcs.kuini.controller.Controller;
-import pl.edu.uj.tcs.kuini.model.factories.IPlayerStub;
+import pl.edu.uj.tcs.kuini.model.PlayerStub;
 import pl.edu.uj.tcs.kuini.model.factories.ModelFactory;
-import pl.edu.uj.tcs.kuini.model.factories.PlayerStub;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
@@ -35,7 +34,7 @@ public class JoinGame extends AbstractGame {
             
             int playerId = HostGame.GUEST_PLAYER_ID;
             model = new ModelFactory().getModel(
-                    new IPlayerStub[]{
+                    new PlayerStub[]{
                             new PlayerStub("Host", HostGame.HOST_PLAYER_ID),
                             new PlayerStub("Guest", HostGame.GUEST_PLAYER_ID),
                     }, 800.0f/480.0f, "ANTS!", 1.0f, true);            

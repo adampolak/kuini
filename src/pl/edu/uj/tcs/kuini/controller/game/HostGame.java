@@ -5,9 +5,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import pl.edu.uj.tcs.kuini.controller.ControllersServer;
-import pl.edu.uj.tcs.kuini.model.factories.IPlayerStub;
+import pl.edu.uj.tcs.kuini.model.PlayerStub;
 import pl.edu.uj.tcs.kuini.model.factories.ModelFactory;
-import pl.edu.uj.tcs.kuini.model.factories.PlayerStub;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;

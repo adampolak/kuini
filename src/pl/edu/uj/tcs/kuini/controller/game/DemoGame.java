@@ -3,10 +3,8 @@ package pl.edu.uj.tcs.kuini.controller.game;
 import java.io.IOException;
 
 import pl.edu.uj.tcs.kuini.controller.ControllersServer;
-import pl.edu.uj.tcs.kuini.model.PlayerColor;
-import pl.edu.uj.tcs.kuini.model.factories.IPlayerStub;
+import pl.edu.uj.tcs.kuini.model.PlayerStub;
 import pl.edu.uj.tcs.kuini.model.factories.ModelFactory;
-import pl.edu.uj.tcs.kuini.model.factories.PlayerStub;
 
 public class DemoGame extends AbstractGame {
 
@@ -19,7 +17,7 @@ public class DemoGame extends AbstractGame {
     public void run() {
         
         model = new ModelFactory().getModel(
-                new IPlayerStub[]{
+                new PlayerStub[]{
                         new PlayerStub("Player 1", 1),
                         new PlayerStub("Player 2", 2),
                         new PlayerStub("Player 3", 3)

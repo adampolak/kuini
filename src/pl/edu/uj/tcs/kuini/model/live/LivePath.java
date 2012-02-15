@@ -1,5 +1,6 @@
-package pl.edu.uj.tcs.kuini.model;
+package pl.edu.uj.tcs.kuini.model.live;
 
+import pl.edu.uj.tcs.kuini.model.Path;
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
 
 public class LivePath {
