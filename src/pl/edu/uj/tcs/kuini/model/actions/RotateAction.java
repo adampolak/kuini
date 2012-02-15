@@ -1,6 +1,5 @@
-package pl.edu.uj.tcs.kuini.model.factories;
+package pl.edu.uj.tcs.kuini.model.actions;
 
-import pl.edu.uj.tcs.kuini.model.actions.IAction;
 import pl.edu.uj.tcs.kuini.model.live.ILiveActor;
 import pl.edu.uj.tcs.kuini.model.live.ILiveState;
 

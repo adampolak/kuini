@@ -1,10 +1,10 @@
-package pl.edu.uj.tcs.kuini.model;
+package pl.edu.uj.tcs.kuini.model.live;
 
+import pl.edu.uj.tcs.kuini.model.ActorType;
+import pl.edu.uj.tcs.kuini.model.Path;
 import pl.edu.uj.tcs.kuini.model.actions.IAction;
 import pl.edu.uj.tcs.kuini.model.actions.NullAction;
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
-import pl.edu.uj.tcs.kuini.model.live.ILiveActor;
-import pl.edu.uj.tcs.kuini.model.live.ILiveState;
 
 public class Actor implements ILiveActor {
 	private Position position;

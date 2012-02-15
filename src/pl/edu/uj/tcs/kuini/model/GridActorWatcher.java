@@ -1,8 +1,6 @@
 package pl.edu.uj.tcs.kuini.model;
 
 import java.lang.reflect.Array;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -105,21 +103,6 @@ public class GridActorWatcher implements IActorWatcher {
 		}
 		return result;
 	}
-	/*
-	private List<GridPosition> getNeighbourFields(GridPosition start, float radius){
-		List<GridPosition> result = new LinkedList<GridPosition>();
-		int width = (int)(1+radius/fieldWidth());
-		int height = (int)(1+radius/fieldHeight());
-		GridPosition p;
-		for(int x=Math.max(0, start.x-width);x<Math.min(gridWidth, start.x+width);x++)
-			for(int y=Math.max(0, start.y-height);y<Math.min(gridHeight, start.y+height);y++){
-				p = new GridPosition(x, y);
-				if(distance(p, start) < radius)result.add(p);
-			}
-				
-		return result;
-	}*/
-			
 	
 	private boolean validPosition(GridPosition p) {
 		return p.x >= 0 
@@ -136,10 +119,6 @@ public class GridActorWatcher implements IActorWatcher {
 		return (float) Math.sqrt(square(fieldWidth()*(a.x-b.x) 
 				+ square(fieldHeight()*(a.y-b.y))));
 		
-	}
-	
-	private float fieldDiagonal(){
-		return ((float) Math.round(1000000*Math.sqrt(square(fieldWidth())+square(fieldHeight()))))/1000000;
 	}
 	
 	private GridPosition positionToGridPosition(Position p){

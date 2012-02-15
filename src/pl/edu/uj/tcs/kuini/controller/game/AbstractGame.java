@@ -10,8 +10,8 @@ import java.util.UUID;
 import pl.edu.uj.tcs.kuini.controller.Controller;
 import pl.edu.uj.tcs.kuini.controller.ControllersServer;
 import pl.edu.uj.tcs.kuini.model.Command;
-import pl.edu.uj.tcs.kuini.model.IModel;
 import pl.edu.uj.tcs.kuini.model.IState;
+import pl.edu.uj.tcs.kuini.model.Model;
 import pl.edu.uj.tcs.kuini.view.ICommandProxy;
 import android.content.Context;
 import android.preference.PreferenceManager;
@@ -23,7 +23,7 @@ public abstract class AbstractGame extends Thread implements ICommandProxy {
     
     protected final IView view;
     
-    protected IModel model = null;
+    protected Model model = null;
     protected Controller controller = null;
     
     protected String playerName = "";

@@ -6,10 +6,8 @@ import java.io.Serializable;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import android.util.Log;
-
 import pl.edu.uj.tcs.kuini.model.Command;
-import pl.edu.uj.tcs.kuini.model.IModel;
+import pl.edu.uj.tcs.kuini.model.Model;
 import pl.edu.uj.tcs.kuini.model.IState;
 
 public class Controller {
@@ -23,7 +21,7 @@ public class Controller {
     private final ObjectInputStream in;
     private final ObjectOutputStream out;
 
-    private final IModel model;
+    private final Model model;
 
 
     private final BlockingQueue<Serializable> sendingQueue = 
@@ -40,7 +38,7 @@ public class Controller {
         }
     };
 
-    public Controller(ObjectInputStream in, ObjectOutputStream out, IModel model, StateChangeListener view) {
+    public Controller(ObjectInputStream in, ObjectOutputStream out, Model model, StateChangeListener view) {
         this.in = in;
         this.out = out;
         this.model = model;
@@ -52,7 +50,6 @@ public class Controller {
     }
 
     public void run() {
-        int turnN = 0;
         sender.start();
         view.stateChanged(model.getState());
         while(!Thread.interrupted()) {
@@ -68,11 +65,6 @@ public class Controller {
             view.stateChanged(model.getState());
             if (model.getState().isGameEnded()) break;
             // Thread.yield();
-            
-            //turnN ++;
-            //Log.i("Controller", "Received turn number "+Integer.toString(turnN)+", hash = "+Integer.toString(model.getState().hashCode()));
-            //Log.i("Controller", "Received turn number "+Integer.toString(turnN)+", turn = "+model.getState());
-            
         }
         sender.interrupt();
     }

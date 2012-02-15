@@ -2,12 +2,12 @@ package pl.edu.uj.tcs.kuini.model.factories;
 
 import java.util.Random;
 
-import pl.edu.uj.tcs.kuini.model.Actor;
 import pl.edu.uj.tcs.kuini.model.ActorType;
 import pl.edu.uj.tcs.kuini.model.Path;
 import pl.edu.uj.tcs.kuini.model.actions.DecayAction;
 import pl.edu.uj.tcs.kuini.model.actions.IAction;
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
+import pl.edu.uj.tcs.kuini.model.live.Actor;
 import pl.edu.uj.tcs.kuini.model.live.ILiveActor;
 import pl.edu.uj.tcs.kuini.model.live.ILiveState;
 

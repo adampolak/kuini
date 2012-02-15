@@ -1,6 +1,6 @@
-package pl.edu.uj.tcs.kuini.model;
+package pl.edu.uj.tcs.kuini.model.live;
 
-import pl.edu.uj.tcs.kuini.model.live.ILivePlayer;
+import pl.edu.uj.tcs.kuini.model.PlayerColor;
 
 public class Player implements ILivePlayer {
 	private final int id;

@@ -5,31 +5,32 @@ import java.util.Collections;
 import java.util.Random;
 import java.util.Vector;
 
-import pl.edu.uj.tcs.kuini.model.Actor;
 import pl.edu.uj.tcs.kuini.model.ActorType;
 import pl.edu.uj.tcs.kuini.model.GridActorWatcher;
-import pl.edu.uj.tcs.kuini.model.IModel;
-import pl.edu.uj.tcs.kuini.model.LiveState;
 import pl.edu.uj.tcs.kuini.model.Model;
 import pl.edu.uj.tcs.kuini.model.Path;
-import pl.edu.uj.tcs.kuini.model.Player;
 import pl.edu.uj.tcs.kuini.model.PlayerColor;
+import pl.edu.uj.tcs.kuini.model.PlayerStub;
 import pl.edu.uj.tcs.kuini.model.RandomOrderer;
 import pl.edu.uj.tcs.kuini.model.SimpleActorWatcher;
 import pl.edu.uj.tcs.kuini.model.actions.CompoundAction;
 import pl.edu.uj.tcs.kuini.model.actions.HealYourselfAction;
 import pl.edu.uj.tcs.kuini.model.actions.IAction;
 import pl.edu.uj.tcs.kuini.model.actions.NoCollision;
+import pl.edu.uj.tcs.kuini.model.actions.RotateAction;
 import pl.edu.uj.tcs.kuini.model.actions.SimpleCollision;
 import pl.edu.uj.tcs.kuini.model.actions.SpawnAntAction;
 import pl.edu.uj.tcs.kuini.model.actions.SpawnFoodAction;
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
+import pl.edu.uj.tcs.kuini.model.live.Actor;
 import pl.edu.uj.tcs.kuini.model.live.ILiveActor;
 import pl.edu.uj.tcs.kuini.model.live.ILivePlayer;
 import pl.edu.uj.tcs.kuini.model.live.ILiveState;
+import pl.edu.uj.tcs.kuini.model.live.LiveState;
+import pl.edu.uj.tcs.kuini.model.live.Player;
 
-public class ModelFactory implements IModelFactory {
-	public IModel getModel() {
+public class ModelFactory {
+	public Model getModel() {
 		//Random random = new RandomGenerator();
 	    Random random = new Random(0);
 		ILiveState state = new LiveState(12, 18, 
@@ -88,7 +89,7 @@ public class ModelFactory implements IModelFactory {
 		return result;
 	}
 	
-	public IModel getTestingModel(IPlayerStub[] players, float screenRatio, String seed, int antsPerPlayer){
+	public Model getTestingModel(PlayerStub[] players, float screenRatio, String seed, int antsPerPlayer){
 		//Random random = new RandomGenerator();
 	    Random random = new Random(seed.hashCode());
 		float width, height;
@@ -108,7 +109,7 @@ public class ModelFactory implements IModelFactory {
 		
 		Vector<PlayerColor> colors = getColors(random);
 		int colorIdx = 0;
-		for(IPlayerStub playerStub : players){
+		for(PlayerStub playerStub : players){
 			ILivePlayer player = new Player(playerStub.getId(), playerStub.getName(), colors.get(colorIdx++), 0, 1000);
 			state.addPlayer(player);
 			for(int i=0;i<antsPerPlayer;i++){
@@ -121,8 +122,7 @@ public class ModelFactory implements IModelFactory {
 		return new Model(state, 1.0f);
 	}
 
-	@Override
-	public IModel getModel(IPlayerStub[] players, float screenRatio, String seed, float gameSpeed, boolean healAnts) {
+	public Model getModel(PlayerStub[] players, float screenRatio, String seed, float gameSpeed, boolean healAnts) {
 		int maxActors = 50;
 		Random random = new Random(seed.hashCode());
 		float width, height;
@@ -150,7 +150,7 @@ public class ModelFactory implements IModelFactory {
 		float anthillRadius = 0.5f;
 		Position[] anthills = getAnthillsPositions(random, width, height, anthillRadius, players.length);
 		int idx = 0;
-		for(IPlayerStub playerStub : players){
+		for(PlayerStub playerStub : players){
 			ILivePlayer player = new Player(playerStub.getId(), playerStub.getName(), colors.get(idx), 0, 500);
 			state.addPlayer(player);
 			state.addActor(new Actor(ActorType.ANTHILL, state.nextActorId(), player.getId(), anthillAction,

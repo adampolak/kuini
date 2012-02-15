@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Random;
 
 import pl.edu.uj.tcs.kuini.model.ActorType;
-import pl.edu.uj.tcs.kuini.model.LivePath;
 import pl.edu.uj.tcs.kuini.model.Path;
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
 import pl.edu.uj.tcs.kuini.model.geometry.Vector;
 import pl.edu.uj.tcs.kuini.model.live.ILiveActor;
 import pl.edu.uj.tcs.kuini.model.live.ILiveState;
+import pl.edu.uj.tcs.kuini.model.live.LivePath;
 
 public class BoidMoveAction implements IAction {
 	private final float followPathFactor = 0.7f;
