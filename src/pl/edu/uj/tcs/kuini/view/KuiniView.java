@@ -136,12 +136,10 @@ public class KuiniView extends View implements OnTouchListener {
             if(showFps)
                 y += size;
             float ourFood = state.getPlayerStatesById().get(playerId).getFood();
-            /* TODO : how to get foodPlayerId from state, not only liveState? */
-            PlayerColor foodColor = PlayerColor.GOLD;
             /* TODO : how to get ant price? */
             float antPrice = 100.0f;
             Paint paint = new Paint();
-            paint.setColor(Color.argb((int) 255*8/10, foodColor.getR(), foodColor.getG(), foodColor.getB()));
+            paint.setColor(getColorFromId(state, state.getFoodPlayerId()));
             paint.setTextSize(size);
             canvas.drawText("" + (int)ourFood + "/" + (int)antPrice + " ", 
                     x, y, paint);
@@ -159,6 +157,7 @@ public class KuiniView extends View implements OnTouchListener {
                 canvas.drawText("" + getNumberOfAntsFromId(state, id),
                         x, y, paint);
                 y += size;
+                
             }
         }
     }
