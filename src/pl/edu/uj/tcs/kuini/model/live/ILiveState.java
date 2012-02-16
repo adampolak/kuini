@@ -27,5 +27,4 @@ public interface ILiveState extends IState {
 	void doCommand(Command command);
 	long nextActorId();
 	int nextPlayerId();
-	int getFoodPlayerId();
 }
