@@ -19,12 +19,15 @@ public class State implements Serializable, IFrozenState{
     private final float height;
 	private final boolean gameEnded;
 	private final int winnerId;
+	private final int foodPlayerId;
     public State(IState state){
-    	this(state.getActorStates(), state.getPlayerStatesById(), state.getWidth(), state.getHeight(), state.getWinnerId(), state.isGameEnded());
+    	this(state.getActorStates(), state.getPlayerStatesById(), 
+    			state.getWidth(), state.getHeight(), state.getWinnerId(), state.isGameEnded(),
+    			state.getFoodPlayerId());
     }
     	
     public State(List<IActor> actors, Map<Integer, IPlayer> playerStateById, float width, float height, 
-    		int winnerId, boolean gameEnded) {
+    		int winnerId, boolean gameEnded, int foodPlayerId) {
         this.actorStates = new ArrayList<IActor>(actors.size());
         for(IActor actor : actors){
         	this.actorStates.add(new ActorState(actor));
@@ -37,6 +40,7 @@ public class State implements Serializable, IFrozenState{
         this.height = height;
         this.gameEnded = gameEnded;
         this.winnerId = winnerId;
+        this.foodPlayerId = foodPlayerId;
     }
     public List<IActor> getActorStates() {
         return Collections.unmodifiableList(actorStates);
@@ -79,5 +83,10 @@ public class State implements Serializable, IFrozenState{
 	@Override
 	public boolean isGameEnded() {
 		return gameEnded;
+	}
+
+	@Override
+	public int getFoodPlayerId() {
+		return foodPlayerId;
 	}
 }

@@ -33,8 +33,7 @@ public class BoidMoveAction implements IAction {
 		if(collision)
 			for(ILiveActor neighbour : state.getNeighbours(actor)){
 				if(neighbour.getPosition().distanceTo(actor.getPosition()) < 3*actor.getRadius() && (
-						neighbour.getActorType() == ActorType.ANT || (neighbour.getActorType() == ActorType.ANTHILL && 
-						neighbour.getPlayerId() != actor.getPlayerId())))
+						neighbour.getActorType() == ActorType.ANT ))
 					repellers.add(neighbour);
 			}
 		float maxDistance = (actor.getSpeed()*elapsedTime)*(velocityFactor+followPathFactor+repellFactor)/(velocityFactor+followPathFactor);

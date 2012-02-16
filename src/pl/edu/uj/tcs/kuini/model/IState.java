@@ -17,4 +17,5 @@ public interface IState {
     public int getWinnerId();
     public String getWinnerName();
     public boolean isGameEnded();
+	int getFoodPlayerId();
 }
