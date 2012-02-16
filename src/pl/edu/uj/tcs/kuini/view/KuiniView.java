@@ -38,6 +38,7 @@ public class KuiniView extends View implements OnTouchListener {
     private float max_radius_for_command = 40;
     private float radius_speed_growth = 3f;
     private int playerId;
+    private boolean beenOut;
 
     
     private boolean showFps = true;
@@ -157,6 +158,7 @@ public class KuiniView extends View implements OnTouchListener {
             incremeanting_radius = true;
             startPosition = act;
             pathRadius = max_radius_for_command;
+            beenOut = false;
         }
         else if(event.getAction() == MotionEvent.ACTION_UP) {
             // TODO rescale positions, radius, etc
@@ -176,8 +178,14 @@ public class KuiniView extends View implements OnTouchListener {
                 pathRadius += radius_speed_growth;
             else
                 incremeanting_radius = false;
-            if(startPosition.distanceTo(act) > pathRadius)
+            path.add(act);
+            if(beenOut == false && startPosition.distanceTo(act) > pathRadius) {
+                path.clear();
+                path.add(startPosition);
                 path.add(act);
+                beenOut = true;
+            }
+                
         }
         invalidate();
         return true;
