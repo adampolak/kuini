@@ -23,11 +23,6 @@ import android.view.View.OnTouchListener;
 public class KuiniView extends View implements OnTouchListener {
     
     private ICommandProxy proxy = null;
-    /*
-    private boolean changes;
-    private IState state;
-    private IState newWaitingState;
-    */
     private volatile IState currState = null;
     private final int myWidth;
     private final int myHeight;
@@ -39,10 +34,10 @@ public class KuiniView extends View implements OnTouchListener {
     private float radius_speed_growth = 3f;
     private int playerId;
     private boolean beenOut;
-
     
     private boolean showFps = true;
     private FpsCounter fpsCounter = new FpsCounter();
+    private boolean showStats = true;
     
     public void setPlayerId(int playerId) {
         this.playerId = playerId;
@@ -63,18 +58,6 @@ public class KuiniView extends View implements OnTouchListener {
         
         this.setOnTouchListener(this);
     }
-
-    /*
-    private void updateState() {
-        if(!changes)
-            return;
-        synchronized (this) {
-            changes = false;
-            state = newWaitingState;
-            newWaitingState = null;
-        }
-    }
-    */
     
     private float[] ptsFromPositions(List<Position> path) {
         float[] pts = new float[path.size()*2];
@@ -85,10 +68,20 @@ public class KuiniView extends View implements OnTouchListener {
         return pts;
     }
         
+    private int getColorFromId(IState state, int id) {
+        PlayerColor playerColor = state.getPlayerStatesById().get(id).getColor();
+        return Color.argb((int) 255*8/10, playerColor.getR(), playerColor.getG(), playerColor.getB());            
+    }
+    private int getNumberOfAntsFromId(IState state, int id) {
+        int result = 0;
+        for(IActor actor : state.getActorStates())
+            if(actor.getPlayerId() == id)
+                result++;
+        return result;
+    }
+    
     @Override
     public void onDraw(Canvas canvas) {
-        /* updateState(); */
-        
         IState state = currState;
         
         /* will be changed to drawBitmap */ 
@@ -135,13 +128,39 @@ public class KuiniView extends View implements OnTouchListener {
             canvas.drawLines(ptsFromPositions(path2), paint);
         
         } 
-/*        for(Position p : tmpPointList) {
-            Paint paint = new Paint();
-            paint.setColor(new Random().nextInt());
-            canvas.drawCircle(p.getX(), p.getY(), 5, paint);    
-        }
-  */
         if (showFps) fpsCounter.drawFps(canvas);
+        if (showStats) {
+            float x = 20.0f;
+            float y = 50.0f;
+            float size = 30.0f;
+            if(showFps)
+                y += size;
+            float ourFood = state.getPlayerStatesById().get(playerId).getFood();
+            /* TODO : how to get foodPlayerId from state, not only liveState? */
+            PlayerColor foodColor = PlayerColor.GOLD;
+            /* TODO : how to get ant price? */
+            float antPrice = 100.0f;
+            Paint paint = new Paint();
+            paint.setColor(Color.argb((int) 255*8/10, foodColor.getR(), foodColor.getG(), foodColor.getB()));
+            paint.setTextSize(size);
+            canvas.drawText("" + (int)ourFood + "/" + (int)antPrice + " ", 
+                    x, y, paint);
+            y += size;
+            paint.setColor(getColorFromId(state, playerId));
+            canvas.drawText("" + getNumberOfAntsFromId(state, playerId),
+                    x, y, paint);
+            y += size;
+            for(int id : state.getPlayerStatesById().keySet()) {
+                if(id == playerId)
+                    continue;
+                if(!state.getPlayerStatesById().get(id).isHuman())
+                    continue;
+                paint.setColor(getColorFromId(state, id));
+                canvas.drawText("" + getNumberOfAntsFromId(state, id),
+                        x, y, paint);
+                y += size;
+            }
+        }
     }
 
     @Override
@@ -161,8 +180,6 @@ public class KuiniView extends View implements OnTouchListener {
             beenOut = false;
         }
         else if(event.getAction() == MotionEvent.ACTION_UP) {
-            // TODO rescale positions, radius, etc
-        	Log.d("COMMAND", "Command sent!");
             ScalerInterface scaler = new SimpleScaler(state.getHeight(), state.getWidth(), myHeight, myWidth);
         	List<Position> modelPath = new ArrayList<Position>();
         	for(Position p : path){
@@ -192,18 +209,10 @@ public class KuiniView extends View implements OnTouchListener {
     }
     
     public void stateChanged(IState state) {
-        /*
-        synchronized (this) {
-            newWaitingState = new State(state);
-            changes = true;
-        }
-        */
-        
         fpsCounter.nextFrame();
    
         currState = state;
         postInvalidate();
-//        invalidate();
     }
     
     public void setCommandProxy(ICommandProxy proxy) {
