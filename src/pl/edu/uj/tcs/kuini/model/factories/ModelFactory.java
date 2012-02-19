@@ -58,7 +58,7 @@ public class ModelFactory {
 				new Position(radius, height-radius)
 				*/
 			    new Position(radius*0.8f+(width-radius)*0.2f, radius),
-			    new Position(width-radius, (height-radius)*0.65f+radius*0.35f),
+			    new Position(radius*0.05f + (width-radius)*0.95f, (height-radius)*0.65f+radius*0.35f),
 			    new Position(radius*0.75f+(width-radius)*0.25f, (height-radius)*0.85f+radius*0.15f)
 			};
 		}

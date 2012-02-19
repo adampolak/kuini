@@ -2,6 +2,8 @@
 <resources>
     <string name="app_name">Kuini</string>
     
+    <string name="select_host_label">Kuini - Select host device</string>
+    
     <string name="error_no_bt">This device does not support Bluetooth. Kuini is exiting.</string>
     <string name="error_bt_disabled">Bluetooth was not enabled. Kuini is exiting.</string>
     
@@ -26,7 +28,7 @@
         <item>Three</item>
     </string-array>
     
-    <string name="splash_before">Please wait for other players...</string>
+    <string name="splash_before">Please wait for other players…</string>
     
     <string name="dialog_not_started">Game could not started.</string>
     <string name="dialog_fail">Game was interrupted.</string>
@@ -43,5 +45,7 @@
         during Team Project course.
     </string>
     <string name="about_ok">OK</string>
+    
+    <string name="splash_image_content_description">Splash image</string>
     
 </resources>

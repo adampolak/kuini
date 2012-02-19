@@ -86,6 +86,8 @@ public class KuiniView extends View implements OnTouchListener {
     @Override
     public void onDraw(Canvas canvas) {
         
+        fpsCounter.nextFrame();
+        
         IState state = currState;
         
         /* will be changed to drawBitmap */ 
@@ -217,7 +219,7 @@ public class KuiniView extends View implements OnTouchListener {
     }
     
     public void stateChanged(IState state) {
-        fpsCounter.nextFrame();
+        //fpsCounter.nextFrame();
    
         currState = state;
         postInvalidate();

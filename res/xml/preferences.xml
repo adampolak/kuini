@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    
     <PreferenceCategory android:key="general"
         android:title="General Kuini settings"
         >
@@ -13,6 +14,7 @@
             android:title="@string/preference_show_fps"
             android:defaultValue="true"/>
     </PreferenceCategory>
+    
     <PreferenceCategory android:key="game"
         android:title="New game settings"
         >

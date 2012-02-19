@@ -32,7 +32,7 @@
         
         <activity 
             android:name=".gui.SelectHostActivity"
-            android:label="@string/app_name"
+            android:label="@string/select_host_label"
             android:screenOrientation="portrait">
         </activity>        
         
