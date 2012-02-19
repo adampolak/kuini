@@ -45,7 +45,8 @@ public class GridActorWatcher implements IActorWatcher {
 	
 	@SuppressWarnings("unchecked")
 	public GridActorWatcher(int gridWidth, int gridHeight, float boardWidth,float boardHeight){
-		actorsGrid = (Vector<ILiveActor>[][]) Array.newInstance(Vector.class, gridWidth, gridHeight);
+		// actorsGrid = (Vector<ILiveActor>[][]) Array.newInstance(Vector.class, gridWidth, gridHeight);
+		actorsGrid = (Vector<ILiveActor>[][]) new Vector[gridWidth][gridHeight];
 		for(int x=0;x<gridWidth;x++)
 			for(int y=0;y<gridHeight;y++)
 				actorsGrid[x][y] = new Vector<ILiveActor>();

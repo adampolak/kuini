@@ -53,7 +53,7 @@ public class HostGame extends AbstractGame {
             for(int i=0; i<playersN-1; i++) {
             
                 serverSocket = 
-                        btAdapter.listenUsingInsecureRfcommWithServiceRecord("Kuini", KUINI_UUID);
+                        btAdapter.listenUsingRfcommWithServiceRecord("Kuini", KUINI_UUID);
                 socket = serverSocket.accept();
                 serverSocket.close();
             
