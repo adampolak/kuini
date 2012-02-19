@@ -1,14 +1,14 @@
 package pl.edu.uj.tcs.kuini.controller;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import pl.edu.uj.tcs.kuini.model.Command;
-import pl.edu.uj.tcs.kuini.model.Model;
 import pl.edu.uj.tcs.kuini.model.IState;
+import pl.edu.uj.tcs.kuini.model.Model;
 
 public class Controller {
 
@@ -23,10 +23,15 @@ public class Controller {
 
     private final Model model;
 
-
+    /*
     private final BlockingQueue<Serializable> sendingQueue = 
             new LinkedBlockingQueue<Serializable>();
+            */
 
+    private final Queue<Command> sendingQueue2 = 
+            new LinkedList<Command>();
+    
+    /*
     private final Thread sender = new Thread() {
         @Override
         public void run() {
@@ -37,6 +42,7 @@ public class Controller {
             }
         }
     };
+    */
 
     public Controller(ObjectInputStream in, ObjectOutputStream out, Model model, StateChangeListener view) {
         this.in = in;
@@ -46,14 +52,28 @@ public class Controller {
     }
 
     public void proxyCommand(Command command) throws IllegalStateException {
-        sendingQueue.add(command);
+        // sendingQueue.add(command);
+        synchronized(sendingQueue2) { 
+            sendingQueue2.add(command);
+        }
     }
 
     public void run() {
-        sender.start();
+        //sender.start();
         view.stateChanged(model.getState());
         while(!Thread.interrupted()) {
-            sendingQueue.add(new ReadyForNextTurn());
+            
+            // sendingQueue.add(new ReadyForNextTurn());
+            
+            Command currCommand;
+            synchronized(sendingQueue2) {
+                currCommand = sendingQueue2.poll();
+            }
+            try {
+                if (currCommand != null)
+                    out.writeObject(currCommand);
+                out.writeObject(new ReadyForNextTurn());
+            } catch (IOException e) { break; }
 
             Turn turn;
             try {
@@ -64,9 +84,9 @@ public class Controller {
             model.nextTurn(turn.getElapsedTime());
             view.stateChanged(model.getState());
             if (model.getState().isGameEnded()) break;
-            // Thread.yield();
+            Thread.yield();
         }
-        sender.interrupt();
+        //sender.interrupt();
     }
 
 }

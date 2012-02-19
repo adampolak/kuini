@@ -35,7 +35,9 @@
             android:id="@+id/splashText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#444444" />
+            android:textColor="#444444" 
+            android:text="@string/splash_before"
+            />
 
     </LinearLayout>
 

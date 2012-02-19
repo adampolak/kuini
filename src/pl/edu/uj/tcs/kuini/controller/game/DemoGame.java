@@ -3,8 +3,8 @@ package pl.edu.uj.tcs.kuini.controller.game;
 import java.io.IOException;
 
 import pl.edu.uj.tcs.kuini.controller.ControllersServer;
-import pl.edu.uj.tcs.kuini.model.PlayerStub;
 import pl.edu.uj.tcs.kuini.model.factories.ModelFactory;
+import pl.edu.uj.tcs.kuini.model.factories.PlayerStub;
 
 public class DemoGame extends AbstractGame {
 
@@ -16,12 +16,12 @@ public class DemoGame extends AbstractGame {
     
     public void run() {
         
-        model = new ModelFactory().getModel(
+        model = ModelFactory.getModel(
                 new PlayerStub[]{
                         new PlayerStub("Player 1", 1),
                         new PlayerStub("Player 2", 2),
                         new PlayerStub("Player 3", 3)
-                }, 800.0f/480.0f, "ANTS!", 1.5f, false
+                }, RATIO, 4475/*System.currentTimeMillis()*/, 1.5f, false
         );
 
         ControllersServer server = new ControllersServer();
@@ -48,7 +48,6 @@ public class DemoGame extends AbstractGame {
         
         server.interrupt();
         
-        // TODO: ask model if the anyone won the game
         view.gameFinished();
         
     }

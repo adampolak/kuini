@@ -3,6 +3,7 @@ package pl.edu.uj.tcs.kuini.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.edu.uj.tcs.kuini.model.ActorType;
 import pl.edu.uj.tcs.kuini.model.Command;
 import pl.edu.uj.tcs.kuini.model.IActor;
 import pl.edu.uj.tcs.kuini.model.IPlayer;
@@ -15,7 +16,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -24,8 +24,7 @@ public class KuiniView extends View implements OnTouchListener {
     
     private ICommandProxy proxy = null;
     private volatile IState currState = null;
-    private final int myWidth;
-    private final int myHeight;
+    private int myWidth, myHeight;
     private List<Position> path;
     private Position startPosition;
     private boolean incremeanting_radius;
@@ -43,13 +42,8 @@ public class KuiniView extends View implements OnTouchListener {
         this.playerId = playerId;
     }
     
-    public KuiniView(Context context, int myWidth, int myHeight) {
+    public KuiniView(Context context) {
         super(context);
-        
-        /* this.controller = controller; */
-        //changes = true;
-        this.myWidth = myWidth;
-        this.myHeight = myHeight;
 
         setFocusable(true);
         setFocusableInTouchMode(true);
@@ -59,7 +53,7 @@ public class KuiniView extends View implements OnTouchListener {
         this.setOnTouchListener(this);
     }
     
-    private float[] ptsFromPositions(List<Position> path) {
+    private static float[] ptsFromPositions(List<Position> path) {
         float[] pts = new float[path.size()*2];
         for(int i = 0; i < path.size(); i++) {
             pts[2*i] = path.get(i).getX();
@@ -68,20 +62,22 @@ public class KuiniView extends View implements OnTouchListener {
         return pts;
     }
         
-    private int getColorFromId(IState state, int id) {
+    private static int getColorFromId(IState state, int id) {
         PlayerColor playerColor = state.getPlayerStatesById().get(id).getColor();
         return Color.argb((int) 255*8/10, playerColor.getR(), playerColor.getG(), playerColor.getB());            
     }
-    private int getNumberOfAntsFromId(IState state, int id) {
+    
+    private static int getNumberOfAntsFromId(IState state, int id) {
         int result = 0;
         for(IActor actor : state.getActorStates())
-            if(actor.getPlayerId() == id)
+            if(actor.getPlayerId() == id && actor.getActorType()==ActorType.ANT)
                 result++;
         return result;
     }
     
     @Override
     public void onDraw(Canvas canvas) {
+        
         IState state = currState;
         
         /* will be changed to drawBitmap */ 
@@ -216,6 +212,13 @@ public class KuiniView extends View implements OnTouchListener {
     
     public void setCommandProxy(ICommandProxy proxy) {
         this.proxy = proxy;
+    }
+    
+    @Override
+    protected void onSizeChanged (int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        this.myWidth = w;
+        this.myHeight = h;
     }
 
 }

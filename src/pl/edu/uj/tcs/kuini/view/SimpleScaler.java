@@ -17,9 +17,11 @@ public class SimpleScaler implements ScalerInterface{
         dW = (canvasW - modelW * m2cModifier) / 2;
         dH = (canvasH - modelH * m2cModifier) / 2;
     }
+    @Override
     public Position getCanvasPosition(Position modelPosition) {
         return new Position(dW + modelPosition.getX()*m2cModifier, dH + modelPosition.getY()*m2cModifier);
     }
+    @Override
     public Position getModelPosition(Position canvasPosition) {
         return new Position((canvasPosition.getX() - dW) / m2cModifier, (canvasPosition.getY() - dH) / m2cModifier);
     }

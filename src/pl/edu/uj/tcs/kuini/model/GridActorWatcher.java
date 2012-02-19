@@ -55,6 +55,7 @@ public class GridActorWatcher implements IActorWatcher {
 		this.gridHeight = gridHeight;
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public List<ILiveActor> getNeighbours(Position position, float radius) {
 		List<ILiveActor> result = new LinkedList<ILiveActor>();
