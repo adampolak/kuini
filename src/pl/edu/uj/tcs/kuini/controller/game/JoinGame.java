@@ -25,7 +25,7 @@ public class JoinGame extends AbstractGame {
                 
         try {
         
-            socket = device.createInsecureRfcommSocketToServiceRecord(KUINI_UUID);
+            socket = device.createRfcommSocketToServiceRecord(KUINI_UUID);
             socket.connect();
         
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
