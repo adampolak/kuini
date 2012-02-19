@@ -6,6 +6,9 @@
         <EditTextPreference android:key="playerName"
             android:title="@string/preference_player_name"
             android:defaultValue="Anonymous"/>
+        <CheckBoxPreference android:key="drawBg"
+            android:title="@string/preference_draw_bg"
+            android:defaultValue="true"/>
         <CheckBoxPreference android:key="showFps"
             android:title="@string/preference_show_fps"
             android:defaultValue="true"/>

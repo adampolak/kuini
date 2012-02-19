@@ -2,7 +2,7 @@ package pl.edu.uj.tcs.kuini.controller.game;
 
 import java.io.IOException;
 
-import pl.edu.uj.tcs.kuini.controller.ControllersServer;
+import pl.edu.uj.tcs.kuini.controller.SerialControllersServer;
 import pl.edu.uj.tcs.kuini.model.factories.ModelFactory;
 import pl.edu.uj.tcs.kuini.model.factories.PlayerStub;
 
@@ -24,7 +24,8 @@ public class DemoGame extends AbstractGame {
                 }, RATIO, 4475/*System.currentTimeMillis()*/, 1.5f, false
         );
 
-        ControllersServer server = new ControllersServer();
+        //ControllersServer server = new ControllersServer();
+        SerialControllersServer server = new SerialControllersServer();
         
         try {
             createLocalController(server, DEMO_PLAYER_ID);

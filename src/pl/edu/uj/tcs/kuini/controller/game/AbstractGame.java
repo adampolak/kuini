@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import pl.edu.uj.tcs.kuini.controller.Controller;
 import pl.edu.uj.tcs.kuini.controller.ControllersServer;
+import pl.edu.uj.tcs.kuini.controller.SerialControllersServer;
 import pl.edu.uj.tcs.kuini.model.Command;
 import pl.edu.uj.tcs.kuini.model.IState;
 import pl.edu.uj.tcs.kuini.model.Model;
@@ -52,7 +53,7 @@ public abstract class AbstractGame extends Thread implements ICommandProxy {
                 }
             };
     
-    protected void createLocalController(ControllersServer server, int playerId) throws IOException {
+    protected void createLocalController(SerialControllersServer server, int playerId) throws IOException {
         
         PipedInputStream serverToControllerIn = new PipedInputStream();
         PipedOutputStream serverToControllerOut = new PipedOutputStream();
@@ -80,8 +81,37 @@ public abstract class AbstractGame extends Thread implements ICommandProxy {
                 stateChangeListener);    
     }
     
+    protected void createLocalController(ControllersServer server, int playerId) throws IOException {
+        
+        PipedInputStream serverToControllerIn = new PipedInputStream();
+        PipedOutputStream serverToControllerOut = new PipedOutputStream();
+        PipedInputStream controllerToServerIn = new PipedInputStream();
+        PipedOutputStream controllerToServerOut = new PipedOutputStream();
+    
+        serverToControllerIn.connect(serverToControllerOut);
+        controllerToServerIn.connect(controllerToServerOut);
+    
+        ObjectOutputStream serverToControllerObjOut = new ObjectOutputStream(serverToControllerOut);
+        ObjectOutputStream controllerToServerObjOut = new ObjectOutputStream(controllerToServerOut);
+        ObjectInputStream serverToControllerObjIn = new ObjectInputStream(serverToControllerIn);
+        ObjectInputStream controllerToServerObjIn = new ObjectInputStream(controllerToServerIn);
+       
+        server.addPlayer(
+                controllerToServerObjIn,
+                serverToControllerObjOut,
+                playerId
+                );
+        
+        controller = new Controller(
+                serverToControllerObjIn,
+                controllerToServerObjOut,
+                model,
+                stateChangeListener);    
+    }
+    /*
     protected String getPlayerName() {
         return "";
     }
+    */
 
 }

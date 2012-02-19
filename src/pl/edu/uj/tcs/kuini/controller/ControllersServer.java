@@ -11,6 +11,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import pl.edu.uj.tcs.kuini.model.Command;
 
+@Deprecated
 public class ControllersServer extends Thread {
 
     private static final long IDLE_TIME = 10; // milliseconds
