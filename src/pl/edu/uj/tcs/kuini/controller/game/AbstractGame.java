@@ -21,6 +21,8 @@ public abstract class AbstractGame extends Thread implements ICommandProxy {
     protected static final UUID KUINI_UUID = 
             UUID.fromString("c3246310-523d-11e1-b86c-0800200c9a66");
     
+    protected static final float RATIO = 800.0f/480.0f;
+    
     protected final IView view;
     
     protected Model model = null;

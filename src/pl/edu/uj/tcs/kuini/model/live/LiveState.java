@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import pl.edu.uj.tcs.kuini.model.ActorType;
 import pl.edu.uj.tcs.kuini.model.Command;
 import pl.edu.uj.tcs.kuini.model.IActor;
 import pl.edu.uj.tcs.kuini.model.IActorOrderer;
@@ -165,14 +166,14 @@ public class LiveState implements ILiveState {
 	public int getWinnerId() {
 		Set<Integer> livePlayers = new HashSet<Integer>();
 		for(ILiveActor actor : getLiveActors()){
-			if(playersById.get(actor.getPlayerId()).isHuman())
-				livePlayers.add(actor.getPlayerId());
+			if(actor.getActorType() == ActorType.ANT)
+			    if (playersById.get(actor.getPlayerId()).isHuman())
+			        livePlayers.add(actor.getPlayerId());
 		}
-		if(livePlayers.size() == 1)
-			for(int id : livePlayers){
-				return id;
-			}
-		return -1;
+		if (livePlayers.size() == 1)
+			return livePlayers.iterator().next();
+		else
+		    return -1;
 	}
 
 	@Override

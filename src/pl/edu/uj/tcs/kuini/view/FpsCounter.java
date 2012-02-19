@@ -25,9 +25,13 @@ public class FpsCounter {
         lastFrameTimestamp = timestamp;
     }
     
+    public long getFps() {
+        return averageFrameDuration > 0 ? 1000 / averageFrameDuration : 0;
+    }
+    
     public void drawFps(Canvas canvas) {
-        long fps = averageFrameDuration > 0 ? 1000 / averageFrameDuration : 0;
-        canvas.drawText(Long.toString(fps)+" FPS", 
+        // long fps = averageFrameDuration > 0 ? 1000 / averageFrameDuration : 0;
+        canvas.drawText(Long.toString(getFps())+" FPS", 
                 20.0f, 50.0f, paint);
     }
     

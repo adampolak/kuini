@@ -9,16 +9,14 @@ import pl.edu.uj.tcs.kuini.controller.game.JoinGame;
 import pl.edu.uj.tcs.kuini.model.IState;
 import pl.edu.uj.tcs.kuini.view.KuiniView;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.DisplayMetrics;
-import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 public class KuiniActivity extends Activity implements IView {
 
@@ -26,15 +24,17 @@ public class KuiniActivity extends Activity implements IView {
     public static final int JOIN_GAME = 1;
     public static final int DEMO_GAME = 2;
    
+    /*
     private View splash;
     private ProgressBar splashProgressBar;
     private TextView splashText;
+    */
     
     private AbstractGame game = null;
     private KuiniView view;
     
     private boolean hasStarted = false;
-    private String winner = null;
+    private volatile String winner = null;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,19 +42,21 @@ public class KuiniActivity extends Activity implements IView {
         
         this.setContentView(R.layout.splash);
         
+        /*
         splash = findViewById(R.id.splash);
         splashProgressBar = (ProgressBar)findViewById(R.id.splashProgressBar);
         splashText = (TextView)findViewById(R.id.splashText);
         
         splashProgressBar.setVisibility(View.VISIBLE);
         splashText.setText(R.string.splash_before);
+        */
         
+        /*
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         int width = displaymetrics.widthPixels;
         int height = displaymetrics.heightPixels; 
-        
-        view = new KuiniView(this, width, height);
+        */
         
         Intent intent = getIntent();
         
@@ -64,7 +66,7 @@ public class KuiniActivity extends Activity implements IView {
             startActivity(new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE));
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
             int playersN = 1 + Integer.decode(preferences.getString("oppNumber", "1"));
-            float gameSpeed = preferences.getBoolean("fasterGame", false) ? 1.5f : 1.0f;
+            float gameSpeed = preferences.getBoolean("fasterGame", false) ? 2.5f : 1.0f;
             boolean healAnts = preferences.getBoolean("healAnts", true);
             game = new HostGame(this, adapter, playersN, gameSpeed, healAnts);
             break;
@@ -77,6 +79,7 @@ public class KuiniActivity extends Activity implements IView {
             break;
         }
 
+        view = new KuiniView(this);
         view.setCommandProxy(game);
         game.importPlayerNameFromContext(this);
         game.start();
@@ -106,27 +109,31 @@ public class KuiniActivity extends Activity implements IView {
         runOnUiThread(new Runnable(){
             @Override
             public void run() {
-                splashProgressBar.setVisibility(View.GONE);
+                if (KuiniActivity.this.isFinishing()) return;
+                
+                AlertDialog.Builder builder = new AlertDialog.Builder(KuiniActivity.this);
+
                 if (!hasStarted)
-                    splashText.setText(R.string.splash_not_started);
+                    builder.setMessage(R.string.dialog_not_started);
                 else if (winner == null)
-                    splashText.setText(R.string.splash_fail);
-                else {
-                    /*
-                    (new AlertDialog.Builder(KuiniActivity.this))
-                    .setMessage(winner + " " + getString(R.string.splash_winner))
-                    .setPositiveButton(R.string.about_ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int arg1) {
-                            dialog.cancel();
-                        }
-                    })
-                    .show();
-                    */
-                    splashText.setText(winner + " " + getString(R.string.splash_winner));
-                }
-                    
-                setContentView(splash);
+                    builder.setMessage(R.string.dialog_fail);
+                else
+                    builder.setMessage(winner + " " + getString(R.string.dialog_winner_2));
+                
+                builder.setPositiveButton(R.string.dialog_btn, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.cancel();
+                    }
+                });
+                builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        KuiniActivity.this.finish();
+                    }
+                });
+                
+                builder.show();
             }
         });
     }

@@ -26,9 +26,12 @@
     </string-array>
     
     <string name="splash_before">Please wait for other players...</string>
-    <string name="splash_not_started">Game could not started.</string>
-    <string name="splash_fail">Game was interrupted.</string>
-    <string name="splash_winner">is the new Queen Ant!</string>
+    
+    <string name="dialog_not_started">Game could not started.</string>
+    <string name="dialog_fail">Game was interrupted.</string>
+    <string name="dialog_winner_2">is the new Queen Ant!</string>
+    
+    <string name="dialog_btn">Exit</string>
     
     <string name="about_title">About Kuini</string>
     <string name="about">
