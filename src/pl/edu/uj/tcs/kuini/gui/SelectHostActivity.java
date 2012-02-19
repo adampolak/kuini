@@ -1,6 +1,5 @@
 package pl.edu.uj.tcs.kuini.gui;
 
-import android.R;
 import android.app.ListActivity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -33,7 +32,7 @@ public class SelectHostActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        hosts = new ArrayAdapter<String>(this, R.layout.simple_list_item_1);
+        hosts = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
 
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(receiver, filter);
