@@ -6,6 +6,7 @@
     <string name="error_bt_disabled">Bluetooth was not enabled. Kuini is exiting.</string>
     
     <string name="preference_player_name">Player name</string>
+    <string name="preference_draw_bg">Draw background</string>
     <string name="preference_show_fps">Display FPS</string>
     
     <string name="preference_opp_number">Number of opponents</string>
@@ -29,6 +30,7 @@
     
     <string name="dialog_not_started">Game could not started.</string>
     <string name="dialog_fail">Game was interrupted.</string>
+    <string name="dialog_winner_1"></string>
     <string name="dialog_winner_2">is the new Queen Ant!</string>
     
     <string name="dialog_btn">Exit</string>

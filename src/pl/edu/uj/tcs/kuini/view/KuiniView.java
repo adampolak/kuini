@@ -3,6 +3,7 @@ package pl.edu.uj.tcs.kuini.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.edu.uj.tcs.kuini.R;
 import pl.edu.uj.tcs.kuini.model.ActorType;
 import pl.edu.uj.tcs.kuini.model.Command;
 import pl.edu.uj.tcs.kuini.model.IActor;
@@ -15,6 +16,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,6 +39,9 @@ public class KuiniView extends View implements OnTouchListener {
     private boolean showFps = true;
     private FpsCounter fpsCounter = new FpsCounter();
     private boolean showStats = true;
+
+    private boolean drawBg = true;
+    private final Drawable background;
     
     public void setPlayerId(int playerId) {
         this.playerId = playerId;
@@ -49,6 +54,9 @@ public class KuiniView extends View implements OnTouchListener {
         setFocusableInTouchMode(true);
 
         showFps = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("showFps", true);
+        
+        drawBg  =PreferenceManager.getDefaultSharedPreferences(context).getBoolean("drawBg", true);
+        background = context.getResources().getDrawable(R.drawable.sand);
         
         this.setOnTouchListener(this);
     }
@@ -90,18 +98,23 @@ public class KuiniView extends View implements OnTouchListener {
         
         ScalerInterface scaler = new SimpleScaler(state.getHeight(), state.getWidth(), myHeight, myWidth);
 
-        Paint white = new Paint();
-        white.setColor(Color.LTGRAY);
         Position upLeft = scaler.getCanvasPosition(new Position(0, 0));
         Position downRight = scaler.getCanvasPosition(new Position(state.getWidth(), state.getHeight()));
-        canvas.drawRect(upLeft.getX(), upLeft.getY(), downRight.getX(), downRight.getY(), white);
+        if (drawBg) {
+            background.setBounds((int)upLeft.getX(), (int)upLeft.getY(), (int)downRight.getX(), (int)downRight.getY());
+            background.draw(canvas);
+        } else {
+            Paint white = new Paint();
+            white.setColor(Color.LTGRAY);
+            canvas.drawRect(upLeft.getX(), upLeft.getY(), downRight.getX(), downRight.getY(), white);
+        }
         
         for(IActor actor : state.getActorStates()) {
             Position canvasPosition = scaler.getCanvasPosition(actor.getPosition());            
             float canvasRadius = scaler.getCanvasRadius(actor.getRadius());
             IPlayer player = state.getPlayerStatesById().get(actor.getPlayerId());
             PlayerColor playerColor = player.getColor();
-            float alpha = ((float) actor.getHP() / actor.getMaxHP()) * ((1<<8)-1);
+            float alpha = (1<<7) + ((float) actor.getHP() / actor.getMaxHP()) * ((1<<7)-1);
             int color = Color.argb((int)alpha, playerColor.getR(), playerColor.getG(), playerColor.getB());
 
             Paint paint = new Paint();

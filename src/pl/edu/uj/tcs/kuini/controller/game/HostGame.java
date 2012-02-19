@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.edu.uj.tcs.kuini.controller.ControllersServer;
+import pl.edu.uj.tcs.kuini.controller.SerialControllersServer;
 import pl.edu.uj.tcs.kuini.model.factories.ModelFactory;
 import pl.edu.uj.tcs.kuini.model.factories.PlayerStub;
 import android.bluetooth.BluetoothAdapter;
@@ -42,8 +42,9 @@ public class HostGame extends AbstractGame {
         
         try {
             
-            ControllersServer server = new ControllersServer();
-            
+            /* ControllersServer server = new ControllersServer(); */
+            SerialControllersServer server = new SerialControllersServer();
+
             PlayerStub players[] = new PlayerStub[playersN];
             players[0] = new PlayerStub(playerName, HOST_PLAYER_ID);
             
