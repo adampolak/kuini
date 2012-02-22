@@ -81,6 +81,7 @@ public abstract class AbstractGame extends Thread implements ICommandProxy {
                 stateChangeListener);    
     }
     
+    @Deprecated
     protected void createLocalController(ControllersServer server, int playerId) throws IOException {
         
         PipedInputStream serverToControllerIn = new PipedInputStream();
@@ -108,10 +109,5 @@ public abstract class AbstractGame extends Thread implements ICommandProxy {
                 model,
                 stateChangeListener);    
     }
-    /*
-    protected String getPlayerName() {
-        return "";
-    }
-    */
 
 }

@@ -23,13 +23,7 @@ public class KuiniActivity extends Activity implements IView {
     public static final int HOST_GAME = 0;
     public static final int JOIN_GAME = 1;
     public static final int DEMO_GAME = 2;
-   
-    /*
-    private View splash;
-    private ProgressBar splashProgressBar;
-    private TextView splashText;
-    */
-    
+
     private AbstractGame game = null;
     private KuiniView view;
     
@@ -42,31 +36,14 @@ public class KuiniActivity extends Activity implements IView {
         
         this.setContentView(R.layout.splash);
         
-        /*
-        splash = findViewById(R.id.splash);
-        splashProgressBar = (ProgressBar)findViewById(R.id.splashProgressBar);
-        splashText = (TextView)findViewById(R.id.splashText);
-        
-        splashProgressBar.setVisibility(View.VISIBLE);
-        splashText.setText(R.string.splash_before);
-        */
-        
-        /*
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        int width = displaymetrics.widthPixels;
-        int height = displaymetrics.heightPixels; 
-        */
-        
         Intent intent = getIntent();
-        
         switch (intent.getIntExtra("game", HOST_GAME)) {
         case HOST_GAME:
             BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
             startActivity(new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE));
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
             int playersN = 1 + Integer.decode(preferences.getString("oppNumber", "1"));
-            float gameSpeed = preferences.getBoolean("fasterGame", false) ? 2.5f : 1.0f;
+            float gameSpeed = preferences.getBoolean("fasterGame", false) ? 1.75f : 1.0f;
             boolean healAnts = preferences.getBoolean("healAnts", true);
             game = new HostGame(this, adapter, playersN, gameSpeed, healAnts);
             break;

@@ -1,6 +1,5 @@
 package pl.edu.uj.tcs.kuini.model.actions;
 
-import android.util.Log;
 import pl.edu.uj.tcs.kuini.model.ActorType;
 import pl.edu.uj.tcs.kuini.model.live.ILiveActor;
 import pl.edu.uj.tcs.kuini.model.live.ILivePlayer;
@@ -23,7 +22,6 @@ public class EatFoodAction implements IAction {
 			if(food.getActorType() != ActorType.FOOD)continue;
 			float foodEaten = Math.max(0, Math.min(food.getHP(), elapsedTime*eatingSpeed));
 			ILivePlayer player = state.getLivePlayersById().get(actor.getPlayerId());
-			Log.d("EAT FOOD", "Player: "+actor.getPlayerId()+" Food eaten: "+foodEaten +" ("+player.getFood()+")");
 			food.changeHP(-foodEaten);
 			player.changeFood(foodEaten);
 			return;

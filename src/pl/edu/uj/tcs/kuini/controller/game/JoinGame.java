@@ -8,7 +8,6 @@ import pl.edu.uj.tcs.kuini.controller.Controller;
 import pl.edu.uj.tcs.kuini.model.factories.ModelFactory;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.util.Log;
 
 public class JoinGame extends AbstractGame {
 
@@ -31,18 +30,10 @@ public class JoinGame extends AbstractGame {
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
             
+            out.writeObject(playerName);
             
             int playerId = (Integer)in.readObject();
             model = ModelFactory.getModel((ModelFactory.Arguments)in.readObject());
-            
-            /*
-            model = ModelFactory.getModel(
-                    new PlayerStub[]{
-                            new PlayerStub("Host", HostGame.HOST_PLAYER_ID),
-                            new PlayerStub("Guest", HostGame.GUEST_PLAYER_ID),
-                    }, 800.0f/480.0f, 4475, 1.0f, true);            
-            int playerId = HostGame.GUEST_PLAYER_ID;
-            */
             
             controller = new Controller(in, out, model, stateChangeListener);
             view.gameStarted(playerId);
@@ -51,7 +42,6 @@ public class JoinGame extends AbstractGame {
             view.gameFinished();
             
         } catch (Exception e) { /* IOException, ClassNotFoundException, ClassCastException */
-            Log.i("JoinGame", Log.getStackTraceString(e));
             view.gameFinished();
         }
         

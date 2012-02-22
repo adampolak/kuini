@@ -6,13 +6,13 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.edu.uj.tcs.kuini.controller.ControllersServer;
 import pl.edu.uj.tcs.kuini.controller.SerialControllersServer;
 import pl.edu.uj.tcs.kuini.model.factories.ModelFactory;
 import pl.edu.uj.tcs.kuini.model.factories.PlayerStub;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
-import android.util.Log;
 
 public class HostGame extends AbstractGame {
 
@@ -42,7 +42,7 @@ public class HostGame extends AbstractGame {
         
         try {
             
-            /* ControllersServer server = new ControllersServer(); */
+            // ControllersServer server = new ControllersServer();
             SerialControllersServer server = new SerialControllersServer();
 
             PlayerStub players[] = new PlayerStub[playersN];
@@ -91,8 +91,6 @@ public class HostGame extends AbstractGame {
             view.gameFinished();
 
         } catch (Exception e) {
-            
-            Log.i("HostGame", Log.getStackTraceString(e));
             view.gameFinished();
         }
         

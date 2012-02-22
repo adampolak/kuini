@@ -2,6 +2,14 @@
 <resources>
     <string name="app_name">Kuini</string>
     
+    <string-array name="menu_items">
+        <item>Host new game</item>
+        <item>Join existing game</item>
+        <item>Settings</item>
+        <item>About Kuini</item>
+        <item>Start demo game</item>
+    </string-array>
+    
     <string name="select_host_label">Kuini - Select host device</string>
     
     <string name="error_no_bt">This device does not support Bluetooth. Kuini is exiting.</string>

@@ -103,8 +103,8 @@ public class ControllersServer extends Thread {
     @Override
     public void run() {
         
-        // tempoPolicy = new SimplePolicy();
-        tempoPolicy = new WaitForAllPolicy(clientInputHandlers.size());
+        tempoPolicy = new SimplePolicy();
+        //tempoPolicy = new WaitForAllPolicy(clientInputHandlers.size());
         
         for(ClientInputHandler h: clientInputHandlers)
             h.start();

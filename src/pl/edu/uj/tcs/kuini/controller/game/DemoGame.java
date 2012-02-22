@@ -8,8 +8,6 @@ import pl.edu.uj.tcs.kuini.model.factories.PlayerStub;
 
 public class DemoGame extends AbstractGame {
 
-    private static final int DEMO_PLAYER_ID = 1;
-    
     public DemoGame(IView view) {
         super(view);
     }
@@ -18,24 +16,24 @@ public class DemoGame extends AbstractGame {
         
         model = ModelFactory.getModel(
                 new PlayerStub[]{
-                        new PlayerStub("Player 1", 1),
-                        new PlayerStub("Player 2", 2),
-                        new PlayerStub("Player 3", 3)
-                }, RATIO, 4475/*System.currentTimeMillis()*/, 1.5f, false
+                        new PlayerStub(playerName, 1),
+                        new PlayerStub("Opponent 1", 2),
+                        new PlayerStub("Opponent 2", 3),
+                        new PlayerStub("Opponent 3", 4)
+                }, RATIO, System.currentTimeMillis(), 1.5f, true
         );
 
-        //ControllersServer server = new ControllersServer();
         SerialControllersServer server = new SerialControllersServer();
         
         try {
-            createLocalController(server, DEMO_PLAYER_ID);
+            createLocalController(server, 1);
         } catch (IOException e) {
             view.gameFinished();
             return;
         }
         
         try { 
-            sleep(500);    /* Only for testing/debugging purpose */
+            sleep(1000);    /* Only for testing/debugging purpose */
         } catch (InterruptedException e) {
             view.gameFinished();
             return;
@@ -43,7 +41,7 @@ public class DemoGame extends AbstractGame {
         
         server.start();
         
-        view.gameStarted(DEMO_PLAYER_ID);
+        view.gameStarted(1);
         
         controller.run();
         

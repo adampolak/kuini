@@ -6,6 +6,6 @@ public class SimplePolicy implements TempoPolicyInterface {
     public void ready(int playerId) {}
 
     @Override
-    public void nextTurn() throws InterruptedException {}
+    public void nextTurn() {}
 
 }
