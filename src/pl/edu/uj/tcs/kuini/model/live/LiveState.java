@@ -18,7 +18,6 @@ import pl.edu.uj.tcs.kuini.model.IPlayer;
 import pl.edu.uj.tcs.kuini.model.PlayerColor;
 import pl.edu.uj.tcs.kuini.model.actions.IGlobalAction;
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
-import android.util.Log;
 
 public class LiveState implements ILiveState {
 	private List<ILiveActor> actors;
@@ -91,7 +90,7 @@ public class LiveState implements ILiveState {
 	@Override
 	public void nextTurn(float elapsedTime) {
 		clearCache();
-		//long time = System.nanoTime();
+		/* long time = System.nanoTime(); */
 		for(ILiveActor actor : orderer.orderActors(actors)){
 			actor.performAction(elapsedTime, this);
 			actorWatcher.updatePosition(actor);
@@ -109,8 +108,10 @@ public class LiveState implements ILiveState {
 			}
 		}
 		actors.removeAll(actorsToRemove);
-		//Log.d("TIME", "Next turn computed in "+(((double)(System.nanoTime()-time))/1000000000)+
-		//		"s (actors:"+actors.size()+")");
+		/*
+		Log.d("TIME", "Next turn computed in "+(((double)(System.nanoTime()-time))/1000000000)+
+			"s (actors:"+actors.size()+")");
+		*/
 	}
 
 	private void clearCache() {
@@ -120,15 +121,14 @@ public class LiveState implements ILiveState {
 
 	@Override
 	public void doCommand(Command command) {
-		int selectedActors = 0;
+		/* int selectedActors = 0; */
 		Position start = command.getStart();
 		for(ILiveActor actor : getActorsInRange(start, command.getRadius())){
 			if(actor.getPlayerId() == command.getPlayerId()){
 				actor.setPath(command.getPath());
-				selectedActors++;
+				/* selectedActors++; */
 			}
 		}
-		Log.d("COMMAND", "Command received: "+command+" ("+selectedActors+" actors)");
 	}
 
 	private List<ILiveActor> getActorsInRange(Position origin, float radius) {

@@ -1,6 +1,5 @@
 package pl.edu.uj.tcs.kuini.model;
 
-import java.lang.reflect.Array;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;

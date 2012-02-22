@@ -10,7 +10,7 @@ import pl.edu.uj.tcs.kuini.model.Command;
 
 public class SerialControllersServer extends Thread {
 
-    private static final long IDLE_TIME = 20; // milliseconds
+    private static final long IDLE_TIME = 10; // milliseconds
     private static final int MAX_PLAYERS = 4;
 
     private final ObjectInputStream[] in = new ObjectInputStream[MAX_PLAYERS];

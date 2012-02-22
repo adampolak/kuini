@@ -1,5 +1,6 @@
 package pl.edu.uj.tcs.kuini.gui;
 
+import pl.edu.uj.tcs.kuini.R;
 import android.app.ListActivity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SelectHostActivity extends ListActivity {
 
@@ -40,11 +42,19 @@ public class SelectHostActivity extends ListActivity {
         setListAdapter(hosts);
         
         btAdapter = BluetoothAdapter.getDefaultAdapter();
+      
+        if (btAdapter == null) {
+            Toast.makeText(this, R.string.error_no_bt, Toast.LENGTH_LONG).show();
+            finish();
+        }
         
-        if (btAdapter.isDiscovering())
+        if (!btAdapter.isEnabled()) {
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(intent, 0);
+        } else {        
             btAdapter.cancelDiscovery();
-        
-        btAdapter.startDiscovery();
+            btAdapter.startDiscovery();
+        }
         
     }
     
@@ -66,6 +76,17 @@ public class SelectHostActivity extends ListActivity {
         intent.putExtra("device", device);
         startActivity(intent);
         finish();
-    }
+    }  
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_CANCELED) {
+            Toast.makeText(this, R.string.error_bt_disabled, Toast.LENGTH_LONG).show();
+            finish();
+        } else if (resultCode == RESULT_OK) {
+            btAdapter.cancelDiscovery();
+            btAdapter.startDiscovery();
+        }
+    }    
     
 }

@@ -11,11 +11,13 @@ import pl.edu.uj.tcs.kuini.model.IPlayer;
 import pl.edu.uj.tcs.kuini.model.IState;
 import pl.edu.uj.tcs.kuini.model.Path;
 import pl.edu.uj.tcs.kuini.model.PlayerColor;
+import pl.edu.uj.tcs.kuini.model.actions.SpawnAntAction;
 import pl.edu.uj.tcs.kuini.model.geometry.Position;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.view.MotionEvent;
@@ -35,6 +37,8 @@ public class KuiniView extends View implements OnTouchListener {
     private float radius_speed_growth = 3f;
     private int playerId;
     private boolean beenOut;
+    
+    private final Paint defaultPaint = new Paint();
     
     private boolean showFps = true;
     private FpsCounter fpsCounter = new FpsCounter();
@@ -62,10 +66,12 @@ public class KuiniView extends View implements OnTouchListener {
     }
     
     private static float[] ptsFromPositions(List<Position> path) {
-        float[] pts = new float[path.size()*2];
-        for(int i = 0; i < path.size(); i++) {
-            pts[2*i] = path.get(i).getX();
-            pts[2*i+1] = path.get(i).getY();
+        float[] pts = new float[(path.size()-1)*4];
+        for(int i = 0; i < path.size() - 1; i++) {
+            pts[4*i] = path.get(i).getX();
+            pts[4*i+1] = path.get(i).getY();
+            pts[4*i+2] = path.get(i+1).getX();
+            pts[4*i+3] = path.get(i+1).getY();
         }
         return pts;
     }
@@ -83,20 +89,17 @@ public class KuiniView extends View implements OnTouchListener {
         return result;
     }
     
+    private static String addLeading0(int x) {
+        if (x < 10) return "0"+x; else return ""+x;
+    }
+    
     @Override
     public void onDraw(Canvas canvas) {
         
-        fpsCounter.nextFrame();
-        
+        canvas.drawColor(Color.DKGRAY);
+
         IState state = currState;
-        
-        /* will be changed to drawBitmap */ 
-        Paint black = new Paint();
-        black.setColor(Color.DKGRAY);
-        canvas.drawPaint(black);
-        
-        if(state == null)
-            return;
+        if(state == null) return;
         
         ScalerInterface scaler = new SimpleScaler(state.getHeight(), state.getWidth(), myHeight, myWidth);
 
@@ -106,9 +109,9 @@ public class KuiniView extends View implements OnTouchListener {
             background.setBounds((int)upLeft.getX(), (int)upLeft.getY(), (int)downRight.getX(), (int)downRight.getY());
             background.draw(canvas);
         } else {
-            Paint white = new Paint();
-            white.setColor(Color.LTGRAY);
-            canvas.drawRect(upLeft.getX(), upLeft.getY(), downRight.getX(), downRight.getY(), white);
+            defaultPaint.setColor(Color.LTGRAY);
+            defaultPaint.setColor(Color.rgb(0xb8, 0xa8, 0x90));
+            canvas.drawRect(upLeft.getX(), upLeft.getY(), downRight.getX(), downRight.getY(), defaultPaint);
         }
         
         for(IActor actor : state.getActorStates()) {
@@ -116,12 +119,11 @@ public class KuiniView extends View implements OnTouchListener {
             float canvasRadius = scaler.getCanvasRadius(actor.getRadius());
             IPlayer player = state.getPlayerStatesById().get(actor.getPlayerId());
             PlayerColor playerColor = player.getColor();
-            float alpha = (1<<7) + ((float) actor.getHP() / actor.getMaxHP()) * ((1<<7)-1);
+            float alpha = 64 + ((float) actor.getHP() / actor.getMaxHP()) * 191;
             int color = Color.argb((int)alpha, playerColor.getR(), playerColor.getG(), playerColor.getB());
 
-            Paint paint = new Paint();
-            paint.setColor(color);
-            canvas.drawCircle(canvasPosition.getX(), canvasPosition.getY(), canvasRadius, paint);
+            defaultPaint.setColor(color);
+            canvas.drawCircle(canvasPosition.getX(), canvasPosition.getY(), canvasRadius, defaultPaint);
         }
         if(startPosition != null) {
             
@@ -132,44 +134,46 @@ public class KuiniView extends View implements OnTouchListener {
             
             canvas.drawCircle(startPosition.getX(), startPosition.getY(), pathRadius, paint);
             paint.setStyle(Paint.Style.STROKE);
-            paint.setStrokeWidth(16);
+            paint.setStrokeWidth(12);
             canvas.drawLines(ptsFromPositions(path), paint);
-            List<Position> path2 = new ArrayList<Position>(path);
-            path2.remove(0);
-            canvas.drawLines(ptsFromPositions(path2), paint);
-        
+          
         } 
         if (showFps) fpsCounter.drawFps(canvas);
         if (showStats) {
-            float x = 20.0f;
-            float y = 50.0f;
-            float size = 30.0f;
-            if(showFps)
-                y += size;
-            float ourFood = state.getPlayerStatesById().get(playerId).getFood();
-            /* TODO : how to get ant price? */
-            float antPrice = 100.0f;
+            
+            float x = myWidth / 3;
+            float y = 25.0f;
+            
             Paint paint = new Paint();
-            paint.setColor(getColorFromId(state, state.getFoodPlayerId()));
-            paint.setTextSize(size);
-            canvas.drawText("" + (int)ourFood + "/" + (int)antPrice + " ", 
-                    x, y, paint);
-            y += size;
+            paint.setTextSize(25.0f);
+            paint.setTextAlign(Align.LEFT);
+
             paint.setColor(getColorFromId(state, playerId));
-            canvas.drawText("" + getNumberOfAntsFromId(state, playerId),
+            canvas.drawText(addLeading0(getNumberOfAntsFromId(state, playerId)),
                     x, y, paint);
-            y += size;
+            x += 40.0f;
             for(int id : state.getPlayerStatesById().keySet()) {
                 if(id == playerId)
                     continue;
                 if(!state.getPlayerStatesById().get(id).isHuman())
                     continue;
                 paint.setColor(getColorFromId(state, id));
-                canvas.drawText("" + getNumberOfAntsFromId(state, id),
+                canvas.drawText(addLeading0(getNumberOfAntsFromId(state, id)),
                         x, y, paint);
-                y += size;
+                x += 40.0f;
                 
             }
+            
+            
+            y += 25.0f;
+            x = myWidth/3;
+            
+            paint.setColor(getColorFromId(state, state.getFoodPlayerId()));
+            float ourFood = state.getPlayerStatesById().get(playerId).getFood();
+            canvas.drawText("Food: " + (int)ourFood + "/" + (int)SpawnAntAction.ANT_PRICE + " ", 
+                    x, y, paint);
+            
+            
         }
     }
 
@@ -219,7 +223,7 @@ public class KuiniView extends View implements OnTouchListener {
     }
     
     public void stateChanged(IState state) {
-        //fpsCounter.nextFrame();
+        fpsCounter.nextTurn();
    
         currState = state;
         postInvalidate();

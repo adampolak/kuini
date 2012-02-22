@@ -28,7 +28,7 @@ public class Controller {
             new LinkedBlockingQueue<Serializable>();
             */
 
-    private final Queue<Command> sendingQueue2 = 
+    private final Queue<Command> sendingQueue = 
             new LinkedList<Command>();
     
     /*
@@ -53,8 +53,8 @@ public class Controller {
 
     public void proxyCommand(Command command) throws IllegalStateException {
         // sendingQueue.add(command);
-        synchronized(sendingQueue2) { 
-            sendingQueue2.add(command);
+        synchronized(sendingQueue) { 
+            sendingQueue.add(command);
         }
     }
 
@@ -66,8 +66,8 @@ public class Controller {
             // sendingQueue.add(new ReadyForNextTurn());
             
             Command currCommand;
-            synchronized(sendingQueue2) {
-                currCommand = sendingQueue2.poll();
+            synchronized(sendingQueue) {
+                currCommand = sendingQueue.poll();
             }
             try {
                 if (currCommand != null)
