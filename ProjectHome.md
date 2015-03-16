@@ -1,0 +1,1 @@
+Kuini is a realtime ants game for Android. It features Bluetooth multiplayer mode for up to four players.
